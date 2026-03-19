@@ -1,106 +1,842 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UVPeek - Smart UV Protection</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-        }
-        .container {
-            text-align: center;
-            padding: 40px 20px;
-            max-width: 600px;
-        }
-        .app-icon {
-            width: 120px;
-            height: 120px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 30px;
-            font-size: 60px;
-            backdrop-filter: blur(10px);
-        }
-        h1 {
-            font-size: 48px;
-            font-weight: 700;
-            margin-bottom: 12px;
-            letter-spacing: -1px;
-        }
-        .tagline {
-            font-size: 20px;
-            opacity: 0.9;
-            margin-bottom: 40px;
-            font-weight: 300;
-        }
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            margin-bottom: 40px;
-        }
-        .feature {
-            background: rgba(255,255,255,0.15);
-            padding: 12px 20px;
-            border-radius: 12px;
-            font-size: 14px;
-            backdrop-filter: blur(5px);
-        }
-        .download-btn {
-            display: inline-block;
-            background: #fff;
-            color: #764ba2;
-            padding: 16px 40px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 18px;
-            font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        .footer {
-            margin-top: 50px;
-            font-size: 13px;
-            opacity: 0.6;
-        }
-        .footer a { color: #fff; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UVPeek — Your Skin's Best Friend</title>
+<meta name="description" content="Precision UV detection powered by on-device AI. Know your UV in 3 meters. Your skin deserves more than a weather forecast.">
+<link rel="canonical" href="https://uvpeek.life">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --warm-100: #FFF7ED;
+    --warm-200: #FFEDD5;
+    --warm-300: #FDBA74;
+    --warm-400: #FB923C;
+    --warm-500: #F97316;
+    --warm-600: #EA580C;
+    --sun-gold: #FBBF24;
+    --sun-deep: #F59E0B;
+    --sky-100: #F0F9FF;
+    --sky-400: #38BDF8;
+    --sky-500: #0EA5E9;
+    --sky-600: #0284C7;
+    --night: #0C0A1D;
+    --night-800: #1E1B3A;
+    --night-700: #2D2952;
+    --glass-white: rgba(255, 255, 255, 0.08);
+    --glass-white-border: rgba(255, 255, 255, 0.15);
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.45);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Sora', sans-serif;
+    background: var(--night);
+    color: var(--text-primary);
+  }
+
+  /* ── ANIMATED BG ── */
+  .hero {
+    position: relative;
+    width: 100vw; height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .animated-bg {
+    position: absolute; inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(251,191,36,0.25) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 20%, rgba(249,115,22,0.2) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 50% 50%, rgba(14,165,233,0.12) 0%, transparent 60%),
+      linear-gradient(135deg, #0C0A1D 0%, #1a1535 30%, #1E1B3A 60%, #0C0A1D 100%);
+    animation: bgShift 12s ease-in-out infinite alternate;
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%; }
+    50% { background-position: 30% 20%, 70% 80%, 40% 60%, 0% 0%; }
+    100% { background-position: 60% 40%, 40% 60%, 60% 40%, 0% 0%; }
+  }
+
+  /* Floating light orbs */
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    animation: orbFloat 8s ease-in-out infinite alternate;
+  }
+  .orb-1 {
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(251,191,36,0.3), transparent 70%);
+    top: -10%; left: -5%;
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(249,115,22,0.2), transparent 70%);
+    bottom: -15%; right: -8%;
+    animation-delay: -3s;
+  }
+  .orb-3 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%);
+    top: 30%; right: 15%;
+    animation-delay: -6s;
+  }
+
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -25px) scale(1.1); }
+  }
+
+  /* Grain overlay */
+  .grain {
+    position: absolute; inset: 0;
+    z-index: 1;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    pointer-events: none;
+  }
+
+  /* ── MAIN LAYOUT ── */
+  .content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6vw;
+    width: 100%;
+    max-width: 1400px;
+    padding: 0 5vw;
+    height: 100%;
+  }
+
+  /* ── LEFT SIDE: TEXT ── */
+  .text-side {
+    flex: 1;
+    max-width: 540px;
+    animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  @keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-50px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: var(--glass-white);
+    border: 1px solid var(--glass-white-border);
+    backdrop-filter: blur(20px);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sun-gold);
+    margin-bottom: 28px;
+    animation: fadeInUp 1s 0.3s both;
+  }
+  .badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--sun-gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 10px;
+    animation: fadeInUp 1s 0.4s both;
+  }
+  h1 .highlight {
+    background: linear-gradient(135deg, var(--sun-gold), var(--warm-500));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1rem, 1.8vw, 1.35rem);
+    color: var(--text-secondary);
+    margin-bottom: 28px;
+    line-height: 1.5;
+    animation: fadeInUp 1s 0.55s both;
+  }
+
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 36px;
+    animation: fadeInUp 1s 0.65s both;
+  }
+  .feature-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: var(--glass-white);
+    border: 1px solid var(--glass-white-border);
+    backdrop-filter: blur(12px);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+  }
+  .feature-tag:hover {
+    background: rgba(255,255,255,0.14);
+    color: var(--text-primary);
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.25);
+  }
+  .feature-tag .emoji {
+    font-size: 15px;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    animation: fadeInUp 1s 0.8s both;
+  }
+
+  .google-play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 32px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
+    color: #111;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+  .google-play-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--sun-gold), var(--warm-500));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: inherit;
+  }
+  .google-play-btn:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(251,191,36,0.25), 0 0 0 1px rgba(255,255,255,0.2);
+  }
+  .google-play-btn:hover::before { opacity: 1; }
+  .google-play-btn:hover .gp-text,
+  .google-play-btn:hover .gp-icon { position: relative; z-index: 1; }
+  .google-play-btn:hover .gp-text { color: #fff; }
+  .google-play-btn:hover .gp-icon svg path { fill: #fff; }
+
+  .gp-icon {
+    position: relative; z-index: 1;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gp-text {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    line-height: 1.2;
+    transition: color 0.4s ease;
+  }
+  .gp-text small {
+    font-size: 10px;
+    font-weight: 400;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .rating-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 400;
+  }
+  .stars {
+    color: var(--sun-gold);
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  /* ── RIGHT SIDE: PHONE ── */
+  .phone-side {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slideInRight 1.2s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    position: relative;
+  }
+
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(60px) translateY(20px); }
+    to { opacity: 1; transform: translateX(0) translateY(0); }
+  }
+
+  .phone-wrapper {
+    position: relative;
+    animation: phoneFloat 6s ease-in-out infinite;
+  }
+  @keyframes phoneFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  /* Glow behind phone */
+  .phone-glow {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 340px; height: 500px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(251,191,36,0.2) 0%, rgba(249,115,22,0.1) 40%, transparent 70%);
+    filter: blur(50px);
+    z-index: -1;
+  }
+
+  .phone-frame {
+    width: 280px;
+    height: 580px;
+    border-radius: 44px;
+    background: #000;
+    padding: 10px;
+    box-shadow:
+      0 0 0 2px rgba(255,255,255,0.1),
+      0 20px 60px rgba(0,0,0,0.5),
+      0 0 100px rgba(251,191,36,0.08),
+      inset 0 0 0 1px rgba(255,255,255,0.05);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .phone-notch {
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 28px;
+    background: #000;
+    border-radius: 0 0 18px 18px;
+    z-index: 10;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    border-radius: 36px;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(180deg, #1a1040 0%, #2d1f6e 30%, #4a2c8a 60%, #e86530 85%, #f5a623 100%);
+  }
+
+  /* App UI simulation inside phone */
+  .app-ui {
+    position: absolute; inset: 0;
+    padding: 52px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .app-location {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+  .app-location::before {
+    content: '\1F4CD';
+    font-size: 10px;
+  }
+
+  .app-env {
+    font-size: 9px;
+    color: rgba(255,255,255,0.45);
+    background: rgba(255,255,255,0.08);
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    letter-spacing: 0.04em;
+  }
+
+  .app-uv-number {
+    font-family: 'Sora', sans-serif;
+    font-size: 96px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 4px 30px rgba(251,191,36,0.3);
+    margin-bottom: 4px;
+    animation: uvPulse 4s ease-in-out infinite;
+  }
+  @keyframes uvPulse {
+    0%, 100% { text-shadow: 0 4px 30px rgba(251,191,36,0.3); }
+    50% { text-shadow: 0 4px 50px rgba(251,191,36,0.5); }
+  }
+
+  .app-uv-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .app-level-badge {
+    padding: 5px 18px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(234,88,12,0.9), rgba(249,115,22,0.7));
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.04em;
+    margin-bottom: 24px;
+  }
+
+  .app-card {
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+  .app-card-title {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+  .app-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .app-card-val {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+  }
+  .app-card-unit {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+  }
+  .app-spf-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--sky-500), var(--sky-600));
+    font-size: 11px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .app-chart {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    margin-top: 4px;
+  }
+  .app-chart svg { width: 100%; height: 100%; }
+  .chart-line {
+    fill: none;
+    stroke: url(#chartGrad);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .chart-area {
+    fill: url(#chartAreaGrad);
+    opacity: 0.3;
+  }
+
+  /* ── NAV ── */
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 5vw;
+    animation: fadeInDown 1s 0.1s both;
+  }
+  @keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--sun-gold), var(--warm-500));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 4px 16px rgba(251,191,36,0.3);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+    letter-spacing: 0.01em;
+  }
+  .nav-links a:hover { color: var(--text-primary); }
+
+  /* ── BOTTOM STATS BAR ── */
+  .bottom-bar {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 12px 28px;
+    border-radius: 100px;
+    background: var(--glass-white);
+    border: 1px solid var(--glass-white-border);
+    backdrop-filter: blur(24px);
+    animation: fadeInUp 1s 1s both;
+  }
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .stat-val {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .stat-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255,255,255,0.12);
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── DECORATIVE PARTICLES ── */
+  .particles {
+    position: absolute; inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: rgba(251,191,36,0.4);
+    animation: particleRise linear infinite;
+  }
+  @keyframes particleRise {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
+  /* ── FOOTER ── */
+  .footer-links {
+    position: fixed;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-align: center;
+    animation: fadeInUp 1s 1.2s both;
+  }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .footer-links a:hover { color: var(--text-secondary); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    .content {
+      flex-direction: column;
+      gap: 30px;
+      padding-top: 90px;
+      justify-content: flex-start;
+    }
+    .text-side {
+      text-align: center;
+      max-width: 100%;
+    }
+    .features { justify-content: center; }
+    .cta-row { justify-content: center; flex-wrap: wrap; }
+    .phone-frame { width: 220px; height: 460px; }
+    .app-uv-number { font-size: 72px; }
+    .bottom-bar { display: none; }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    h1 { font-size: 2rem; }
+    .phone-frame { width: 180px; height: 380px; }
+    .app-uv-number { font-size: 56px; }
+    .app-card { padding: 10px; }
+    .app-ui { padding: 44px 14px 14px; }
+    .footer-links { display: none; }
+  }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="app-icon">&#9728;</div>
-        <h1>UVPeek</h1>
-        <p class="tagline">Smart UV Protection for Your Skin</p>
-        <div class="features">
-            <div class="feature">Real-time UV Index</div>
-            <div class="feature">AI Skin Analysis</div>
-            <div class="feature">Smart Environment Detection</div>
-            <div class="feature">Personalized SPF Advice</div>
-            <div class="feature">UV Trend Prediction</div>
-        </div>
-        <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect">
-            Get it on Google Play
-        </a>
-        <div class="footer">
-            <p>&copy; 2025 UVPeek. All rights reserved.</p>
-            <p><a href="mailto:support@uvpeek.life">Contact Us</a></p>
-        </div>
+
+<div class="hero">
+  <!-- Animated gradient background -->
+  <div class="animated-bg"></div>
+
+  <!-- Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Particles -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Grain texture -->
+  <div class="grain"></div>
+
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <div class="logo">
+      <div class="logo-icon">&#9728;&#65039;</div>
+      UVPeek
     </div>
+    <div class="nav-links">
+      <a href="mailto:support@uvpeek.life">Contact</a>
+      <a href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect">Download</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+
+    <!-- Left: Text & CTA -->
+    <div class="text-side">
+      <div class="badge">
+        <span class="dot"></span>
+        Live UV Monitoring
+      </div>
+
+      <h1>Know Your<br><span class="highlight">UV in 3 Meters</span></h1>
+
+      <p class="tagline">
+        Precision UV detection powered by on-device AI.<br>
+        Your skin deserves more than a weather forecast.
+      </p>
+
+      <div class="features">
+        <span class="feature-tag"><span class="emoji">&#128752;</span> GNSS + Sensor Fusion</span>
+        <span class="feature-tag"><span class="emoji">&#128274;</span> 100% On-Device AI</span>
+        <span class="feature-tag"><span class="emoji">&#129524;</span> Smart SPF Advice</span>
+        <span class="feature-tag"><span class="emoji">&#9201;</span> Reapply Reminders</span>
+        <span class="feature-tag"><span class="emoji">&#127777;</span> 6 Skin Types</span>
+        <span class="feature-tag"><span class="emoji">&#127381;</span> Free to Use</span>
+      </div>
+
+      <div class="cta-row">
+        <a href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect" class="google-play-btn" target="_blank" rel="noopener">
+          <span class="gp-icon">
+            <svg viewBox="0 0 24 24" width="28" height="28">
+              <path d="M3.609 1.814L13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893l2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199l2.302 2.302a1 1 0 0 1 0 1.38l-2.302 2.302L15.396 12l2.302-2.492zM5.864 2.658L16.8 8.99l-2.302 2.302-8.635-8.635z" fill="#111"/>
+            </svg>
+          </span>
+          <span class="gp-text">
+            <small>Get it on</small>
+            Google Play
+          </span>
+        </a>
+
+        <div class="rating-info">
+          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <span>4.9 Rating</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Phone Mockup -->
+    <div class="phone-side">
+      <div class="phone-wrapper">
+        <div class="phone-glow"></div>
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+            <div class="app-ui">
+              <div class="app-location">San Francisco, CA</div>
+              <div class="app-env">&#9728;&#65039; Bright Outdoor</div>
+
+              <div class="app-uv-number">6.8</div>
+              <div class="app-uv-label">UV Index</div>
+              <div class="app-level-badge">&#9679; High</div>
+
+              <!-- SPF Card -->
+              <div class="app-card">
+                <div class="app-card-title">Recommended Protection</div>
+                <div class="app-card-row">
+                  <div>
+                    <div class="app-card-val">87 <span class="app-card-unit">min safe</span></div>
+                  </div>
+                  <div class="app-spf-badge">SPF 50+</div>
+                </div>
+              </div>
+
+              <!-- Trend Card -->
+              <div class="app-card">
+                <div class="app-card-title">24H UV Trend</div>
+                <div class="app-chart">
+                  <svg viewBox="0 0 220 50" preserveAspectRatio="none">
+                    <defs>
+                      <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#38BDF8"/>
+                        <stop offset="50%" stop-color="#FBBF24"/>
+                        <stop offset="100%" stop-color="#38BDF8"/>
+                      </linearGradient>
+                      <linearGradient id="chartAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.4"/>
+                        <stop offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
+                      </linearGradient>
+                    </defs>
+                    <path class="chart-area" d="M0,48 L20,44 L45,36 L70,24 L100,10 L130,8 L150,14 L175,28 L200,40 L220,46 L220,50 L0,50 Z"/>
+                    <path class="chart-line" d="M0,48 L20,44 L45,36 L70,24 L100,10 L130,8 L150,14 L175,28 L200,40 L220,46"/>
+                    <circle cx="130" cy="8" r="4" fill="#FBBF24" stroke="#fff" stroke-width="1.5">
+                      <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Stats Bar -->
+  <div class="bottom-bar">
+    <div class="stat-item">
+      <span class="stat-val">3-10m</span> Precision
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-val">15+</span> Environments
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-val">100%</span> On-Device
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-val">0</span> Data Uploaded
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer-links">
+    &copy; 2025 UVPeek &middot; <a href="mailto:support@uvpeek.life">support@uvpeek.life</a>
+  </div>
+</div>
+
+<script>
+  // ── Floating Particles ──
+  function createParticles() {
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDuration = (8 + Math.random() * 12) + 's';
+      p.style.animationDelay = (Math.random() * 10) + 's';
+      p.style.width = (2 + Math.random() * 3) + 'px';
+      p.style.height = p.style.width;
+      p.style.opacity = 0.15 + Math.random() * 0.35;
+      container.appendChild(p);
+    }
+  }
+  createParticles();
+
+  // ── Subtle parallax on mouse move ──
+  const phoneWrapper = document.querySelector('.phone-wrapper');
+  document.addEventListener('mousemove', function(e) {
+    const x = (e.clientX / window.innerWidth - 0.5) * 12;
+    const y = (e.clientY / window.innerHeight - 0.5) * 12;
+    if (phoneWrapper) {
+      phoneWrapper.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
+    }
+  });
+</script>
 </body>
 </html>
