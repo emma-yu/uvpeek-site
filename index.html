@@ -567,6 +567,14 @@
   .audio-toggle.muted .slash-line {
     display: block;
   }
+  /* Gentle pulse hint to attract attention */
+  .audio-toggle.muted {
+    animation: audioPulse 2.5s ease-in-out 3s 3;
+  }
+  @keyframes audioPulse {
+    0%, 100% { box-shadow: none; }
+    50% { box-shadow: 0 0 12px 3px rgba(251,191,36,0.35); }
+  }
 
   /* X/Twitter icon - filled style */
   .x-link svg {
@@ -759,34 +767,15 @@
     if (pw) pw.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
   });
 
-  // Audio toggle - default ON
-  // Browsers block autoplay with audio, so we start muted and unmute on first user interaction
+  // Audio toggle
+  // Browsers block autoplay with audio — must start muted, user clicks to enable
   var video = document.getElementById('bgVideo');
   var audioBtn = document.getElementById('audioToggle');
   var audioOn = false;
-
-  // Start muted (browser requirement), unmute on first click anywhere
   video.muted = true;
+  audioBtn.classList.add('muted');
 
-  function enableAudio() {
-    video.muted = false;
-    audioOn = true;
-    audioBtn.classList.remove('muted');
-    document.removeEventListener('click', firstInteraction);
-    document.removeEventListener('touchstart', firstInteraction);
-  }
-
-  function firstInteraction(e) {
-    // Don't unmute if they specifically clicked the mute button
-    if (e.target.closest('#audioToggle')) return;
-    enableAudio();
-  }
-
-  // Auto-unmute on first user interaction with the page
-  document.addEventListener('click', firstInteraction);
-  document.addEventListener('touchstart', firstInteraction);
-
-  // Toggle button
+  // Single click handler: first click unmutes, subsequent clicks toggle
   audioBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     if (audioOn) {
@@ -795,13 +784,11 @@
       audioBtn.classList.add('muted');
     } else {
       video.muted = false;
+      video.play().catch(function(){});
       audioOn = true;
       audioBtn.classList.remove('muted');
     }
   });
-
-  // Show muted state initially (since browser forces muted start)
-  audioBtn.classList.add('muted');
 </script>
 </body>
 </html>
