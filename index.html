@@ -373,9 +373,9 @@
   .phone-frame {
     width: 280px;
     height: 590px;
-    border-radius: 44px;
+    border-radius: 32px;
     background: #111;
-    padding: 8px;
+    padding: 6px;
     box-shadow:
       0 0 0 2px rgba(255,255,255,0.08),
       0 25px 60px rgba(0,0,0,0.6),
@@ -384,23 +384,25 @@
     overflow: hidden;
   }
 
-  .phone-notch {
+  /* Android-style punch-hole camera */
+  .phone-camera {
     position: absolute;
-    top: 8px;
+    top: 16px;
     left: 50%;
     transform: translateX(-50%);
-    width: 110px;
-    height: 26px;
-    background: #111;
-    border-radius: 0 0 16px 16px;
+    width: 10px;
+    height: 10px;
+    background: #222;
+    border-radius: 50%;
     z-index: 10;
+    box-shadow: inset 0 0 2px rgba(255,255,255,0.1);
   }
 
   /* ── PHONE SCREEN - Real App Screenshot ── */
   .phone-screen {
     width: 100%;
     height: 100%;
-    border-radius: 38px;
+    border-radius: 28px;
     overflow: hidden;
     position: relative;
     background: #000;
@@ -569,12 +571,35 @@
   }
   /* Gentle pulse hint to attract attention */
   .audio-toggle.muted {
-    animation: audioPulse 2.5s ease-in-out 3s 3;
+    animation: audioPulse 2.5s ease-in-out 1s infinite;
   }
   @keyframes audioPulse {
     0%, 100% { box-shadow: none; }
     50% { box-shadow: 0 0 12px 3px rgba(251,191,36,0.35); }
   }
+
+  /* Tap-for-sound floating hint */
+  .sound-hint {
+    position: fixed;
+    bottom: 80px;
+    left: 32px;
+    z-index: 61;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 100px;
+    background: rgba(251,191,36,0.15);
+    border: 1px solid rgba(251,191,36,0.3);
+    backdrop-filter: blur(12px);
+    color: var(--sun-gold);
+    font-size: 12px;
+    font-weight: 500;
+    animation: fadeInUp 0.6s 2s both, audioPulse 2.5s ease-in-out 2.5s infinite;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .sound-hint.hidden { opacity: 0; pointer-events: none; }
 
   /* X/Twitter icon - filled style */
   .x-link svg {
@@ -586,7 +611,18 @@
     fill: #fff;
   }
 
-  /* ── RESPONSIVE ── */
+  /* ── MOBILE PERFORMANCE ── */
+  @media (max-width: 960px) {
+    .orb { filter: blur(40px); }
+    .orb-1 { width: 300px; height: 300px; }
+    .orb-2 { width: 250px; height: 250px; }
+    .orb-3 { display: none; }
+    .phone-glow { filter: blur(25px); }
+    .grain { display: none; }
+    .badge, .feature-tag, .icon-btn, .bottom-bar { backdrop-filter: none; }
+    .animated-bg { animation: none; }
+    .sound-hint { bottom: 68px; left: 16px; }
+  }
   @media (max-width: 960px) {
     .content {
       flex-direction: column;
@@ -597,7 +633,8 @@
     .text-side { text-align: center; max-width: 100%; }
     .features { justify-content: center; }
     .cta-row { justify-content: center; flex-wrap: wrap; }
-    .phone-frame { width: 220px; height: 460px; }
+    .phone-frame { width: 220px; height: 460px; border-radius: 28px; padding: 5px; }
+    .phone-screen { border-radius: 24px; }
     .bottom-bar { display: none; }
     .nav-links { display: none; }
     .based-on { justify-content: center; flex-wrap: wrap; }
@@ -608,7 +645,8 @@
   }
   @media (max-width: 480px) {
     h1 { font-size: 2rem; }
-    .phone-frame { width: 180px; height: 380px; }
+    .phone-frame { width: 180px; height: 380px; border-radius: 24px; padding: 4px; }
+    .phone-screen { border-radius: 20px; }
     .footer-links { display: none; }
     .bottom-left-icons { bottom: 14px; left: 12px; gap: 6px; }
     .icon-btn { width: 34px; height: 34px; }
@@ -620,8 +658,8 @@
 <body>
 
 <div class="hero">
-  <!-- Video background (audio on by default) -->
-  <video class="video-bg" id="bgVideo" autoplay loop playsinline>
+  <!-- Video background — try autoplay with sound -->
+  <video class="video-bg" id="bgVideo" autoplay loop playsinline preload="auto">
     <source src="bg-video.mp4" type="video/mp4">
   </video>
   <div class="video-overlay"></div>
@@ -699,7 +737,7 @@
       <div class="phone-wrapper">
         <div class="phone-glow"></div>
         <div class="phone-frame">
-          <div class="phone-notch"></div>
+          <div class="phone-camera"></div>
           <div class="phone-screen">
             <img src="app-screenshot.png" alt="UVPeek App - UV Index Display">
           </div>
@@ -736,16 +774,21 @@
     </a>
   </div>
 
+  <!-- Sound hint for mobile (hidden once audio plays) -->
+  <div class="sound-hint" id="soundHint">Tap anywhere for sound</div>
+
   <div class="footer-links">
     &copy; 2025 UVPeek
   </div>
 </div>
 
 <script>
-  // Particles
+  // Particles (fewer on mobile for performance)
+  var isMobile = window.innerWidth <= 960;
   function createParticles() {
     var c = document.getElementById('particles');
-    for (var i = 0; i < 20; i++) {
+    var count = isMobile ? 6 : 20;
+    for (var i = 0; i < count; i++) {
       var p = document.createElement('div');
       p.className = 'particle';
       p.style.left = Math.random() * 100 + '%';
@@ -759,34 +802,71 @@
   }
   createParticles();
 
-  // Phone parallax
-  var pw = document.querySelector('.phone-wrapper');
-  document.addEventListener('mousemove', function(e) {
-    var x = (e.clientX / window.innerWidth - 0.5) * 12;
-    var y = (e.clientY / window.innerHeight - 0.5) * 12;
-    if (pw) pw.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
-  });
+  // Phone parallax (desktop only — skip on mobile for performance)
+  if (!isMobile) {
+    var pw = document.querySelector('.phone-wrapper');
+    document.addEventListener('mousemove', function(e) {
+      var x = (e.clientX / window.innerWidth - 0.5) * 12;
+      var y = (e.clientY / window.innerHeight - 0.5) * 12;
+      if (pw) pw.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
+    });
+  }
 
-  // Audio toggle
-  // Browsers block autoplay with audio — must start muted, user clicks to enable
+  // Audio: try autoplay with sound, fallback to tap-anywhere-to-unmute
   var video = document.getElementById('bgVideo');
   var audioBtn = document.getElementById('audioToggle');
+  var soundHint = document.getElementById('soundHint');
   var audioOn = false;
-  video.muted = true;
-  audioBtn.classList.add('muted');
 
-  // Single click handler: first click unmutes, subsequent clicks toggle
+  function enableAudio() {
+    video.muted = false;
+    video.play().catch(function(){});
+    audioOn = true;
+    audioBtn.classList.remove('muted');
+    soundHint.classList.add('hidden');
+  }
+
+  function disableAudio() {
+    video.muted = true;
+    audioOn = false;
+    audioBtn.classList.add('muted');
+  }
+
+  // Step 1: Try playing with sound immediately
+  video.muted = false;
+  var playAttempt = video.play();
+  if (playAttempt !== undefined) {
+    playAttempt.then(function() {
+      // Autoplay with sound succeeded
+      audioOn = true;
+      audioBtn.classList.remove('muted');
+      soundHint.classList.add('hidden');
+    }).catch(function() {
+      // Autoplay with sound blocked — fallback to muted + tap-to-unmute
+      video.muted = true;
+      video.play().catch(function(){});
+      audioBtn.classList.add('muted');
+
+      // First touch/click anywhere on page will unmute
+      function onFirstInteraction() {
+        if (!audioOn) {
+          enableAudio();
+        }
+        document.removeEventListener('touchstart', onFirstInteraction);
+        document.removeEventListener('click', onFirstInteraction);
+      }
+      document.addEventListener('touchstart', onFirstInteraction, {once: true});
+      document.addEventListener('click', onFirstInteraction, {once: true});
+    });
+  }
+
+  // Toggle button always works for manual control
   audioBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     if (audioOn) {
-      video.muted = true;
-      audioOn = false;
-      audioBtn.classList.add('muted');
+      disableAudio();
     } else {
-      video.muted = false;
-      video.play().catch(function(){});
-      audioOn = true;
-      audioBtn.classList.remove('muted');
+      enableAudio();
     }
   });
 </script>
