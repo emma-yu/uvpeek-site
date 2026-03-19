@@ -9,21 +9,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --warm-100: #FFF7ED;
-    --warm-200: #FFEDD5;
-    --warm-300: #FDBA74;
-    --warm-400: #FB923C;
     --warm-500: #F97316;
-    --warm-600: #EA580C;
     --sun-gold: #FBBF24;
-    --sun-deep: #F59E0B;
-    --sky-100: #F0F9FF;
     --sky-400: #38BDF8;
     --sky-500: #0EA5E9;
     --sky-600: #0284C7;
     --night: #0C0A1D;
-    --night-800: #1E1B3A;
-    --night-700: #2D2952;
     --glass-white: rgba(255, 255, 255, 0.08);
     --glass-white-border: rgba(255, 255, 255, 0.15);
     --text-primary: #FFFFFF;
@@ -41,7 +32,6 @@
     color: var(--text-primary);
   }
 
-  /* ── VIDEO / ANIMATED BG ── */
   .hero {
     position: relative;
     width: 100vw; height: 100vh;
@@ -51,14 +41,23 @@
     overflow: hidden;
   }
 
+  /* ── VIDEO BG (layer 1) ── */
   .video-bg {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
-    z-index: 0;
-    opacity: 0.45;
+    z-index: 1;
+    opacity: 0.5;
   }
 
+  /* ── dark overlay on video (layer 2) ── */
+  .video-overlay {
+    position: absolute; inset: 0;
+    z-index: 2;
+    background: rgba(12,10,29,0.45);
+  }
+
+  /* ── gradient fallback behind video (layer 0) ── */
   .animated-bg {
     position: absolute; inset: 0;
     z-index: 0;
@@ -69,59 +68,75 @@
       linear-gradient(135deg, #0C0A1D 0%, #1a1535 30%, #1E1B3A 60%, #0C0A1D 100%);
     animation: bgShift 12s ease-in-out infinite alternate;
   }
-
   @keyframes bgShift {
     0% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%; }
     50% { background-position: 30% 20%, 70% 80%, 40% 60%, 0% 0%; }
     100% { background-position: 60% 40%, 40% 60%, 60% 40%, 0% 0%; }
   }
 
-  /* Floating light orbs */
   .orb {
     position: absolute;
     border-radius: 50%;
     filter: blur(80px);
-    z-index: 0;
+    z-index: 3;
     animation: orbFloat 8s ease-in-out infinite alternate;
+    pointer-events: none;
   }
   .orb-1 {
     width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(251,191,36,0.3), transparent 70%);
+    background: radial-gradient(circle, rgba(251,191,36,0.18), transparent 70%);
     top: -10%; left: -5%;
-    animation-delay: 0s;
   }
   .orb-2 {
     width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(249,115,22,0.2), transparent 70%);
+    background: radial-gradient(circle, rgba(249,115,22,0.12), transparent 70%);
     bottom: -15%; right: -8%;
     animation-delay: -3s;
   }
   .orb-3 {
     width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%);
+    background: radial-gradient(circle, rgba(56,189,248,0.1), transparent 70%);
     top: 30%; right: 15%;
     animation-delay: -6s;
   }
-
   @keyframes orbFloat {
     0% { transform: translate(0, 0) scale(1); }
     100% { transform: translate(30px, -25px) scale(1.1); }
   }
 
-  /* Grain overlay */
   .grain {
     position: absolute; inset: 0;
-    z-index: 1;
-    opacity: 0.035;
+    z-index: 4;
+    opacity: 0.03;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
     background-repeat: repeat;
     pointer-events: none;
   }
 
+  .particles {
+    position: absolute; inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .particle {
+    position: absolute;
+    width: 3px; height: 3px;
+    border-radius: 50%;
+    background: rgba(251,191,36,0.4);
+    animation: particleRise linear infinite;
+  }
+  @keyframes particleRise {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+
   /* ── MAIN LAYOUT ── */
   .content {
     position: relative;
-    z-index: 2;
+    z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,13 +147,12 @@
     height: 100%;
   }
 
-  /* ── LEFT SIDE: TEXT ── */
+  /* ── LEFT SIDE ── */
   .text-side {
     flex: 1;
     max-width: 540px;
     animation: slideInLeft 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-
   @keyframes slideInLeft {
     from { opacity: 0; transform: translateX(-50px); }
     to { opacity: 1; transform: translateX(0); }
@@ -173,7 +187,6 @@
   }
 
   h1 {
-    font-family: 'Sora', sans-serif;
     font-size: clamp(2.2rem, 4.5vw, 3.8rem);
     font-weight: 800;
     line-height: 1.1;
@@ -225,9 +238,6 @@
     transform: translateY(-2px);
     border-color: rgba(255,255,255,0.25);
   }
-  .feature-tag .emoji {
-    font-size: 15px;
-  }
 
   .cta-row {
     display: flex;
@@ -251,6 +261,7 @@
     box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
     position: relative;
     overflow: hidden;
+    flex-shrink: 0;
   }
   .google-play-btn::before {
     content: '';
@@ -334,7 +345,6 @@
     animation: slideInRight 1.2s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
     position: relative;
   }
-
   @keyframes slideInRight {
     from { opacity: 0; transform: translateX(60px) translateY(20px); }
     to { opacity: 1; transform: translateX(0) translateY(0); }
@@ -349,243 +359,274 @@
     50% { transform: translateY(-14px); }
   }
 
-  /* Glow behind phone */
   .phone-glow {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 340px; height: 500px;
+    width: 340px; height: 520px;
     border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(100,160,220,0.25) 0%, rgba(80,140,200,0.1) 40%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(59,130,246,0.25) 0%, rgba(96,165,250,0.1) 40%, transparent 70%);
     filter: blur(50px);
     z-index: -1;
   }
 
   .phone-frame {
     width: 280px;
-    height: 580px;
+    height: 590px;
     border-radius: 44px;
-    background: #000;
-    padding: 10px;
+    background: #111;
+    padding: 8px;
     box-shadow:
-      0 0 0 2px rgba(255,255,255,0.1),
-      0 20px 60px rgba(0,0,0,0.5),
-      0 0 100px rgba(100,160,220,0.1),
-      inset 0 0 0 1px rgba(255,255,255,0.05);
+      0 0 0 2px rgba(255,255,255,0.08),
+      0 25px 60px rgba(0,0,0,0.6),
+      0 0 80px rgba(59,130,246,0.1);
     position: relative;
     overflow: hidden;
   }
 
   .phone-notch {
     position: absolute;
-    top: 10px;
+    top: 8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 28px;
-    background: #000;
-    border-radius: 0 0 18px 18px;
+    width: 110px;
+    height: 26px;
+    background: #111;
+    border-radius: 0 0 16px 16px;
     z-index: 10;
   }
 
+  /* ── PHONE SCREEN - Real App UI ── */
   .phone-screen {
     width: 100%;
     height: 100%;
-    border-radius: 36px;
+    border-radius: 38px;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(180deg, #7CB8E4 0%, #8EC5EB 25%, #9DD0F0 50%, #A8D8F4 75%, #B5DFF7 100%);
+    background: linear-gradient(180deg, #5B9FD6 0%, #6BADE0 20%, #7CBCE8 45%, #8DC8EE 70%, #9DD4F4 100%);
   }
 
-  /* ── App UI - matching real screenshot ── */
   .app-ui {
     position: absolute; inset: 0;
-    padding: 48px 16px 16px;
+    padding: 44px 14px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: 'Sora', -apple-system, sans-serif;
+    overflow: hidden;
   }
 
-  /* Top bar */
-  .app-topbar {
+  /* -- Top bar -- */
+  .app-top {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
   }
-  .app-topbar-left {
+  .app-top-left {
     display: flex;
     align-items: flex-start;
-    gap: 6px;
+    gap: 5px;
   }
-  .app-topbar-left .pin-icon {
-    font-size: 14px;
-    margin-top: 1px;
+  .app-top-left svg {
+    width: 16px; height: 16px;
+    fill: #fff;
+    margin-top: 2px;
+    flex-shrink: 0;
   }
-  .app-topbar-info .app-scene {
+  .app-top-text .app-scene-name {
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     color: #fff;
     line-height: 1.2;
   }
-  .app-topbar-info .app-range {
-    font-size: 9px;
-    color: rgba(255,255,255,0.6);
+  .app-top-text .app-scene-sub {
+    font-size: 8.5px;
+    color: rgba(255,255,255,0.65);
     margin-top: 1px;
   }
-  .app-topbar-right {
+  .app-top-right {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
   }
-  .app-sun-icon {
+  .app-icon-pro {
     width: 28px; height: 28px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #FFD700, #FFA500);
+    background: linear-gradient(135deg, #FFD700, #FF8C00);
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    box-shadow: 0 2px 8px rgba(255,165,0,0.4);
+    box-shadow: 0 2px 10px rgba(255,165,0,0.4);
+    overflow: hidden;
   }
-  .app-gear-icon {
+  .app-icon-pro img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .app-icon-gear {
     width: 28px; height: 28px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.18);
     display: flex; align-items: center; justify-content: center;
-    color: rgba(255,255,255,0.7);
-    font-size: 14px;
+  }
+  .app-icon-gear svg {
+    width: 15px; height: 15px;
+    fill: none;
+    stroke: rgba(255,255,255,0.7);
+    stroke-width: 1.8;
   }
 
-  /* UV Index label */
+  /* -- UV Index label -- */
   .app-uv-label {
-    font-size: 12px;
-    color: rgba(255,255,255,0.7);
-    letter-spacing: 0.04em;
-    margin-bottom: 4px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin-bottom: 0;
     display: flex;
     align-items: center;
     gap: 5px;
   }
-  .app-uv-label .sun-sm {
-    font-size: 11px;
+  .app-uv-label svg {
+    width: 14px; height: 14px;
+    fill: rgba(255,255,255,0.7);
   }
 
-  /* Big UV number */
-  .app-uv-number {
+  /* -- Big UV number -- */
+  .app-uv-big {
     font-family: 'Sora', sans-serif;
-    font-size: 90px;
+    font-size: 108px;
     font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 1;
+    letter-spacing: -0.05em;
+    line-height: 0.95;
     color: #fff;
-    text-shadow: 0 4px 20px rgba(255,255,255,0.15);
-    margin-bottom: 8px;
-    animation: uvPulse 4s ease-in-out infinite;
+    text-shadow: 0 6px 30px rgba(255,255,255,0.12);
+    margin: -2px 0 4px;
+    animation: uvGlow 4s ease-in-out infinite;
   }
-  @keyframes uvPulse {
-    0%, 100% { text-shadow: 0 4px 20px rgba(255,255,255,0.15); }
-    50% { text-shadow: 0 4px 30px rgba(255,255,255,0.25); }
+  @keyframes uvGlow {
+    0%, 100% { text-shadow: 0 6px 30px rgba(255,255,255,0.12); }
+    50% { text-shadow: 0 6px 40px rgba(255,255,255,0.2); }
   }
 
-  /* Moderate badge */
-  .app-level-badge {
-    padding: 6px 28px;
-    border-radius: 24px;
-    background: rgba(60,100,180,0.6);
-    font-size: 13px;
+  /* -- Level badge -- */
+  .app-level {
+    padding: 5px 24px;
+    border-radius: 20px;
+    background: rgba(50,90,160,0.5);
+    font-size: 12px;
     font-weight: 600;
     color: #fff;
-    letter-spacing: 0.02em;
-    margin-bottom: 14px;
+    letter-spacing: 0.03em;
+    margin-bottom: 12px;
   }
 
-  /* Info banner */
-  .app-info-banner {
+  /* -- Hint banner -- */
+  .app-hint {
     width: 100%;
-    background: rgba(255,255,255,0.18);
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.15);
     border-radius: 14px;
-    padding: 10px 14px;
+    padding: 9px 12px;
     margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
   }
-  .app-info-banner .info-icon {
-    font-size: 14px;
-    opacity: 0.6;
+  .app-hint svg {
+    width: 18px; height: 18px;
+    fill: none;
+    stroke: rgba(255,255,255,0.5);
+    stroke-width: 1.5;
+    flex-shrink: 0;
   }
-  .app-info-banner .info-text {
-    font-size: 10px;
-    color: rgba(255,255,255,0.8);
-    line-height: 1.4;
+  .app-hint-text {
+    font-size: 9.5px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.35;
   }
 
-  /* Cards */
-  .app-card {
+  /* -- Glass cards -- */
+  .app-glass-card {
     width: 100%;
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(255,255,255,0.7);
     border-radius: 18px;
-    padding: 14px;
+    padding: 12px 14px;
     margin-bottom: 8px;
+    backdrop-filter: blur(12px);
   }
-  .app-card-header {
+  .app-glass-card .gc-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    margin-bottom: 6px;
+    align-items: flex-start;
   }
-  .app-card-title {
+  .app-glass-card .gc-title {
     font-size: 12px;
     font-weight: 700;
-    color: rgba(0,0,0,0.7);
+    color: #1F2937;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
+    line-height: 1.3;
   }
-  .app-card-title .card-icon {
-    font-size: 13px;
+  .app-glass-card .gc-title svg {
+    width: 14px; height: 14px;
+    fill: none;
+    stroke: #4B5563;
+    stroke-width: 2;
+    flex-shrink: 0;
   }
-  .app-card-desc {
-    font-size: 9.5px;
-    color: rgba(0,0,0,0.45);
-    line-height: 1.4;
-  }
-  .app-card-footer {
-    margin-top: 6px;
+  .app-glass-card .gc-desc {
     font-size: 9px;
-    color: rgba(200,80,50,0.8);
+    color: #6B7280;
+    line-height: 1.4;
+    margin-top: 3px;
+  }
+  .app-glass-card .gc-footer {
+    margin-top: 5px;
+    font-size: 8.5px;
+    color: #DC6843;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
   }
-  .refresh-btn {
-    width: 32px; height: 32px;
+  .gc-refresh {
+    width: 30px; height: 30px;
     border-radius: 50%;
-    background: rgba(60,120,200,0.15);
+    background: rgba(59,130,246,0.1);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(60,120,200,0.8);
-    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .gc-refresh svg {
+    width: 16px; height: 16px;
+    fill: none;
+    stroke: #3B82F6;
+    stroke-width: 2;
   }
 
-  /* Bottom card peek */
-  .app-card-peek {
+  /* -- Peek card at bottom -- */
+  .app-peek-card {
     width: 100%;
-    background: rgba(255,255,255,0.22);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.55);
+    border: 1px solid rgba(255,255,255,0.7);
     border-radius: 18px 18px 0 0;
-    padding: 14px 14px 20px;
+    padding: 12px 14px 24px;
+    backdrop-filter: blur(12px);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
   }
-  .app-card-peek .app-card-title {
+  .app-peek-card .peek-icon {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+  .app-peek-card .peek-title {
     font-size: 13px;
     font-weight: 700;
-    color: rgba(0,0,0,0.7);
+    color: #1F2937;
+    line-height: 1.3;
   }
 
   /* ── NAV ── */
@@ -634,11 +675,10 @@
     font-size: 14px;
     font-weight: 500;
     transition: color 0.3s;
-    letter-spacing: 0.01em;
   }
   .nav-links a:hover { color: var(--text-primary); }
 
-  /* ── BOTTOM STATS BAR ── */
+  /* ── BOTTOM BAR ── */
   .bottom-bar {
     position: fixed;
     bottom: 28px;
@@ -677,28 +717,6 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ── DECORATIVE PARTICLES ── */
-  .particles {
-    position: absolute; inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    overflow: hidden;
-  }
-  .particle {
-    position: absolute;
-    width: 3px; height: 3px;
-    border-radius: 50%;
-    background: rgba(251,191,36,0.4);
-    animation: particleRise linear infinite;
-  }
-  @keyframes particleRise {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    20% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-  }
-
-  /* ── FOOTER ── */
   .footer-links {
     position: fixed;
     bottom: 8px;
@@ -725,24 +743,20 @@
       padding-top: 90px;
       justify-content: flex-start;
     }
-    .text-side {
-      text-align: center;
-      max-width: 100%;
-    }
+    .text-side { text-align: center; max-width: 100%; }
     .features { justify-content: center; }
     .cta-row { justify-content: center; flex-wrap: wrap; }
     .phone-frame { width: 220px; height: 460px; }
-    .app-uv-number { font-size: 68px; }
+    .app-uv-big { font-size: 80px; }
     .bottom-bar { display: none; }
     .nav-links { display: none; }
+    .based-on { justify-content: center; flex-wrap: wrap; }
   }
-
   @media (max-width: 480px) {
     h1 { font-size: 2rem; }
     .phone-frame { width: 180px; height: 380px; }
-    .app-uv-number { font-size: 52px; }
-    .app-card { padding: 10px; }
-    .app-ui { padding: 40px 12px 12px; }
+    .app-uv-big { font-size: 60px; }
+    .app-ui { padding: 38px 10px 0; }
     .footer-links { display: none; }
   }
 </style>
@@ -754,22 +768,18 @@
   <video class="video-bg" autoplay muted loop playsinline>
     <source src="bg-video.mp4" type="video/mp4">
   </video>
+  <div class="video-overlay"></div>
 
-  <!-- Animated gradient fallback -->
+  <!-- Gradient fallback (behind video) -->
   <div class="animated-bg"></div>
 
-  <!-- Orbs -->
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
-
-  <!-- Particles -->
   <div class="particles" id="particles"></div>
-
-  <!-- Grain texture -->
   <div class="grain"></div>
 
-  <!-- Top Navigation -->
+  <!-- Nav -->
   <nav class="top-nav">
     <div class="logo">
       <div class="logo-icon"><img src="logo.png" alt="UVPeek"></div>
@@ -783,8 +793,7 @@
 
   <!-- Main Content -->
   <div class="content">
-
-    <!-- Left: Text & CTA -->
+    <!-- Left -->
     <div class="text-side">
       <div class="badge">
         <span class="dot"></span>
@@ -799,12 +808,12 @@
       </p>
 
       <div class="features">
-        <span class="feature-tag"><span class="emoji">&#128752;</span> GNSS + Sensor Fusion</span>
-        <span class="feature-tag"><span class="emoji">&#128274;</span> 100% On-Device AI</span>
-        <span class="feature-tag"><span class="emoji">&#129524;</span> Smart SPF Advice</span>
-        <span class="feature-tag"><span class="emoji">&#9201;</span> Reapply Reminders</span>
-        <span class="feature-tag"><span class="emoji">&#127777;</span> 6 Skin Types</span>
-        <span class="feature-tag"><span class="emoji">&#127381;</span> Free to Use</span>
+        <span class="feature-tag">&#128752; GNSS + Sensor Fusion</span>
+        <span class="feature-tag">&#128274; 100% On-Device AI</span>
+        <span class="feature-tag">&#129524; Smart SPF Advice</span>
+        <span class="feature-tag">&#9201; Reapply Reminders</span>
+        <span class="feature-tag">&#127777; 6 Skin Types</span>
+        <span class="feature-tag">&#127381; Free to Use</span>
       </div>
 
       <div class="cta-row">
@@ -819,7 +828,6 @@
             Google Play
           </span>
         </a>
-
         <div class="based-on">
           BASED ON
           <span class="org-badge"><span class="org-dot"></span> WHO</span>
@@ -830,7 +838,7 @@
       </div>
     </div>
 
-    <!-- Right: Phone Mockup -->
+    <!-- Right: Phone -->
     <div class="phone-side">
       <div class="phone-wrapper">
         <div class="phone-glow"></div>
@@ -839,47 +847,62 @@
           <div class="phone-screen">
             <div class="app-ui">
 
-              <!-- Top bar: location + icons -->
-              <div class="app-topbar">
-                <div class="app-topbar-left">
-                  <span class="pin-icon">&#128205;</span>
-                  <div class="app-topbar-info">
-                    <div class="app-scene">Outdoor Shade</div>
-                    <div class="app-range">3~10m surrounding environment</div>
+              <!-- Top bar -->
+              <div class="app-top">
+                <div class="app-top-left">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+                  <div class="app-top-text">
+                    <div class="app-scene-name">Outdoor Shade</div>
+                    <div class="app-scene-sub">3~10m surrounding environment</div>
                   </div>
                 </div>
-                <div class="app-topbar-right">
-                  <div class="app-sun-icon">&#9889;</div>
-                  <div class="app-gear-icon">&#9881;</div>
+                <div class="app-top-right">
+                  <div class="app-icon-pro"><img src="logo.png" alt=""></div>
+                  <div class="app-icon-gear">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                  </div>
                 </div>
               </div>
 
-              <!-- UV Index -->
-              <div class="app-uv-label"><span class="sun-sm">&#9728;</span> UV Index</div>
-              <div class="app-uv-number">5.0</div>
-              <div class="app-level-badge">Moderate</div>
+              <!-- UV label -->
+              <div class="app-uv-label">
+                <svg viewBox="0 0 24 24"><path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 00-1.41 0 .996.996 0 000 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 000-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 000-1.41.996.996 0 00-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/></svg>
+                UV Index
+              </div>
 
-              <!-- Info banner -->
-              <div class="app-info-banner">
-                <span class="info-icon">&#9881;</span>
-                <span class="info-text">Spatial-level sensing,<br>Recommended exposure &le; 40 min</span>
+              <!-- Big number -->
+              <div class="app-uv-big">5.0</div>
+
+              <!-- Level -->
+              <div class="app-level">Moderate</div>
+
+              <!-- Hint -->
+              <div class="app-hint">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+                <span class="app-hint-text">Spatial-level sensing,<br>Recommended exposure &#8804; 40 min</span>
               </div>
 
               <!-- UV Calibration card -->
-              <div class="app-card">
-                <div class="app-card-header">
+              <div class="app-glass-card">
+                <div class="gc-header">
                   <div>
-                    <div class="app-card-title"><span class="card-icon">&#9776;</span> UV Calibration</div>
-                    <div class="app-card-desc">Smart sensing &middot; Dynamic refresh,<br>real-time display of nearby UV risk</div>
+                    <div class="gc-title">
+                      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                      UV Calibration
+                    </div>
+                    <div class="gc-desc">Smart sensing &middot; Dynamic refresh,<br>real-time display of nearby UV risk</div>
                   </div>
-                  <div class="refresh-btn">&#8635;</div>
+                  <div class="gc-refresh">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                  </div>
                 </div>
-                <div class="app-card-footer">&#9200; Just updated</div>
+                <div class="gc-footer">&#9200; Just updated</div>
               </div>
 
-              <!-- Personalized Sun Protection (peek) -->
-              <div class="app-card-peek">
-                <div class="app-card-title"><span class="card-icon">&#9728;</span> Personalized Sun<br>Protection Plan</div>
+              <!-- Personalized peek -->
+              <div class="app-peek-card">
+                <span class="peek-icon">&#9728;&#65039;</span>
+                <div class="peek-title">Personalized Sun<br>Protection Plan</div>
               </div>
 
             </div>
@@ -889,35 +912,25 @@
     </div>
   </div>
 
-  <!-- Bottom Stats Bar -->
+  <!-- Bottom Stats -->
   <div class="bottom-bar">
-    <div class="stat-item">
-      <span class="stat-val">3-10m</span> Precision
-    </div>
+    <div class="stat-item"><span class="stat-val">3-10m</span> Precision</div>
     <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-val">15+</span> Environments
-    </div>
+    <div class="stat-item"><span class="stat-val">15+</span> Environments</div>
     <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-val">100%</span> On-Device
-    </div>
+    <div class="stat-item"><span class="stat-val">100%</span> On-Device</div>
     <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-val">0</span> Data Uploaded
-    </div>
+    <div class="stat-item"><span class="stat-val">0</span> Data Uploaded</div>
   </div>
 
-  <!-- Footer -->
   <div class="footer-links">
     &copy; 2025 UVPeek &middot; <a href="mailto:aiapis.info@gmail.com">aiapis.info@gmail.com</a>
   </div>
 </div>
 
 <script>
-  // ── Floating Particles ──
   function createParticles() {
-    var container = document.getElementById('particles');
+    var c = document.getElementById('particles');
     for (var i = 0; i < 20; i++) {
       var p = document.createElement('div');
       p.className = 'particle';
@@ -927,19 +940,16 @@
       p.style.width = (2 + Math.random() * 3) + 'px';
       p.style.height = p.style.width;
       p.style.opacity = 0.15 + Math.random() * 0.35;
-      container.appendChild(p);
+      c.appendChild(p);
     }
   }
   createParticles();
 
-  // ── Subtle parallax on mouse move ──
-  var phoneWrapper = document.querySelector('.phone-wrapper');
+  var pw = document.querySelector('.phone-wrapper');
   document.addEventListener('mousemove', function(e) {
     var x = (e.clientX / window.innerWidth - 0.5) * 12;
     var y = (e.clientY / window.innerHeight - 0.5) * 12;
-    if (phoneWrapper) {
-      phoneWrapper.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
-    }
+    if (pw) pw.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
   });
 </script>
 </body>
