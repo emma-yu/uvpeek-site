@@ -578,28 +578,6 @@
     50% { box-shadow: 0 0 12px 3px rgba(251,191,36,0.35); }
   }
 
-  /* Tap-for-sound floating hint */
-  .sound-hint {
-    position: fixed;
-    bottom: 80px;
-    left: 32px;
-    z-index: 61;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border-radius: 100px;
-    background: rgba(251,191,36,0.15);
-    border: 1px solid rgba(251,191,36,0.3);
-    backdrop-filter: blur(12px);
-    color: var(--sun-gold);
-    font-size: 12px;
-    font-weight: 500;
-    animation: fadeInUp 0.6s 2s both, audioPulse 2.5s ease-in-out 2.5s infinite;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-  }
-  .sound-hint.hidden { opacity: 0; pointer-events: none; }
 
   /* X/Twitter icon - filled style */
   .x-link svg {
@@ -621,7 +599,6 @@
     .grain { display: none; }
     .badge, .feature-tag, .icon-btn, .bottom-bar { backdrop-filter: none; }
     .animated-bg { animation: none; }
-    .sound-hint { bottom: 68px; left: 16px; }
   }
   @media (max-width: 960px) {
     .content {
@@ -774,9 +751,6 @@
     </a>
   </div>
 
-  <!-- Sound hint for mobile (hidden once audio plays) -->
-  <div class="sound-hint" id="soundHint">Tap anywhere for sound</div>
-
   <div class="footer-links">
     &copy; 2025 UVPeek
   </div>
@@ -815,7 +789,6 @@
   // Audio: try autoplay with sound, fallback to tap-anywhere-to-unmute
   var video = document.getElementById('bgVideo');
   var audioBtn = document.getElementById('audioToggle');
-  var soundHint = document.getElementById('soundHint');
   var audioOn = false;
 
   function enableAudio() {
@@ -823,7 +796,6 @@
     video.play().catch(function(){});
     audioOn = true;
     audioBtn.classList.remove('muted');
-    soundHint.classList.add('hidden');
   }
 
   function disableAudio() {
@@ -840,8 +812,7 @@
       // Autoplay with sound succeeded
       audioOn = true;
       audioBtn.classList.remove('muted');
-      soundHint.classList.add('hidden');
-    }).catch(function() {
+      }).catch(function() {
       // Autoplay with sound blocked — fallback to muted + tap-to-unmute
       video.muted = true;
       video.play().catch(function(){});
