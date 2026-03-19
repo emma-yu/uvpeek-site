@@ -289,18 +289,40 @@
     letter-spacing: 0.06em;
   }
 
-  .rating-info {
+  .based-on {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
     color: var(--text-muted);
-    font-size: 13px;
-    font-weight: 400;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
-  .stars {
-    color: var(--sun-gold);
-    font-size: 14px;
-    letter-spacing: 1px;
+  .org-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.04em;
+    transition: all 0.3s ease;
+  }
+  .org-badge:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: rgba(255,255,255,0.2);
+    color: var(--text-primary);
+  }
+  .org-badge .org-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--sky-400);
+    flex-shrink: 0;
   }
 
   /* ── RIGHT SIDE: PHONE ── */
@@ -798,9 +820,12 @@
           </span>
         </a>
 
-        <div class="rating-info">
-          <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-          <span>4.9 Rating</span>
+        <div class="based-on">
+          BASED ON
+          <span class="org-badge"><span class="org-dot"></span> WHO</span>
+          <span class="org-badge"><span class="org-dot"></span> AAD</span>
+          <span class="org-badge"><span class="org-dot"></span> CDC</span>
+          <span class="org-badge"><span class="org-dot"></span> NHS</span>
         </div>
       </div>
     </div>
