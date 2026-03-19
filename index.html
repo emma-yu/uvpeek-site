@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UVPeek - Smart UV Protection</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+        }
+        .container {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 600px;
+        }
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 60px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+        }
+        .tagline {
+            font-size: 20px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        .feature {
+            background: rgba(255,255,255,0.15);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            backdrop-filter: blur(5px);
+        }
+        .download-btn {
+            display: inline-block;
+            background: #fff;
+            color: #764ba2;
+            padding: 16px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        .footer {
+            margin-top: 50px;
+            font-size: 13px;
+            opacity: 0.6;
+        }
+        .footer a { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="app-icon">&#9728;</div>
+        <h1>UVPeek</h1>
+        <p class="tagline">Smart UV Protection for Your Skin</p>
+        <div class="features">
+            <div class="feature">Real-time UV Index</div>
+            <div class="feature">AI Skin Analysis</div>
+            <div class="feature">Smart Environment Detection</div>
+            <div class="feature">Personalized SPF Advice</div>
+            <div class="feature">UV Trend Prediction</div>
+        </div>
+        <a class="download-btn" href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect">
+            Get it on Google Play
+        </a>
+        <div class="footer">
+            <p>&copy; 2025 UVPeek. All rights reserved.</p>
+            <p><a href="mailto:support@uvpeek.life">Contact Us</a></p>
+        </div>
+    </div>
+</body>
+</html>
