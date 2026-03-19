@@ -6,7 +6,7 @@
 <title>UVPeek — Your Skin's Best Friend</title>
 <meta name="description" content="Precision UV detection powered by on-device AI. Know your UV in 3 meters. Your skin deserves more than a weather forecast.">
 <link rel="canonical" href="https://uvpeek.life">
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
     --warm-500: #F97316;
@@ -403,16 +403,17 @@
     border-radius: 38px;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(180deg, #E08A4A 0%, #E8A060 20%, #F0B878 40%, #F5C890 60%, #F8D8A8 80%, #FCEACC 100%);
+    /* UV 6-8 (High) gradient matching real app */
+    background: linear-gradient(180deg, #F59E0B 0%, #FBBF24 35%, #FDE047 70%, #FEF3C7 100%);
   }
 
   .app-ui {
     position: absolute; inset: 0;
-    padding: 44px 14px 0;
+    padding: 44px 16px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-family: 'Sora', -apple-system, sans-serif;
+    font-family: 'Inter', -apple-system, 'Roboto', 'SF Pro Display', sans-serif;
     overflow: hidden;
   }
 
@@ -422,41 +423,42 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 12px;
+    margin-bottom: 6px;
   }
   .app-top-left {
     display: flex;
     align-items: flex-start;
-    gap: 5px;
+    gap: 4px;
   }
   .app-top-left svg {
-    width: 16px; height: 16px;
+    width: 14px; height: 14px;
     fill: #fff;
-    margin-top: 2px;
+    margin-top: 3px;
     flex-shrink: 0;
   }
   .app-top-text .app-scene-name {
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     color: #fff;
-    line-height: 1.2;
+    line-height: 1.25;
   }
   .app-top-text .app-scene-sub {
-    font-size: 8.5px;
-    color: rgba(255,255,255,0.65);
+    font-size: 9px;
+    color: rgba(255,255,255,0.7);
     margin-top: 1px;
+    font-weight: 400;
   }
   .app-top-right {
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
   }
   .app-icon-pro {
-    width: 28px; height: 28px;
+    width: 26px; height: 26px;
     border-radius: 50%;
     background: linear-gradient(135deg, #FFD700, #FF8C00);
     display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 10px rgba(255,165,0,0.4);
+    box-shadow: 0 2px 8px rgba(255,165,0,0.35);
     overflow: hidden;
   }
   .app-icon-pro img {
@@ -464,24 +466,25 @@
     object-fit: cover;
   }
   .app-icon-gear {
-    width: 28px; height: 28px;
+    width: 26px; height: 26px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.2);
     display: flex; align-items: center; justify-content: center;
   }
   .app-icon-gear svg {
-    width: 15px; height: 15px;
+    width: 14px; height: 14px;
     fill: none;
-    stroke: rgba(255,255,255,0.7);
+    stroke: rgba(255,255,255,0.75);
     stroke-width: 1.8;
   }
 
   /* -- UV Index label -- */
   .app-uv-label {
-    font-size: 13px;
-    color: rgba(255,255,255,0.8);
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
     font-weight: 500;
     letter-spacing: 0.02em;
+    margin-top: 4px;
     margin-bottom: 0;
     display: flex;
     align-items: center;
@@ -489,71 +492,74 @@
   }
   .app-uv-label svg {
     width: 14px; height: 14px;
-    fill: rgba(255,255,255,0.7);
+    fill: rgba(255,255,255,0.75);
   }
 
   /* -- Big UV number -- */
   .app-uv-big {
-    font-family: 'Sora', sans-serif;
-    font-size: 108px;
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 100px;
     font-weight: 800;
-    letter-spacing: -0.05em;
+    letter-spacing: -0.04em;
     line-height: 0.95;
     color: #fff;
-    text-shadow: 0 6px 30px rgba(255,255,255,0.12);
-    margin: -2px 0 4px;
+    text-shadow: 0 4px 24px rgba(255,255,255,0.15);
+    margin: -4px 0 2px;
     animation: uvGlow 4s ease-in-out infinite;
   }
   @keyframes uvGlow {
-    0%, 100% { text-shadow: 0 6px 30px rgba(255,255,255,0.12); }
-    50% { text-shadow: 0 6px 40px rgba(255,255,255,0.2); }
+    0%, 100% { text-shadow: 0 4px 24px rgba(255,255,255,0.15); }
+    50% { text-shadow: 0 4px 32px rgba(255,255,255,0.25); }
   }
 
   /* -- Level badge -- */
   .app-level {
-    padding: 5px 24px;
+    padding: 4px 20px;
     border-radius: 20px;
-    background: linear-gradient(135deg, rgba(249,115,22,0.7), rgba(234,88,12,0.7));
+    background: rgba(255,255,255,0.25);
+    backdrop-filter: blur(8px);
     font-size: 11px;
     font-weight: 600;
     color: #fff;
     letter-spacing: 0.03em;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   /* -- Hint banner -- */
   .app-hint {
     width: 100%;
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.18);
     border-radius: 14px;
-    padding: 9px 12px;
-    margin-bottom: 10px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    gap: 7px;
+    gap: 6px;
+    backdrop-filter: blur(8px);
   }
   .app-hint svg {
-    width: 18px; height: 18px;
+    width: 16px; height: 16px;
     fill: none;
-    stroke: rgba(255,255,255,0.5);
+    stroke: rgba(255,255,255,0.6);
     stroke-width: 1.5;
     flex-shrink: 0;
   }
   .app-hint-text {
-    font-size: 9.5px;
-    color: rgba(255,255,255,0.75);
+    font-size: 8.5px;
+    color: rgba(255,255,255,0.8);
     line-height: 1.35;
+    font-weight: 400;
   }
 
   /* -- Glass cards -- */
   .app-glass-card {
     width: 100%;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(255,255,255,0.7);
-    border-radius: 18px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 16px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    backdrop-filter: blur(16px);
   }
   .app-glass-card .gc-header {
     display: flex;
@@ -561,51 +567,51 @@
     align-items: flex-start;
   }
   .app-glass-card .gc-title {
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 700;
     color: #1F2937;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     line-height: 1.3;
   }
   .app-glass-card .gc-title svg {
-    width: 14px; height: 14px;
+    width: 13px; height: 13px;
     fill: none;
     stroke: #4B5563;
     stroke-width: 2;
     flex-shrink: 0;
   }
   .app-glass-card .gc-hint-badge {
-    font-size: 7.5px;
+    font-size: 7px;
     color: #AEAEB2;
-    margin-top: 2px;
+    margin-top: 1px;
   }
   .app-glass-card .gc-desc {
-    font-size: 9px;
+    font-size: 8px;
     color: #6B7280;
     line-height: 1.4;
-    margin-top: 3px;
+    margin-top: 2px;
   }
   .app-glass-card .gc-footer {
-    margin-top: 5px;
-    font-size: 8.5px;
+    margin-top: 4px;
+    font-size: 8px;
     color: #10B981;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
   }
   .gc-refresh {
-    width: 30px; height: 30px;
+    width: 28px; height: 28px;
     border-radius: 50%;
-    background: rgba(59,130,246,0.1);
+    background: rgba(59,130,246,0.08);
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
   .gc-refresh svg {
-    width: 16px; height: 16px;
+    width: 14px; height: 14px;
     fill: none;
     stroke: #3B82F6;
     stroke-width: 2;
@@ -614,24 +620,30 @@
   /* -- Peek card at bottom -- */
   .app-peek-card {
     width: 100%;
-    background: rgba(255,255,255,0.55);
-    border: 1px solid rgba(255,255,255,0.7);
-    border-radius: 18px 18px 0 0;
-    padding: 12px 14px 24px;
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.8);
+    border-radius: 16px 16px 0 0;
+    padding: 10px 12px 20px;
+    backdrop-filter: blur(16px);
     display: flex;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .app-peek-card .peek-icon {
-    font-size: 20px;
-    margin-top: 2px;
+    flex-direction: column;
+    gap: 4px;
   }
   .app-peek-card .peek-title {
-    font-size: 13px;
+    font-size: 11.5px;
     font-weight: 700;
     color: #1F2937;
     line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .app-peek-card .peek-title svg {
+    width: 13px; height: 13px;
+    fill: none;
+    stroke: #4B5563;
+    stroke-width: 2;
+    flex-shrink: 0;
   }
 
   /* ── NAV ── */
@@ -792,7 +804,9 @@
     .features { justify-content: center; }
     .cta-row { justify-content: center; flex-wrap: wrap; }
     .phone-frame { width: 220px; height: 460px; }
-    .app-uv-big { font-size: 80px; }
+    .app-uv-big { font-size: 76px; }
+    .app-scene-name { font-size: 12px !important; }
+    .app-glass-card { padding: 8px 10px; }
     .bottom-bar { display: none; }
     .nav-links { display: none; }
     .based-on { justify-content: center; flex-wrap: wrap; }
@@ -801,8 +815,10 @@
   @media (max-width: 480px) {
     h1 { font-size: 2rem; }
     .phone-frame { width: 180px; height: 380px; }
-    .app-uv-big { font-size: 60px; }
+    .app-uv-big { font-size: 58px; }
     .app-ui { padding: 38px 10px 0; }
+    .app-scene-name { font-size: 10px !important; }
+    .app-glass-card { padding: 6px 8px; border-radius: 12px; }
     .footer-links { display: none; }
     .audio-toggle { bottom: 16px; right: 12px; width: 36px; height: 36px; }
   }
@@ -899,8 +915,8 @@
                 <div class="app-top-left">
                   <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
                   <div class="app-top-text">
-                    <div class="app-scene-name">Outdoor Environment</div>
-                    <div class="app-scene-sub">3–10m precision sensing</div>
+                    <div class="app-scene-name">Bright Outdoor</div>
+                    <div class="app-scene-sub">Your 3~10m surrounding</div>
                   </div>
                 </div>
                 <div class="app-top-right">
@@ -921,12 +937,12 @@
               <div class="app-uv-big">6.2</div>
 
               <!-- Level badge -->
-              <div class="app-level">Current &middot; High</div>
+              <div class="app-level">High</div>
 
               <!-- Hint banner -->
               <div class="app-hint">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>
-                <span class="app-hint-text">Spatial-level sensing<br>Recommended exposure &#8804; 25 min</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                <span class="app-hint-text">Spatial-level sensing for smarter sun protection</span>
               </div>
 
               <!-- UV Calibration card -->
@@ -937,77 +953,78 @@
                       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
                       UV Calibration
                     </div>
-                    <div class="gc-hint-badge">Screen up &middot; open area for accuracy</div>
-                    <div class="gc-desc">Smart sensing &middot; Dynamic refresh,<br>real-time display of nearby UV risk</div>
+                    <div class="gc-hint-badge">Screen up &middot; open area</div>
+                    <div class="gc-desc">Smart sensing &middot; Dynamic refresh<br>Real-time display of nearby UV</div>
                   </div>
                   <div class="gc-refresh">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
                   </div>
                 </div>
                 <div class="gc-footer">
-                  <svg viewBox="0 0 24 24" width="10" height="10" fill="#10B981"><circle cx="12" cy="12" r="10"/></svg>
+                  <svg viewBox="0 0 24 24" width="8" height="8" fill="#10B981"><circle cx="12" cy="12" r="10"/></svg>
                   Updated just now
                 </div>
               </div>
 
-              <!-- Personalized Sun Protection card -->
-              <div class="app-glass-card" style="margin-bottom: 6px;">
+              <!-- Personalized Sun Protection Plan card -->
+              <div class="app-glass-card" style="margin-bottom: 4px;">
                 <div class="gc-header">
                   <div>
                     <div class="gc-title">
                       <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                      Personalized Sun Protection
+                      Personalized Sun Protection Plan
                     </div>
                     <div class="gc-desc">Based on current UV &middot; Professional guide</div>
                   </div>
                 </div>
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
-                  <div style="text-align:center;">
-                    <div style="font-size:16px; font-weight:800; color:#1F2937;">SPF50+</div>
-                    <div style="font-size:7px; color:#9CA3AF;">SPF Index</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px; padding:0 2px;">
+                  <div style="text-align:center; flex:1;">
+                    <div style="font-size:15px; font-weight:800; color:#1F2937; font-family:'Inter',sans-serif;">SPF50+</div>
+                    <div style="font-size:7px; color:#9CA3AF; margin-top:1px;">SPF Index</div>
                   </div>
-                  <div style="width:1px; height:22px; background:rgba(0,0,0,0.08);"></div>
-                  <div style="text-align:center;">
-                    <div style="font-size:16px; font-weight:800; color:#1F2937;">2h</div>
-                    <div style="font-size:7px; color:#9CA3AF;">Reapply</div>
+                  <div style="width:1px; height:20px; background:rgba(0,0,0,0.06);"></div>
+                  <div style="text-align:center; flex:1;">
+                    <div style="font-size:15px; font-weight:800; color:#1F2937; font-family:'Inter',sans-serif;">2h</div>
+                    <div style="font-size:7px; color:#9CA3AF; margin-top:1px;">Reapply</div>
                   </div>
-                  <div style="width:1px; height:22px; background:rgba(0,0,0,0.08);"></div>
-                  <div style="text-align:center;">
-                    <div style="font-size:11px; font-weight:700; color:#F97316; background:rgba(249,115,22,0.1); border-radius:8px; padding:2px 8px;">High</div>
-                    <div style="font-size:7px; color:#9CA3AF; margin-top:2px;">Risk</div>
+                  <div style="width:1px; height:20px; background:rgba(0,0,0,0.06);"></div>
+                  <div style="text-align:center; flex:1;">
+                    <div style="font-size:10px; font-weight:700; color:#F97316; background:rgba(249,115,22,0.1); border-radius:6px; padding:2px 6px; display:inline-block;">High</div>
+                    <div style="font-size:7px; color:#9CA3AF; margin-top:1px;">Risk Level</div>
                   </div>
                 </div>
               </div>
 
-              <!-- UV Trend peek card -->
+              <!-- Today's Outdoor UV Trend card -->
               <div class="app-peek-card">
-                <div style="width:100%;">
-                  <div class="peek-title" style="font-size:11px; margin-bottom:6px;">Today's Outdoor UV Trend</div>
-                  <div style="display:flex; align-items:flex-end; gap:4px; height:32px;">
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
-                      <div style="width:100%;height:4px;background:#22C55E;border-radius:2px;"></div>
-                      <span style="font-size:6px;color:#9CA3AF;">8</span>
-                    </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
-                      <div style="width:100%;height:10px;background:#FBBF24;border-radius:2px;"></div>
-                      <span style="font-size:6px;color:#9CA3AF;">10</span>
-                    </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
-                      <div style="width:100%;height:20px;background:#F97316;border-radius:2px;"></div>
-                      <span style="font-size:6px;color:#9CA3AF;">12</span>
-                    </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
-                      <div style="width:100%;height:24px;background:#EF4444;border-radius:2px;"></div>
-                      <span style="font-size:6px;color:#6B7280;font-weight:600;">14</span>
-                    </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
-                      <div style="width:100%;height:16px;background:#F97316;border-radius:2px;"></div>
-                      <span style="font-size:6px;color:#9CA3AF;">16</span>
-                    </div>
-                    <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
-                      <div style="width:100%;height:6px;background:#22C55E;border-radius:2px;"></div>
-                      <span style="font-size:6px;color:#9CA3AF;">18</span>
-                    </div>
+                <div class="peek-title">
+                  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Today's Outdoor UV Trend
+                </div>
+                <div style="display:flex; align-items:flex-end; gap:3px; height:30px; width:100%; padding-top:2px;">
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
+                    <div style="width:100%;height:3px;background:#22C55E;border-radius:2px;"></div>
+                    <span style="font-size:6px;color:#9CA3AF;">8</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
+                    <div style="width:100%;height:8px;background:#FBBF24;border-radius:2px;"></div>
+                    <span style="font-size:6px;color:#9CA3AF;">10</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
+                    <div style="width:100%;height:18px;background:#F97316;border-radius:2px;"></div>
+                    <span style="font-size:6px;color:#9CA3AF;">12</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
+                    <div style="width:100%;height:22px;background:#EF4444;border-radius:2px;"></div>
+                    <span style="font-size:6px;color:#6B7280;font-weight:600;">14</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
+                    <div style="width:100%;height:14px;background:#F97316;border-radius:2px;"></div>
+                    <span style="font-size:6px;color:#9CA3AF;">16</span>
+                  </div>
+                  <div style="display:flex;flex-direction:column;align-items:center;gap:1px;flex:1;">
+                    <div style="width:100%;height:5px;background:#22C55E;border-radius:2px;"></div>
+                    <span style="font-size:6px;color:#9CA3AF;">18</span>
                   </div>
                 </div>
               </div>
