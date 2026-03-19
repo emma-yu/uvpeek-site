@@ -41,7 +41,7 @@
     color: var(--text-primary);
   }
 
-  /* ── ANIMATED BG ── */
+  /* ── VIDEO / ANIMATED BG ── */
   .hero {
     position: relative;
     width: 100vw; height: 100vh;
@@ -49,6 +49,14 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
+  }
+
+  .video-bg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.45;
   }
 
   .animated-bg {
@@ -326,7 +334,7 @@
     transform: translate(-50%, -50%);
     width: 340px; height: 500px;
     border-radius: 50%;
-    background: radial-gradient(ellipse, rgba(251,191,36,0.2) 0%, rgba(249,115,22,0.1) 40%, transparent 70%);
+    background: radial-gradient(ellipse, rgba(100,160,220,0.25) 0%, rgba(80,140,200,0.1) 40%, transparent 70%);
     filter: blur(50px);
     z-index: -1;
   }
@@ -340,7 +348,7 @@
     box-shadow:
       0 0 0 2px rgba(255,255,255,0.1),
       0 20px 60px rgba(0,0,0,0.5),
-      0 0 100px rgba(251,191,36,0.08),
+      0 0 100px rgba(100,160,220,0.1),
       inset 0 0 0 1px rgba(255,255,255,0.05);
     position: relative;
     overflow: hidden;
@@ -364,134 +372,198 @@
     border-radius: 36px;
     overflow: hidden;
     position: relative;
-    background: linear-gradient(180deg, #1a1040 0%, #2d1f6e 30%, #4a2c8a 60%, #e86530 85%, #f5a623 100%);
+    background: linear-gradient(180deg, #7CB8E4 0%, #8EC5EB 25%, #9DD0F0 50%, #A8D8F4 75%, #B5DFF7 100%);
   }
 
-  /* App UI simulation inside phone */
+  /* ── App UI - matching real screenshot ── */
   .app-ui {
     position: absolute; inset: 0;
-    padding: 52px 20px 20px;
+    padding: 48px 16px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: 'Sora', -apple-system, sans-serif;
   }
 
-  .app-location {
-    font-size: 11px;
-    color: rgba(255,255,255,0.7);
-    font-weight: 500;
-    letter-spacing: 0.03em;
+  /* Top bar */
+  .app-topbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .app-topbar-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .app-topbar-left .pin-icon {
+    font-size: 14px;
+    margin-top: 1px;
+  }
+  .app-topbar-info .app-scene {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .app-topbar-info .app-range {
+    font-size: 9px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 1px;
+  }
+  .app-topbar-right {
     display: flex;
     align-items: center;
-    gap: 4px;
-    margin-bottom: 6px;
+    gap: 8px;
   }
-  .app-location::before {
-    content: '\1F4CD';
-    font-size: 10px;
+  .app-sun-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    box-shadow: 0 2px 8px rgba(255,165,0,0.4);
+  }
+  .app-gear-icon {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
   }
 
-  .app-env {
-    font-size: 9px;
-    color: rgba(255,255,255,0.45);
-    background: rgba(255,255,255,0.08);
-    padding: 3px 10px;
-    border-radius: 20px;
-    margin-bottom: 30px;
+  /* UV Index label */
+  .app-uv-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
     letter-spacing: 0.04em;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .app-uv-label .sun-sm {
+    font-size: 11px;
   }
 
+  /* Big UV number */
   .app-uv-number {
     font-family: 'Sora', sans-serif;
-    font-size: 96px;
+    font-size: 90px;
     font-weight: 800;
     letter-spacing: -0.04em;
     line-height: 1;
     color: #fff;
-    text-shadow: 0 4px 30px rgba(251,191,36,0.3);
-    margin-bottom: 4px;
+    text-shadow: 0 4px 20px rgba(255,255,255,0.15);
+    margin-bottom: 8px;
     animation: uvPulse 4s ease-in-out infinite;
   }
   @keyframes uvPulse {
-    0%, 100% { text-shadow: 0 4px 30px rgba(251,191,36,0.3); }
-    50% { text-shadow: 0 4px 50px rgba(251,191,36,0.5); }
+    0%, 100% { text-shadow: 0 4px 20px rgba(255,255,255,0.15); }
+    50% { text-shadow: 0 4px 30px rgba(255,255,255,0.25); }
   }
 
-  .app-uv-label {
-    font-size: 10px;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
+  /* Moderate badge */
+  .app-level-badge {
+    padding: 6px 28px;
+    border-radius: 24px;
+    background: rgba(60,100,180,0.6);
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.02em;
     margin-bottom: 14px;
   }
 
-  .app-level-badge {
-    padding: 5px 18px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, rgba(234,88,12,0.9), rgba(249,115,22,0.7));
-    font-size: 11px;
-    font-weight: 600;
-    color: #fff;
-    letter-spacing: 0.04em;
-    margin-bottom: 24px;
+  /* Info banner */
+  .app-info-banner {
+    width: 100%;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(12px);
+    border-radius: 14px;
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .app-info-banner .info-icon {
+    font-size: 14px;
+    opacity: 0.6;
+  }
+  .app-info-banner .info-text {
+    font-size: 10px;
+    color: rgba(255,255,255,0.8);
+    line-height: 1.4;
   }
 
+  /* Cards */
   .app-card {
     width: 100%;
-    background: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.22);
     backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.12);
-    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 18px;
     padding: 14px;
-    margin-bottom: 10px;
-  }
-  .app-card-title {
-    font-size: 10px;
-    color: rgba(255,255,255,0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
     margin-bottom: 8px;
   }
-  .app-card-row {
+  .app-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 6px;
   }
-  .app-card-val {
-    font-size: 18px;
+  .app-card-title {
+    font-size: 12px;
     font-weight: 700;
-    color: #fff;
+    color: rgba(0,0,0,0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
-  .app-card-unit {
-    font-size: 10px;
-    color: rgba(255,255,255,0.5);
+  .app-card-title .card-icon {
+    font-size: 13px;
   }
-  .app-spf-badge {
-    padding: 4px 12px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, var(--sky-500), var(--sky-600));
-    font-size: 11px;
-    font-weight: 600;
-    color: #fff;
+  .app-card-desc {
+    font-size: 9.5px;
+    color: rgba(0,0,0,0.45);
+    line-height: 1.4;
+  }
+  .app-card-footer {
+    margin-top: 6px;
+    font-size: 9px;
+    color: rgba(200,80,50,0.8);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .refresh-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(60,120,200,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(60,120,200,0.8);
+    font-size: 15px;
   }
 
-  .app-chart {
+  /* Bottom card peek */
+  .app-card-peek {
     width: 100%;
-    height: 50px;
-    position: relative;
-    margin-top: 4px;
+    background: rgba(255,255,255,0.22);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 18px 18px 0 0;
+    padding: 14px 14px 20px;
   }
-  .app-chart svg { width: 100%; height: 100%; }
-  .chart-line {
-    fill: none;
-    stroke: url(#chartGrad);
-    stroke-width: 2;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-  }
-  .chart-area {
-    fill: url(#chartAreaGrad);
-    opacity: 0.3;
+  .app-card-peek .app-card-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.7);
   }
 
   /* ── NAV ── */
@@ -638,7 +710,7 @@
     .features { justify-content: center; }
     .cta-row { justify-content: center; flex-wrap: wrap; }
     .phone-frame { width: 220px; height: 460px; }
-    .app-uv-number { font-size: 72px; }
+    .app-uv-number { font-size: 68px; }
     .bottom-bar { display: none; }
     .nav-links { display: none; }
   }
@@ -646,9 +718,9 @@
   @media (max-width: 480px) {
     h1 { font-size: 2rem; }
     .phone-frame { width: 180px; height: 380px; }
-    .app-uv-number { font-size: 56px; }
+    .app-uv-number { font-size: 52px; }
     .app-card { padding: 10px; }
-    .app-ui { padding: 44px 14px 14px; }
+    .app-ui { padding: 40px 12px 12px; }
     .footer-links { display: none; }
   }
 </style>
@@ -656,7 +728,12 @@
 <body>
 
 <div class="hero">
-  <!-- Animated gradient background -->
+  <!-- Video background -->
+  <video class="video-bg" autoplay muted loop playsinline>
+    <source src="bg-video.mp4" type="video/mp4">
+  </video>
+
+  <!-- Animated gradient fallback -->
   <div class="animated-bg"></div>
 
   <!-- Orbs -->
@@ -736,48 +813,50 @@
           <div class="phone-notch"></div>
           <div class="phone-screen">
             <div class="app-ui">
-              <div class="app-location">San Francisco, CA</div>
-              <div class="app-env">&#9728;&#65039; Bright Outdoor</div>
 
-              <div class="app-uv-number">6.8</div>
-              <div class="app-uv-label">UV Index</div>
-              <div class="app-level-badge">&#9679; High</div>
-
-              <!-- SPF Card -->
-              <div class="app-card">
-                <div class="app-card-title">Recommended Protection</div>
-                <div class="app-card-row">
-                  <div>
-                    <div class="app-card-val">87 <span class="app-card-unit">min safe</span></div>
+              <!-- Top bar: location + icons -->
+              <div class="app-topbar">
+                <div class="app-topbar-left">
+                  <span class="pin-icon">&#128205;</span>
+                  <div class="app-topbar-info">
+                    <div class="app-scene">Outdoor Shade</div>
+                    <div class="app-range">3~10m surrounding environment</div>
                   </div>
-                  <div class="app-spf-badge">SPF 50+</div>
+                </div>
+                <div class="app-topbar-right">
+                  <div class="app-sun-icon">&#9889;</div>
+                  <div class="app-gear-icon">&#9881;</div>
                 </div>
               </div>
 
-              <!-- Trend Card -->
-              <div class="app-card">
-                <div class="app-card-title">24H UV Trend</div>
-                <div class="app-chart">
-                  <svg viewBox="0 0 220 50" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="chartGrad" x1="0" y1="0" x2="1" y2="0">
-                        <stop offset="0%" stop-color="#38BDF8"/>
-                        <stop offset="50%" stop-color="#FBBF24"/>
-                        <stop offset="100%" stop-color="#38BDF8"/>
-                      </linearGradient>
-                      <linearGradient id="chartAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#FBBF24" stop-opacity="0.4"/>
-                        <stop offset="100%" stop-color="#FBBF24" stop-opacity="0"/>
-                      </linearGradient>
-                    </defs>
-                    <path class="chart-area" d="M0,48 L20,44 L45,36 L70,24 L100,10 L130,8 L150,14 L175,28 L200,40 L220,46 L220,50 L0,50 Z"/>
-                    <path class="chart-line" d="M0,48 L20,44 L45,36 L70,24 L100,10 L130,8 L150,14 L175,28 L200,40 L220,46"/>
-                    <circle cx="130" cy="8" r="4" fill="#FBBF24" stroke="#fff" stroke-width="1.5">
-                      <animate attributeName="r" values="4;6;4" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                  </svg>
-                </div>
+              <!-- UV Index -->
+              <div class="app-uv-label"><span class="sun-sm">&#9728;</span> UV Index</div>
+              <div class="app-uv-number">5.0</div>
+              <div class="app-level-badge">Moderate</div>
+
+              <!-- Info banner -->
+              <div class="app-info-banner">
+                <span class="info-icon">&#9881;</span>
+                <span class="info-text">Spatial-level sensing,<br>Recommended exposure &le; 40 min</span>
               </div>
+
+              <!-- UV Calibration card -->
+              <div class="app-card">
+                <div class="app-card-header">
+                  <div>
+                    <div class="app-card-title"><span class="card-icon">&#9776;</span> UV Calibration</div>
+                    <div class="app-card-desc">Smart sensing &middot; Dynamic refresh,<br>real-time display of nearby UV risk</div>
+                  </div>
+                  <div class="refresh-btn">&#8635;</div>
+                </div>
+                <div class="app-card-footer">&#9200; Just updated</div>
+              </div>
+
+              <!-- Personalized Sun Protection (peek) -->
+              <div class="app-card-peek">
+                <div class="app-card-title"><span class="card-icon">&#9728;</span> Personalized Sun<br>Protection Plan</div>
+              </div>
+
             </div>
           </div>
         </div>
@@ -813,9 +892,9 @@
 <script>
   // ── Floating Particles ──
   function createParticles() {
-    const container = document.getElementById('particles');
-    for (let i = 0; i < 20; i++) {
-      const p = document.createElement('div');
+    var container = document.getElementById('particles');
+    for (var i = 0; i < 20; i++) {
+      var p = document.createElement('div');
       p.className = 'particle';
       p.style.left = Math.random() * 100 + '%';
       p.style.animationDuration = (8 + Math.random() * 12) + 's';
@@ -829,10 +908,10 @@
   createParticles();
 
   // ── Subtle parallax on mouse move ──
-  const phoneWrapper = document.querySelector('.phone-wrapper');
+  var phoneWrapper = document.querySelector('.phone-wrapper');
   document.addEventListener('mousemove', function(e) {
-    const x = (e.clientX / window.innerWidth - 0.5) * 12;
-    const y = (e.clientY / window.innerHeight - 0.5) * 12;
+    var x = (e.clientX / window.innerWidth - 0.5) * 12;
+    var y = (e.clientY / window.innerHeight - 0.5) * 12;
     if (phoneWrapper) {
       phoneWrapper.style.transform = 'translateY(' + (-14 + y * 0.3) + 'px) rotateY(' + (x * 0.4) + 'deg) rotateX(' + (-y * 0.3) + 'deg)';
     }
