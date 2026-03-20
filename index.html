@@ -206,37 +206,25 @@
     font-style: italic;
     font-size: clamp(1rem, 1.8vw, 1.35rem);
     color: var(--text-secondary);
-    margin-bottom: 28px;
-    line-height: 1.5;
+    margin-bottom: 32px;
+    line-height: 1.6;
     animation: fadeInUp 1s 0.55s both;
   }
 
-  .features {
+  /* Inline stats — single line replacing feature tags + bottom bar */
+  .inline-stats {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    align-items: center;
+    gap: 20px;
     margin-bottom: 36px;
     animation: fadeInUp 1s 0.65s both;
-  }
-  .feature-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 100px;
-    background: var(--glass-white);
-    border: 1px solid var(--glass-white-border);
-    backdrop-filter: blur(12px);
     font-size: 13px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    transition: all 0.3s ease;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
   }
-  .feature-tag:hover {
-    background: rgba(255,255,255,0.14);
-    color: var(--text-primary);
-    transform: translateY(-2px);
-    border-color: rgba(255,255,255,0.25);
+  .inline-stats span {
+    font-weight: 700;
+    color: var(--text-secondary);
   }
 
   .cta-row {
@@ -303,37 +291,16 @@
   .based-on {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
     color: var(--text-muted);
     font-size: 12px;
     font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
-  .org-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 100px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--text-secondary);
     letter-spacing: 0.04em;
-    transition: all 0.3s ease;
   }
-  .org-badge:hover {
-    background: rgba(255,255,255,0.12);
-    border-color: rgba(255,255,255,0.2);
-    color: var(--text-primary);
-  }
-  .org-badge .org-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--sky-400);
-    flex-shrink: 0;
+  .based-on .org-names {
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.06em;
   }
 
   /* ── RIGHT SIDE: PHONE ── */
@@ -657,39 +624,7 @@
   }
   .nav-links a:hover { color: var(--text-primary); }
 
-  /* ── BOTTOM BAR ── */
-  .bottom-bar {
-    position: fixed;
-    bottom: 28px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
-    display: flex;
-    align-items: center;
-    gap: 32px;
-    padding: 12px 28px;
-    border-radius: 100px;
-    background: var(--glass-white);
-    border: 1px solid var(--glass-white-border);
-    backdrop-filter: blur(24px);
-    animation: fadeInUp 1s 1s both;
-  }
-  .stat-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 13px;
-    color: var(--text-secondary);
-  }
-  .stat-val {
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  .stat-divider {
-    width: 1px;
-    height: 20px;
-    background: rgba(255,255,255,0.12);
-  }
+  /* bottom-bar removed — stats in inline-stats now */
 
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -698,7 +633,7 @@
 
   .footer-links {
     position: fixed;
-    bottom: 8px;
+    bottom: 16px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 50;
@@ -791,7 +726,7 @@
     .orb-3 { display: none; }
     .phone-glow { filter: blur(25px); }
     .grain { display: none; }
-    .badge, .feature-tag, .icon-btn, .bottom-bar { backdrop-filter: none; }
+    .badge, .icon-btn { backdrop-filter: none; }
     .animated-bg { animation: none; }
   }
   @media (max-width: 960px) {
@@ -802,13 +737,12 @@
       justify-content: flex-start;
     }
     .text-side { text-align: center; max-width: 100%; }
-    .features { justify-content: center; }
+    .inline-stats { justify-content: center; }
     .cta-row { justify-content: center; flex-wrap: wrap; }
     .phone-frame { width: 220px; height: 460px; border-radius: 28px; padding: 5px; }
     .phone-screen { border-radius: 24px; }
-    .bottom-bar { display: none; }
     .nav-links { display: none; }
-    .based-on { justify-content: center; flex-wrap: wrap; }
+    .based-on { justify-content: center; }
     .bottom-left-icons { bottom: 20px; left: 16px; gap: 8px; }
     .icon-btn { width: 38px; height: 38px; }
     .icon-btn svg { width: 18px; height: 18px; }
@@ -905,13 +839,12 @@
         Your skin deserves more than a weather forecast.
       </p>
 
-      <div class="features">
-        <span class="feature-tag">&#128752; GNSS + Sensor Fusion</span>
-        <span class="feature-tag">&#128274; 100% On-Device AI</span>
-        <span class="feature-tag">&#129524; Smart SPF Advice</span>
-        <span class="feature-tag">&#9201; Reapply Reminders</span>
-        <span class="feature-tag">&#127777; 6 Skin Types</span>
-        <span class="feature-tag">&#127381; Free to Use</span>
+      <div class="inline-stats">
+        <span>3-10m</span> Precision
+        &middot;
+        <span>15+</span> Environments
+        &middot;
+        <span>100%</span> On-Device
       </div>
 
       <div class="cta-row">
@@ -927,11 +860,7 @@
           </span>
         </a>
         <div class="based-on">
-          BASED ON
-          <span class="org-badge"><span class="org-dot"></span> WHO</span>
-          <span class="org-badge"><span class="org-dot"></span> AAD</span>
-          <span class="org-badge"><span class="org-dot"></span> CDC</span>
-          <span class="org-badge"><span class="org-dot"></span> NHS</span>
+          Based on <span class="org-names">WHO &middot; AAD &middot; CDC &middot; NHS</span>
         </div>
       </div>
     </div>
@@ -1013,16 +942,7 @@
     </div>
   </div>
 
-  <!-- Bottom Stats -->
-  <div class="bottom-bar">
-    <div class="stat-item"><span class="stat-val">3-10m</span> Precision</div>
-    <div class="stat-divider"></div>
-    <div class="stat-item"><span class="stat-val">15+</span> Environments</div>
-    <div class="stat-divider"></div>
-    <div class="stat-item"><span class="stat-val">100%</span> On-Device</div>
-    <div class="stat-divider"></div>
-    <div class="stat-item"><span class="stat-val">0</span> Data Uploaded</div>
-  </div>
+  <!-- Bottom bar removed — stats consolidated into left-side inline text -->
 
   <!-- Bottom-left icon group -->
   <div class="bottom-left-icons">
