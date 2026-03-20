@@ -242,13 +242,13 @@
     gap: 14px;
     padding: 14px 32px;
     border-radius: 16px;
-    background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
-    color: #111;
+    background: linear-gradient(135deg, var(--sun-gold), var(--warm-500));
+    color: #fff;
     text-decoration: none;
     font-weight: 600;
     font-size: 15px;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.1);
+    box-shadow: 0 4px 24px rgba(251,191,36,0.25), 0 0 0 1px rgba(255,255,255,0.1);
     position: relative;
     overflow: hidden;
     flex-shrink: 0;
@@ -256,26 +256,25 @@
   .google-play-btn::before {
     content: '';
     position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--sun-gold), var(--warm-500));
+    background: linear-gradient(135deg, #FFFFFF 0%, #F3F4F6 100%);
     opacity: 0;
     transition: opacity 0.4s ease;
     border-radius: inherit;
   }
   .google-play-btn:hover {
     transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(251,191,36,0.25), 0 0 0 1px rgba(255,255,255,0.2);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.2);
   }
   .google-play-btn:hover::before { opacity: 1; }
-  .google-play-btn:hover .gp-text,
-  .google-play-btn:hover .gp-icon { position: relative; z-index: 1; }
-  .google-play-btn:hover .gp-text { color: #fff; }
-  .google-play-btn:hover .gp-icon svg path { fill: #fff; }
+  .google-play-btn:hover .gp-text { color: #111; }
+  .google-play-btn:hover .gp-icon svg path { fill: #111; }
 
   .gp-icon {
     position: relative; z-index: 1;
     width: 28px; height: 28px;
     display: flex; align-items: center; justify-content: center;
   }
+  .gp-icon svg path { fill: #fff; transition: fill 0.4s ease; }
   .gp-text {
     position: relative; z-index: 1;
     display: flex; flex-direction: column;
@@ -285,7 +284,7 @@
   .gp-text small {
     font-size: 10px;
     font-weight: 400;
-    opacity: 0.6;
+    opacity: 0.7;
     text-transform: uppercase;
     letter-spacing: 0.06em;
   }
