@@ -125,7 +125,7 @@
     position: absolute;
     width: 3px; height: 3px;
     border-radius: 50%;
-    background: rgba(251,191,36,0.4);
+    background: rgba(251,191,36,0.6);
     animation: particleRise linear infinite;
   }
   @keyframes particleRise {
@@ -467,24 +467,21 @@
   }
 
   /*
-   * Layout: Cards flow in a loose arc from upper-left to lower-right,
-   * staggered at different distances. Imagine a clockwise spiral:
+   * Tight orbit around phone, each card tilted at a distinct 3D angle
+   * like 4 screens floating in space around the device.
    *
-   *     1 (far left, above center)
-   *              [PHONE]
-   *                        2 (far right, upper third)
-   *
-   *   3 (left, below center)
-   *                          4 (far right, bottom)
+   *        1 (top-left, tilted back-left)
+   *              [PHONE]    2 (right, tilted back-right)
+   *    3 (left, tilted forward-left)
+   *              [PHONE]    4 (bottom-right, tilted forward-right)
    */
 
-  /* Card 1: Free Trial — upper-left, large, closest to viewer */
+  /* Card 1: Free Trial — top-left, tilted back like leaning on a wall */
   .glass-card-1 {
-    top: -40px; left: -175px;
+    top: -24px; left: -120px;
     animation: float1 10s ease-in-out infinite;
     background: linear-gradient(140deg, rgba(52,211,153,0.08) 0%, rgba(15,15,26,0.95) 50%);
     border-color: rgba(52,211,153,0.12);
-    transform: rotateY(6deg) rotateX(-2deg);
   }
   .glass-card-1 .glass-card-icon {
     background: rgba(52,211,153,0.12);
@@ -508,15 +505,12 @@
     50% { opacity: 0.4; box-shadow: 0 0 8px #34D399; }
   }
 
-  /* Card 2: $0 Charged — right side, upper area, pushed further right + back */
+  /* Card 2: $0 Charged — right, mid-upper, tilted away to the right */
   .glass-card-2 {
-    top: 20px; right: -185px;
+    top: 100px; right: -135px;
     animation: float2 11s ease-in-out infinite;
     background: linear-gradient(140deg, rgba(96,165,250,0.08) 0%, rgba(15,15,26,0.95) 50%);
     border-color: rgba(96,165,250,0.12);
-    transform: rotateY(-5deg) rotateX(-3deg);
-    font-size: 0.92em;
-    opacity: 0.9;
   }
   .glass-card-2 .glass-card-icon {
     background: rgba(96,165,250,0.12);
@@ -524,19 +518,16 @@
   }
   .glass-card-2 .glass-card-label { color: rgba(96,165,250,0.8); }
   .glass-card-2:hover {
-    opacity: 1;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(96,165,250,0.15);
     border-color: rgba(96,165,250,0.35);
   }
 
-  /* Card 3: Just Download — left side, below center, medium distance */
+  /* Card 3: Just Download — left, below center, tilted forward toward viewer */
   .glass-card-3 {
-    bottom: 60px; left: -165px;
+    bottom: 140px; left: -110px;
     animation: float3 9s ease-in-out infinite;
     background: linear-gradient(140deg, rgba(251,191,36,0.08) 0%, rgba(15,15,26,0.95) 50%);
     border-color: rgba(251,191,36,0.12);
-    transform: rotateY(4deg) rotateX(2deg);
-    opacity: 0.85;
   }
   .glass-card-3 .glass-card-icon {
     background: rgba(251,191,36,0.12);
@@ -544,20 +535,16 @@
   }
   .glass-card-3 .glass-card-label { color: rgba(251,191,36,0.8); }
   .glass-card-3:hover {
-    opacity: 1;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(251,191,36,0.15);
     border-color: rgba(251,191,36,0.35);
   }
 
-  /* Card 4: Cancel Anytime — far right, lower area, smallest feel */
+  /* Card 4: Cancel Anytime — bottom-right, tilted forward-right */
   .glass-card-4 {
-    bottom: -30px; right: -170px;
+    bottom: 20px; right: -125px;
     animation: float4 12s ease-in-out infinite;
     background: linear-gradient(140deg, rgba(244,114,182,0.08) 0%, rgba(15,15,26,0.95) 50%);
     border-color: rgba(244,114,182,0.12);
-    transform: rotateY(-4deg) rotateX(3deg);
-    font-size: 0.88em;
-    opacity: 0.8;
   }
   .glass-card-4 .glass-card-icon {
     background: rgba(244,114,182,0.12);
@@ -565,27 +552,27 @@
   }
   .glass-card-4 .glass-card-label { color: rgba(244,114,182,0.8); }
   .glass-card-4:hover {
-    opacity: 1;
     box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 20px rgba(244,114,182,0.15);
     border-color: rgba(244,114,182,0.35);
   }
 
-  /* Gentle breathing floats — no heavy 3D rotation, just soft drift */
+  /* Each card has a distinct 3D tilt + gentle drift.
+     The tilt angle stays constant, the position breathes. */
   @keyframes float1 {
-    0%, 100% { transform: rotateY(6deg) rotateX(-2deg) translate(0, 0); }
-    50%      { transform: rotateY(6deg) rotateX(-2deg) translate(6px, -10px); }
+    0%, 100% { transform: perspective(600px) rotateY(12deg) rotateX(-8deg) rotateZ(-2deg) translate(0, 0); }
+    50%      { transform: perspective(600px) rotateY(12deg) rotateX(-8deg) rotateZ(-2deg) translate(5px, -8px); }
   }
   @keyframes float2 {
-    0%, 100% { transform: rotateY(-5deg) rotateX(-3deg) translate(0, 0); }
-    50%      { transform: rotateY(-5deg) rotateX(-3deg) translate(-5px, 8px); }
+    0%, 100% { transform: perspective(600px) rotateY(-14deg) rotateX(-5deg) rotateZ(2deg) translate(0, 0); }
+    50%      { transform: perspective(600px) rotateY(-14deg) rotateX(-5deg) rotateZ(2deg) translate(-4px, 7px); }
   }
   @keyframes float3 {
-    0%, 100% { transform: rotateY(4deg) rotateX(2deg) translate(0, 0); }
-    50%      { transform: rotateY(4deg) rotateX(2deg) translate(8px, 6px); }
+    0%, 100% { transform: perspective(600px) rotateY(10deg) rotateX(6deg) rotateZ(3deg) translate(0, 0); }
+    50%      { transform: perspective(600px) rotateY(10deg) rotateX(6deg) rotateZ(3deg) translate(6px, 5px); }
   }
   @keyframes float4 {
-    0%, 100% { transform: rotateY(-4deg) rotateX(3deg) translate(0, 0); }
-    50%      { transform: rotateY(-4deg) rotateX(3deg) translate(-6px, -8px); }
+    0%, 100% { transform: perspective(600px) rotateY(-12deg) rotateX(8deg) rotateZ(-3deg) translate(0, 0); }
+    50%      { transform: perspective(600px) rotateY(-12deg) rotateX(8deg) rotateZ(-3deg) translate(-5px, -6px); }
   }
 
   /* ── NAV ── */
@@ -770,10 +757,10 @@
     .glass-card-icon svg { width: 13px; height: 13px; }
     .glass-card-label { font-size: 8px; }
     .glass-card-value { font-size: 11px; }
-    .glass-card-1 { top: -30px; left: -90px; }
-    .glass-card-2 { top: 10px; right: -95px; }
-    .glass-card-3 { bottom: 40px; left: -85px; }
-    .glass-card-4 { bottom: -20px; right: -90px; }
+    .glass-card-1 { top: -18px; left: -75px; }
+    .glass-card-2 { top: 70px; right: -80px; }
+    .glass-card-3 { bottom: 100px; left: -70px; }
+    .glass-card-4 { bottom: 14px; right: -75px; }
     .green-pulse { width: 5px; height: 5px; }
   }
   @media (max-width: 480px) {
@@ -959,16 +946,16 @@
   var isMobile = window.innerWidth <= 960;
   function createParticles() {
     var c = document.getElementById('particles');
-    var count = isMobile ? 6 : 20;
+    var count = isMobile ? 12 : 40;
     for (var i = 0; i < count; i++) {
       var p = document.createElement('div');
       p.className = 'particle';
       p.style.left = Math.random() * 100 + '%';
-      p.style.animationDuration = (8 + Math.random() * 12) + 's';
-      p.style.animationDelay = (Math.random() * 10) + 's';
-      p.style.width = (2 + Math.random() * 3) + 'px';
+      p.style.animationDuration = (6 + Math.random() * 14) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      p.style.width = (2 + Math.random() * 4) + 'px';
       p.style.height = p.style.width;
-      p.style.opacity = 0.15 + Math.random() * 0.35;
+      p.style.opacity = 0.3 + Math.random() * 0.5;
       c.appendChild(p);
     }
   }
