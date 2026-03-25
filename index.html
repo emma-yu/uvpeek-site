@@ -230,6 +230,7 @@
   }
 
   .cta-row {
+    position: relative;
     display: flex;
     align-items: center;
     gap: 18px;
@@ -762,14 +763,14 @@
     animation: fadeInUp 1.5s 2.2s both, illustFloat4 10s ease-in-out 2.2s infinite;
   }
 
-  /* Sunflower — inline left of CTA button */
+  /* Sunflower — left of CTA button, original size */
   .cta-sunflower {
-    width: 28px;
-    height: auto;
-    object-fit: contain;
-    flex-shrink: 0;
-    opacity: 0;
+    position: absolute;
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
     pointer-events: none;
+    opacity: 0;
     animation: fadeInUp 1s 0.8s both, illustFloat5 12s ease-in-out 2.4s infinite;
   }
 
