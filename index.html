@@ -742,13 +742,14 @@
     animation: fadeInUp 1.5s 1.5s both, illustFloat1 9s ease-in-out 1.5s infinite;
   }
 
-  /* Shooting star — upper-left */
+  /* Shooting star — on phone, below Free Trial card */
   .illust-shooting-star {
-    top: 14%;
-    left: 4%;
-    width: 65px;
-    height: 65px;
-    opacity: 0.28;
+    top: 35px;
+    left: -95px;
+    width: 50px;
+    height: 50px;
+    opacity: 0.5;
+    z-index: 10;
     animation: fadeInUp 1.5s 1.8s both, illustFloat2 11s ease-in-out 1.8s infinite;
   }
 
@@ -894,7 +895,6 @@
 
   <!-- Floating illustrations — hand-drawn accents -->
   <div class="illust illust-sun"><img src="illust-sun.png" alt="" aria-hidden="true"></div>
-  <div class="illust illust-shooting-star"><img src="illust-shooting-star.png" alt="" aria-hidden="true"></div>
   <div class="illust illust-sparkles"><img src="illust-sparkles.png" alt="" aria-hidden="true"></div>
   <div class="illust illust-rainbow"><img src="illust-rainbow.png" alt="" aria-hidden="true"></div>
   <div class="illust illust-sunflower"><img src="illust-sunflower.png" alt="" aria-hidden="true"></div>
@@ -971,6 +971,9 @@
           </div>
           <div class="green-pulse"></div>
         </div>
+
+        <!-- Shooting star illustration — below Free Trial card -->
+        <div class="illust illust-shooting-star"><img src="illust-shooting-star.png" alt="" aria-hidden="true"></div>
 
         <!-- Glass Card 2: First 24 Hours (blue, top-right) -->
         <div class="glass-card glass-card-2">
