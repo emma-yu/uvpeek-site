@@ -638,6 +638,10 @@
     left: 50%;
     transform: translateX(-50%);
     z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
     font-size: 11px;
     color: var(--text-muted);
     text-align: center;
@@ -765,15 +769,9 @@
 
   /* Sunflower — above © 2025 UVPeek */
   .cta-sunflower {
-    position: fixed;
-    bottom: 50px;
-    left: calc(50% + 10px);
-    transform: translateX(-50%);
     transform-origin: bottom center;
     pointer-events: none;
-    z-index: 50;
-    opacity: 0;
-    animation: fadeInUp 1s 1.2s both, plantSway 3s ease-in-out infinite;
+    animation: plantSway 3s ease-in-out infinite;
   }
 
   /* Each illustration has a unique drift pattern */
@@ -796,9 +794,9 @@
     50% { transform: translate(-7px, 6px) rotate(3deg); }
   }
   @keyframes plantSway {
-    0%, 100% { transform: translateX(-50%) rotate(0deg); }
-    25% { transform: translateX(-50%) rotate(6deg); }
-    75% { transform: translateX(-50%) rotate(-6deg); }
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(6deg); }
+    75% { transform: rotate(-6deg); }
   }
 
   /* ── MOBILE PERFORMANCE ── */
@@ -1032,9 +1030,9 @@
     </a>
   </div>
 
-  <img class="cta-sunflower" src="illust-sunflower.png" alt="" aria-hidden="true">
   <div class="footer-links">
-    &copy; 2025 UVPeek
+    <img class="cta-sunflower" src="illust-sunflower.png" alt="" aria-hidden="true">
+    <span>&copy; 2025 UVPeek</span>
   </div>
 </div>
 
