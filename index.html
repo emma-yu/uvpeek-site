@@ -742,17 +742,6 @@
     animation: fadeInUp 1.5s 1.5s both, illustFloat1 9s ease-in-out 1.5s infinite;
   }
 
-  /* Shooting star — on phone, below Free Trial card */
-  .illust-shooting-star {
-    top: 15px;
-    left: -30px;
-    width: 50px;
-    height: 50px;
-    opacity: 0.5;
-    z-index: 7;
-    animation: fadeInUp 1.5s 1.8s both, illustFloat2 11s ease-in-out 1.8s infinite;
-  }
-
   /* Sparkles — near title, right side */
   .illust-sparkles {
     top: 33%;
@@ -773,14 +762,13 @@
     animation: fadeInUp 1.5s 2.2s both, illustFloat4 10s ease-in-out 2.2s infinite;
   }
 
-  /* Sunflower — left of CTA button */
-  .illust-sunflower {
-    bottom: 22%;
-    left: 12%;
+  /* Sunflower — inline left of CTA button */
+  .cta-sunflower {
     width: 28px;
     height: 28px;
-    opacity: 0.45;
-    animation: fadeInUp 1.5s 2.4s both, illustFloat5 12s ease-in-out 2.4s infinite;
+    opacity: 0;
+    pointer-events: none;
+    animation: fadeInUp 1s 0.8s both, illustFloat5 12s ease-in-out 2.4s infinite;
   }
 
   /* Each illustration has a unique drift pattern */
@@ -823,7 +811,7 @@
     .illust-shooting-star { width: 45px; height: 45px; }
     .illust-sparkles { display: none; }
     .illust-rainbow { width: 40px; height: 40px; }
-    .illust-sunflower { display: none; }
+    .cta-sunflower { display: none; }
   }
   @media (max-width: 960px) {
     .content {
@@ -897,7 +885,6 @@
   <div class="illust illust-sun"><img src="illust-sun.png" alt="" aria-hidden="true"></div>
   <div class="illust illust-sparkles"><img src="illust-sparkles.png" alt="" aria-hidden="true"></div>
   <div class="illust illust-rainbow"><img src="illust-rainbow.png" alt="" aria-hidden="true"></div>
-  <div class="illust illust-sunflower"><img src="illust-sunflower.png" alt="" aria-hidden="true"></div>
 
   <!-- Nav -->
   <nav class="top-nav">
@@ -936,6 +923,7 @@
       </div>
 
       <div class="cta-row">
+        <img class="cta-sunflower" src="illust-sunflower.png" alt="" aria-hidden="true">
         <a href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect.overseas" class="google-play-btn" target="_blank" rel="noopener">
           <span class="gp-icon">
             <svg viewBox="0 0 24 24" width="28" height="28">
@@ -971,9 +959,6 @@
           </div>
           <div class="green-pulse"></div>
         </div>
-
-        <!-- Shooting star illustration — below Free Trial card -->
-        <div class="illust illust-shooting-star"><img src="illust-shooting-star.png" alt="" aria-hidden="true"></div>
 
         <!-- Glass Card 2: First 24 Hours (blue, top-right) -->
         <div class="glass-card glass-card-2">
