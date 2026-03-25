@@ -718,6 +718,95 @@
     fill: #fff;
   }
 
+  /* ── FLOATING ILLUSTRATIONS ── */
+  .illust {
+    position: absolute;
+    pointer-events: none;
+    z-index: 6;
+    opacity: 0;
+    animation: fadeInUp 1.5s 1.5s both;
+  }
+  .illust img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Sun — top-right hero area */
+  .illust-sun {
+    top: 8%;
+    right: 7%;
+    width: 80px;
+    height: 80px;
+    opacity: 0.35;
+    animation: fadeInUp 1.5s 1.5s both, illustFloat1 9s ease-in-out 1.5s infinite;
+  }
+
+  /* Shooting star — upper-left */
+  .illust-shooting-star {
+    top: 14%;
+    left: 4%;
+    width: 65px;
+    height: 65px;
+    opacity: 0.28;
+    animation: fadeInUp 1.5s 1.8s both, illustFloat2 11s ease-in-out 1.8s infinite;
+  }
+
+  /* Sparkles — mid-left edge */
+  .illust-sparkles {
+    top: 52%;
+    left: 3%;
+    width: 45px;
+    height: 45px;
+    opacity: 0.3;
+    animation: fadeInUp 1.5s 2s both, illustFloat3 8s ease-in-out 2s infinite;
+  }
+
+  /* Rainbow — lower-right */
+  .illust-rainbow {
+    bottom: 14%;
+    right: 6%;
+    width: 55px;
+    height: 55px;
+    opacity: 0.28;
+    animation: fadeInUp 1.5s 2.2s both, illustFloat4 10s ease-in-out 2.2s infinite;
+  }
+
+  /* Sunflower — bottom center-right, tiny accent */
+  .illust-sunflower {
+    bottom: 6%;
+    right: 32%;
+    width: 28px;
+    height: 28px;
+    opacity: 0.3;
+    animation: fadeInUp 1.5s 2.4s both, illustFloat5 12s ease-in-out 2.4s infinite;
+  }
+
+  /* Each illustration has a unique drift pattern */
+  @keyframes illustFloat1 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    33% { transform: translate(-6px, -10px) rotate(3deg); }
+    66% { transform: translate(4px, -5px) rotate(-2deg); }
+  }
+  @keyframes illustFloat2 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(8px, -12px) rotate(-5deg); }
+  }
+  @keyframes illustFloat3 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    40% { transform: translate(5px, -8px) rotate(4deg); }
+    70% { transform: translate(-3px, -4px) rotate(-2deg); }
+  }
+  @keyframes illustFloat4 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    50% { transform: translate(-7px, 6px) rotate(3deg); }
+  }
+  @keyframes illustFloat5 {
+    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+    35% { transform: translate(4px, -6px) rotate(-3deg); }
+    65% { transform: translate(-3px, 3px) rotate(2deg); }
+  }
+
   /* ── MOBILE PERFORMANCE ── */
   @media (max-width: 960px) {
     .orb { filter: blur(40px); }
@@ -728,6 +817,12 @@
     .grain { display: none; }
     .badge, .icon-btn { backdrop-filter: none; }
     .animated-bg { animation: none; }
+    /* Illustrations: smaller + fewer on tablet */
+    .illust-sun { width: 55px; height: 55px; opacity: 0.25; }
+    .illust-shooting-star { width: 45px; height: 45px; }
+    .illust-sparkles { display: none; }
+    .illust-rainbow { width: 40px; height: 40px; }
+    .illust-sunflower { display: none; }
   }
   @media (max-width: 960px) {
     .content {
@@ -774,6 +869,8 @@
     .x-link svg { width: 14px; height: 14px; }
     /* Floating cards: mobile — hide for clean look */
     .glass-card { display: none; }
+    /* Illustrations: hide on mobile */
+    .illust { display: none; }
   }
 </style>
 </head>
@@ -794,6 +891,13 @@
   <div class="orb orb-3"></div>
   <div class="particles" id="particles"></div>
   <div class="grain"></div>
+
+  <!-- Floating illustrations — hand-drawn accents -->
+  <div class="illust illust-sun"><img src="illust-sun.png" alt="" aria-hidden="true"></div>
+  <div class="illust illust-shooting-star"><img src="illust-shooting-star.png" alt="" aria-hidden="true"></div>
+  <div class="illust illust-sparkles"><img src="illust-sparkles.png" alt="" aria-hidden="true"></div>
+  <div class="illust illust-rainbow"><img src="illust-rainbow.png" alt="" aria-hidden="true"></div>
+  <div class="illust illust-sunflower"><img src="illust-sunflower.png" alt="" aria-hidden="true"></div>
 
   <!-- Nav -->
   <nav class="top-nav">
