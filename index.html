@@ -768,10 +768,11 @@
     position: absolute;
     right: calc(100% + 10px);
     top: 50%;
-    transform: translateY(calc(-50% - 8px));
+    transform: translateY(calc(-50% - 13px));
+    transform-origin: bottom center;
     pointer-events: none;
     opacity: 0;
-    animation: fadeInUp 1s 0.8s both, illustFloat5 12s ease-in-out 2.4s infinite;
+    animation: fadeInUp 1s 0.8s both, plantSway 3s ease-in-out infinite;
   }
 
   /* Each illustration has a unique drift pattern */
@@ -793,10 +794,10 @@
     0%, 100% { transform: translate(0, 0) rotate(0deg); }
     50% { transform: translate(-7px, 6px) rotate(3deg); }
   }
-  @keyframes illustFloat5 {
-    0%, 100% { transform: translate(0, 0) rotate(0deg); }
-    35% { transform: translate(4px, -6px) rotate(-3deg); }
-    65% { transform: translate(-3px, 3px) rotate(2deg); }
+  @keyframes plantSway {
+    0%, 100% { transform: translateY(calc(-50% - 13px)) rotate(0deg); }
+    25% { transform: translateY(calc(-50% - 13px)) rotate(6deg); }
+    75% { transform: translateY(calc(-50% - 13px)) rotate(-6deg); }
   }
 
   /* ── MOBILE PERFORMANCE ── */
