@@ -765,7 +765,9 @@
   /* Sunflower — inline left of CTA button */
   .cta-sunflower {
     width: 28px;
-    height: 28px;
+    height: auto;
+    object-fit: contain;
+    flex-shrink: 0;
     opacity: 0;
     pointer-events: none;
     animation: fadeInUp 1s 0.8s both, illustFloat5 12s ease-in-out 2.4s infinite;
