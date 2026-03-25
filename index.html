@@ -763,16 +763,17 @@
     animation: fadeInUp 1.5s 2.2s both, illustFloat4 10s ease-in-out 2.2s infinite;
   }
 
-  /* Sunflower — left of CTA button, original size */
+  /* Sunflower — above © 2025 UVPeek */
   .cta-sunflower {
-    position: absolute;
-    right: calc(100% + 10px);
-    top: 50%;
-    transform: translateY(calc(-50% - 13px));
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
     transform-origin: bottom center;
     pointer-events: none;
+    z-index: 50;
     opacity: 0;
-    animation: fadeInUp 1s 0.8s both, plantSway 3s ease-in-out infinite;
+    animation: fadeInUp 1s 1.2s both, plantSway 3s ease-in-out infinite;
   }
 
   /* Each illustration has a unique drift pattern */
@@ -795,9 +796,9 @@
     50% { transform: translate(-7px, 6px) rotate(3deg); }
   }
   @keyframes plantSway {
-    0%, 100% { transform: translateY(calc(-50% - 13px)) rotate(0deg); }
-    25% { transform: translateY(calc(-50% - 13px)) rotate(6deg); }
-    75% { transform: translateY(calc(-50% - 13px)) rotate(-6deg); }
+    0%, 100% { transform: translateX(-50%) rotate(0deg); }
+    25% { transform: translateX(-50%) rotate(6deg); }
+    75% { transform: translateX(-50%) rotate(-6deg); }
   }
 
   /* ── MOBILE PERFORMANCE ── */
@@ -927,7 +928,6 @@
       </div>
 
       <div class="cta-row">
-        <img class="cta-sunflower" src="illust-sunflower.png" alt="" aria-hidden="true">
         <a href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect.overseas" class="google-play-btn" target="_blank" rel="noopener">
           <span class="gp-icon">
             <svg viewBox="0 0 24 24" width="28" height="28">
@@ -1032,6 +1032,7 @@
     </a>
   </div>
 
+  <img class="cta-sunflower" src="illust-sunflower.png" alt="" aria-hidden="true">
   <div class="footer-links">
     &copy; 2025 UVPeek
   </div>
