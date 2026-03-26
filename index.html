@@ -555,30 +555,31 @@
   }
 
   /* Each card orbits the phone with a unique 3D tilt + drift path.
-     Left cards tilt toward viewer, right cards tilt away — creating depth. */
+     Left cards tilt toward viewer, right cards tilt away — creating depth.
+     Distinct rotateZ angles make them feel casually scattered. */
   @keyframes float1 {
-    0%   { transform: perspective(600px) rotateY(16deg) rotateX(-6deg) rotateZ(-2deg) translate(0, 0); }
-    33%  { transform: perspective(600px) rotateY(18deg) rotateX(-8deg) rotateZ(-1deg) translate(6px, -10px); }
-    66%  { transform: perspective(600px) rotateY(14deg) rotateX(-4deg) rotateZ(-3deg) translate(-3px, -5px); }
-    100% { transform: perspective(600px) rotateY(16deg) rotateX(-6deg) rotateZ(-2deg) translate(0, 0); }
+    0%   { transform: perspective(600px) rotateY(16deg) rotateX(-6deg) rotateZ(-5deg) translate(0, 0); }
+    33%  { transform: perspective(600px) rotateY(18deg) rotateX(-8deg) rotateZ(-3deg) translate(6px, -10px); }
+    66%  { transform: perspective(600px) rotateY(14deg) rotateX(-4deg) rotateZ(-6deg) translate(-3px, -5px); }
+    100% { transform: perspective(600px) rotateY(16deg) rotateX(-6deg) rotateZ(-5deg) translate(0, 0); }
   }
   @keyframes float2 {
-    0%   { transform: perspective(600px) rotateY(-16deg) rotateX(-4deg) rotateZ(2deg) translate(0, 0); }
-    33%  { transform: perspective(600px) rotateY(-14deg) rotateX(-6deg) rotateZ(3deg) translate(-5px, 8px); }
-    66%  { transform: perspective(600px) rotateY(-18deg) rotateX(-2deg) rotateZ(1deg) translate(3px, 4px); }
-    100% { transform: perspective(600px) rotateY(-16deg) rotateX(-4deg) rotateZ(2deg) translate(0, 0); }
+    0%   { transform: perspective(600px) rotateY(-16deg) rotateX(-4deg) rotateZ(4deg) translate(0, 0); }
+    33%  { transform: perspective(600px) rotateY(-14deg) rotateX(-6deg) rotateZ(6deg) translate(-5px, 8px); }
+    66%  { transform: perspective(600px) rotateY(-18deg) rotateX(-2deg) rotateZ(3deg) translate(3px, 4px); }
+    100% { transform: perspective(600px) rotateY(-16deg) rotateX(-4deg) rotateZ(4deg) translate(0, 0); }
   }
   @keyframes float3 {
-    0%   { transform: perspective(600px) rotateY(14deg) rotateX(5deg) rotateZ(2deg) translate(0, 0); }
-    33%  { transform: perspective(600px) rotateY(12deg) rotateX(7deg) rotateZ(3deg) translate(7px, 6px); }
-    66%  { transform: perspective(600px) rotateY(16deg) rotateX(3deg) rotateZ(1deg) translate(-4px, 3px); }
-    100% { transform: perspective(600px) rotateY(14deg) rotateX(5deg) rotateZ(2deg) translate(0, 0); }
+    0%   { transform: perspective(600px) rotateY(14deg) rotateX(5deg) rotateZ(7deg) translate(0, 0); }
+    33%  { transform: perspective(600px) rotateY(12deg) rotateX(7deg) rotateZ(5deg) translate(7px, 6px); }
+    66%  { transform: perspective(600px) rotateY(16deg) rotateX(3deg) rotateZ(8deg) translate(-4px, 3px); }
+    100% { transform: perspective(600px) rotateY(14deg) rotateX(5deg) rotateZ(7deg) translate(0, 0); }
   }
   @keyframes float4 {
-    0%   { transform: perspective(600px) rotateY(-14deg) rotateX(6deg) rotateZ(-2deg) translate(0, 0); }
-    33%  { transform: perspective(600px) rotateY(-16deg) rotateX(8deg) rotateZ(-3deg) translate(-6px, -7px); }
-    66%  { transform: perspective(600px) rotateY(-12deg) rotateX(4deg) rotateZ(-1deg) translate(4px, -3px); }
-    100% { transform: perspective(600px) rotateY(-14deg) rotateX(6deg) rotateZ(-2deg) translate(0, 0); }
+    0%   { transform: perspective(600px) rotateY(-14deg) rotateX(6deg) rotateZ(-3deg) translate(0, 0); }
+    33%  { transform: perspective(600px) rotateY(-16deg) rotateX(8deg) rotateZ(-5deg) translate(-6px, -7px); }
+    66%  { transform: perspective(600px) rotateY(-12deg) rotateX(4deg) rotateZ(-2deg) translate(4px, -3px); }
+    100% { transform: perspective(600px) rotateY(-14deg) rotateX(6deg) rotateZ(-3deg) translate(0, 0); }
   }
 
   /* ── NAV ── */
