@@ -425,9 +425,9 @@
     position: absolute;
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
-    border-radius: 12px;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 10px;
     background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%);
     border: 1px solid rgba(255,255,255,0.08);
     box-shadow: 0 8px 32px rgba(0,0,0,0.5);
@@ -440,14 +440,13 @@
     border-color: rgba(255,255,255,0.2);
   }
   .glass-card-icon {
-    width: 32px; height: 32px;
-    border-radius: 9px;
+    width: 18px; height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
   }
-  .glass-card-icon svg { width: 16px; height: 16px; }
+  .glass-card-icon svg { width: 14px; height: 14px; }
   .glass-card-text {
     display: flex;
     flex-direction: column;
@@ -484,7 +483,6 @@
     border-color: rgba(52,211,153,0.12);
   }
   .glass-card-1 .glass-card-icon {
-    background: rgba(52,211,153,0.12);
     color: #34D399;
   }
   .glass-card-1 .glass-card-label { color: rgba(52,211,153,0.8); }
@@ -513,7 +511,6 @@
     border-color: rgba(96,165,250,0.12);
   }
   .glass-card-2 .glass-card-icon {
-    background: rgba(96,165,250,0.12);
     color: #60A5FA;
   }
   .glass-card-2 .glass-card-label { color: rgba(96,165,250,0.8); }
@@ -531,7 +528,6 @@
     border-color: rgba(251,191,36,0.12);
   }
   .glass-card-3 .glass-card-icon {
-    background: rgba(251,191,36,0.12);
     color: #FBBF24;
   }
   .glass-card-3 .glass-card-label { color: rgba(251,191,36,0.8); }
@@ -548,7 +544,6 @@
     border-color: rgba(244,114,182,0.12);
   }
   .glass-card-4 .glass-card-icon {
-    background: rgba(244,114,182,0.12);
     color: #F472B6;
   }
   .glass-card-4 .glass-card-label { color: rgba(244,114,182,0.8); }
@@ -747,16 +742,6 @@
     animation: fadeInUp 1.5s 1.5s both, illustFloat1 9s ease-in-out 1.5s infinite;
   }
 
-  /* Sparkles — near title, right side */
-  .illust-sparkles {
-    top: 33%;
-    left: 44%;
-    width: 40px;
-    height: 40px;
-    opacity: 0.45;
-    animation: fadeInUp 1.5s 2s both, illustFloat3 8s ease-in-out 2s infinite;
-  }
-
   /* Rainbow — lower-right */
   .illust-rainbow {
     bottom: 14%;
@@ -840,8 +825,8 @@
       border-radius: 10px;
       gap: 7px;
     }
-    .glass-card-icon { width: 26px; height: 26px; border-radius: 7px; }
-    .glass-card-icon svg { width: 13px; height: 13px; }
+    .glass-card-icon { width: 16px; height: 16px; }
+    .glass-card-icon svg { width: 12px; height: 12px; }
     .glass-card-label { font-size: 8px; }
     .glass-card-value { font-size: 11px; }
     .glass-card-1 { top: -18px; left: -75px; }
@@ -886,7 +871,6 @@
 
   <!-- Floating illustrations — hand-drawn accents -->
   <div class="illust illust-sun"><img src="illust-sun.png" alt="" aria-hidden="true"></div>
-  <div class="illust illust-sparkles"><img src="illust-sparkles.png" alt="" aria-hidden="true"></div>
   <div class="illust illust-rainbow"><img src="illust-rainbow.png" alt="" aria-hidden="true"></div>
 
   <!-- Nav -->
