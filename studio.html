@@ -4,8 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>xinxinmingde Studio — Product Design Practice</title>
-<meta name="description" content="A small product design practice. We help builders ship products users actually use — on apps, consoles, AI tools, and everything in between.">
+<meta name="description" content="A small product design practice. We design products people actually use. Selectively taking on 2–3 projects per quarter.">
 <link rel="canonical" href="https://xinxinmingde.com/studio.html">
+<link rel="icon" type="image/png" href="logo.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="xinxinmingde Studio — Product Design Practice">
+<meta property="og:description" content="A small product design practice. We design products people actually use.">
+<meta property="og:image" content="https://xinxinmingde.com/logo.png">
+<meta property="og:url" content="https://xinxinmingde.com/studio.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="xinxinmingde Studio">
+<meta name="twitter:description" content="A small product design practice. We design products people actually use.">
+<meta name="twitter:image" content="https://xinxinmingde.com/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -410,6 +420,163 @@
     margin: 0 auto 36px;
   }
 
+  /* ── HERO CTA ROW (primary + secondary) ── */
+  .hero-cta-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 22px;
+    animation: fadeInUp 1s 0.8s both;
+  }
+  .cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid rgba(255,255,255,0.18);
+    padding-bottom: 2px;
+    transition: all 0.3s;
+  }
+  .cta-secondary:hover {
+    color: var(--sun-gold);
+    border-bottom-color: var(--sun-gold);
+  }
+  .cta-secondary .arrow { transition: transform 0.3s; }
+  .cta-secondary:hover .arrow { transform: translateX(4px); }
+
+  /* ── TRUST BLOCK ── */
+  .section-trust { padding-top: 2vh; padding-bottom: 4vh; }
+  .trust-block {
+    max-width: 760px;
+    padding: 40px 36px;
+    border-radius: 18px;
+    background: linear-gradient(140deg, rgba(251,191,36,0.06) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid rgba(251,191,36,0.18);
+    backdrop-filter: blur(20px);
+  }
+  .trust-block h3 {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.4vw, 1.85rem);
+    font-weight: 400;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+  .trust-block .trust-sub {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--sun-gold);
+    font-size: 1rem;
+    margin-bottom: 22px;
+    opacity: 0.85;
+  }
+  .trust-block p {
+    font-size: 0.98rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+  }
+  .trust-block p:last-child { margin-bottom: 0; }
+
+  /* ── WHY US ── */
+  .why-grid {
+    display: grid;
+    gap: 22px;
+    grid-template-columns: 1fr;
+    max-width: 920px;
+  }
+  .why-item {
+    padding: 24px 28px;
+    border-left: 2px solid var(--sun-gold);
+    background: linear-gradient(90deg, rgba(251,191,36,0.05) 0%, transparent 75%);
+    border-radius: 0 12px 12px 0;
+    transition: all 0.4s ease;
+  }
+  .why-item:hover {
+    background: linear-gradient(90deg, rgba(251,191,36,0.1) 0%, transparent 75%);
+    transform: translateX(4px);
+  }
+  .why-item h3 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .why-item p {
+    font-size: 0.96rem;
+    line-height: 1.7;
+    color: var(--text-secondary);
+  }
+
+  /* ── ENGAGEMENT MODELS ── */
+  .engage-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .engage-card {
+    padding: 28px 24px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.4s ease;
+  }
+  .engage-card:hover {
+    border-color: rgba(56,189,248,0.4);
+    background: rgba(56,189,248,0.04);
+    transform: translateY(-2px);
+  }
+  .engage-tag {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(56,189,248,0.12);
+    color: var(--sky-400);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .engage-card h3 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .engage-card p {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* ── ANTI-SCAM HINT ── */
+  .scam-hint {
+    margin-top: 36px;
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-style: italic;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
+  }
+
+  /* ── CONTACT CTA ROW ── */
+  .contact-cta-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 22px;
+  }
+
   /* ── FOOTER ── */
   .studio-footer {
     position: relative;
@@ -420,6 +587,15 @@
     font-size: 12px;
     color: var(--text-muted);
     letter-spacing: 0.04em;
+  }
+  .footer-scarcity {
+    display: block;
+    font-style: italic;
+    color: var(--sun-gold);
+    font-size: 11px;
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
   }
   .studio-footer a {
     color: var(--text-secondary);
@@ -452,6 +628,11 @@
     section { padding: 6vh 5vw; }
     .capability-grid { grid-template-columns: 1fr; }
     .process-flow { grid-template-columns: 1fr; }
+    .engage-grid { grid-template-columns: 1fr; }
+    .hero-cta-row { gap: 16px; flex-direction: column; align-items: flex-start; }
+    .contact-cta-row { gap: 14px; flex-direction: column; }
+    .trust-block { padding: 28px 22px; }
+    .why-item { padding: 20px 22px; }
     .quote-mark { font-size: 100px; }
     .section-title::before { width: 24px; }
   }
@@ -498,12 +679,32 @@
       Designs that get used — not just designs that get awards.
     </p>
     <p class="hero-sub">
-      A small product design practice. We work with founders and product teams to take real products from spark to ship — across consumer apps, B2B consoles, AI tools, and the long tail of unsexy interfaces in between.
+      A small, founder-led practice. We work alongside teams to take real products from spark to ship — apps, consoles, AI tools, and the long tail of unsexy systems in between.
     </p>
-    <a href="mailto:hello@xinxinmingde.com?subject=Project%20Inquiry&body=Hi%20xinxinmingde%2C%0A%0AI%27d%20like%20to%20talk%20about%20a%20design%20project.%0A%0A%E2%80%94%20About%20me%20%E2%80%94%0AName%3A%0ACompany%20%2F%20what%20you%20do%3A%0A%0A%E2%80%94%20The%20project%20%E2%80%94%0AType%20%280%E2%86%921%20app%20%C2%B7%20B2B%20console%20%C2%B7%20AI%20%C2%B7%20redesign%20%C2%B7%20research%20%C2%B7%20other%29%3A%0AWhat%20problem%20you%27re%20solving%3A%0A%0A%E2%80%94%20Scope%20%E2%80%94%0ABudget%20%28rough%20is%20fine%29%3A%0ATimeline%3A%0ADesign%20only%20or%20design%20%2B%20code%3A%0A%0A%E2%80%94%20Anything%20else%20%E2%80%94%0ALinks%20%2F%20references%3A%0A%0AThanks%21" class="cta-primary">
-      Start a Project
-      <span class="arrow">→</span>
-    </a>
+    <div class="hero-cta-row">
+      <a href="mailto:hello@xinxinmingde.com?subject=Project%20Inquiry&body=Hi%20xinxinmingde%2C%0A%0AI%27d%20like%20to%20talk%20about%20a%20design%20project.%0A%0A%E2%80%94%20About%20me%20%E2%80%94%0AName%3A%0ACompany%20%2F%20what%20you%20do%3A%0ACompany%20website%20or%20LinkedIn%20%28helps%20us%20know%20who%20you%20are%29%3A%0ACountry%20%2F%20city%3A%0A%0A%E2%80%94%20The%20project%20%E2%80%94%0AType%20%280%E2%86%921%20app%20%C2%B7%20B2B%20console%20%C2%B7%20AI%20%C2%B7%20redesign%20%C2%B7%20research%20%C2%B7%20other%29%3A%0AWhat%20problem%20you%27re%20solving%3A%0A%0A%E2%80%94%20Scope%20%E2%80%94%0ABudget%20%28rough%20is%20fine%29%3A%0ATimeline%3A%0ADesign%20only%20or%20design%20%2B%20code%3A%0A%0A%E2%80%94%20Anything%20else%20%E2%80%94%0ALinks%20%2F%20references%3A%0AHow%20you%20found%20xinxinmingde%3A%0A%0AThanks%21" class="cta-primary">
+        Start a Project
+        <span class="arrow">→</span>
+      </a>
+      <a href="mailto:hello@xinxinmingde.com?subject=Just%20saying%20hi&body=Hi%20xinxinmingde%2C%0A%0A" class="cta-secondary">
+        Or just say hi
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section class="section-trust reveal">
+    <div class="trust-block">
+      <h3>We don't list clients here.</h3>
+      <p class="trust-sub">By choice, not by lack.</p>
+      <p>
+        Past work spans cloud and security platforms, supply-chain systems, AI products, and consumer apps that have reached tens of millions of users — at companies large enough that you'd recognize them, and small enough that the founders still answered the phone.
+      </p>
+      <p>
+        Concrete case studies, screenshots, and references are shared after a discovery call, under NDA. We think that's fair to both the work and the teams who paid for it.
+      </p>
+    </div>
   </section>
 
   <!-- CAPABILITIES -->
@@ -516,38 +717,75 @@
 
       <div class="cap-card">
         <div class="cap-num">01</div>
-        <h3>0 → 1 Products</h3>
-        <p>From research and product definition through to a shipping interface and post-launch iteration. We design every layer of a product — flow, screen, micro-interaction, and the data model behind them.</p>
+        <h3>Build new products</h3>
+        <p>0→1 apps, AI features, products that haven't earned their first user yet. From research and product definition through to a shipping interface and post-launch iteration. We design every layer — flow, screen, micro-interaction, the data model underneath, and the trust layer for AI features (how models meet users, what to surface, what to hide).</p>
       </div>
 
       <div class="cap-card">
         <div class="cap-num">02</div>
-        <h3>B2B &amp; Console UX</h3>
-        <p>Complex internal systems, dashboards, and SaaS consoles. Onboarding, upgrade paths, empty states, error states, expiry, billing — the parts of a product where most teams give up. We don't.</p>
+        <h3>Fix complex products</h3>
+        <p>B2B consoles, dashboards, SaaS billing, multi-region edge cases — the parts most teams give up on. Onboarding, upgrade paths, empty states, error states, expiry. Backed by research (interviews, heatmaps, A/B, journey mapping), not the loudest stakeholder. International work goes beyond translation: density, hierarchy, and flow adapted to how local users actually work.</p>
       </div>
 
       <div class="cap-card">
         <div class="cap-num">03</div>
-        <h3>AI Product UX</h3>
-        <p>Designing the trust layer for AI features. How models meet users, what to surface, what to hide, how to set expectation honestly, and how to translate raw capability into something simple, fast, and confident.</p>
+        <h3>Ship as one team</h3>
+        <p>Where it makes sense, the same person who designs the interface ships the code. Native Android (Kotlin / Jetpack Compose), front-end, AI-assisted development. Designs arrive in production unchanged because there's no handoff to lose them in.</p>
       </div>
 
-      <div class="cap-card">
-        <div class="cap-num">04</div>
-        <h3>International Design</h3>
-        <p>Beyond translation. Adapting flow, density, and information architecture to local user habits, cultural expectations, and regional regulation. Multi-region products that feel native, not imported.</p>
+    </div>
+  </section>
+
+  <!-- WHY US -->
+  <section class="reveal">
+    <h2 class="section-title">
+      Why xinxinmingde
+      <span class="zh">差异</span>
+    </h2>
+    <div class="why-grid">
+
+      <div class="why-item">
+        <h3>Designs that ship — because the designer also writes the code.</h3>
+        <p>Most studios hand off Figma files. We hand off products. The gap between mockup and production is measured in hours, not weeks. No "the engineer didn't quite get the spacing right." If the designer is the engineer, there's no spec to mistranslate.</p>
       </div>
 
-      <div class="cap-card">
-        <div class="cap-num">05</div>
-        <h3>Research &amp; Strategy</h3>
-        <p>Interviews, surveys, focus groups, heatmap testing, A/B experiments, journey mapping, competitive teardowns. Evidence to back design decisions — not opinion, not vibes, not the loudest stakeholder.</p>
+      <div class="why-item">
+        <h3>Decisions held to data, not vibes.</h3>
+        <p>Heatmap tests, A/B experiments, behavioral analytics, post-launch reviews. Every meaningful design choice is testable, and we'd rather be wrong on data than right on opinion. If we can't show you why a screen exists, we shouldn't have drawn it.</p>
       </div>
 
-      <div class="cap-card">
-        <div class="cap-num">06</div>
-        <h3>Design × Code</h3>
-        <p>Where it makes sense, we ship code too. Native Android (Kotlin / Jetpack Compose), front-end, AI-assisted development. Designs that arrive in production unchanged — because the same person built both.</p>
+      <div class="why-item">
+        <h3>We've worked at every scale.</h3>
+        <p>From shipping a personal app on the Play Store to making decisions for platforms used by tens of millions. We bring both ends of that spectrum — the freedom of a startup and the discipline of a system at scale — to your problem.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ENGAGEMENT MODELS -->
+  <section class="reveal">
+    <h2 class="section-title">
+      How we work together
+      <span class="zh">合作</span>
+    </h2>
+    <div class="engage-grid">
+
+      <div class="engage-card">
+        <span class="engage-tag">2 – 4 weeks</span>
+        <h3>Project Sprint</h3>
+        <p>For a defined deliverable: a redesign, an onboarding flow, a research sprint, a 0→1 prototype. Fixed scope, fixed timeline, shipped at the end.</p>
+      </div>
+
+      <div class="engage-card">
+        <span class="engage-tag">ongoing</span>
+        <h3>Embedded Design</h3>
+        <p>Senior product designer working alongside your team for a quarter or more. Best for ongoing product evolution, weekly cycles, and teams that need a design partner, not a deliverable.</p>
+      </div>
+
+      <div class="engage-card">
+        <span class="engage-tag">~ 1 week</span>
+        <h3>Discovery + Strategy</h3>
+        <p>A focused engagement to map a problem, audit an existing product, or scope a future redesign. The cheapest way to start working together — and to find out if we're a fit.</p>
       </div>
 
     </div>
@@ -564,19 +802,19 @@
       <div class="process-step">
         <div class="step-num">01</div>
         <h4>Listen</h4>
-        <p>Interviews, focus groups, surveys, support tickets. Understand the user before drawing a pixel.</p>
+        <p>Interviews, surveys, support tickets. We mean it — half the brief usually changes once we actually listen.</p>
       </div>
 
       <div class="process-step">
         <div class="step-num">02</div>
         <h4>Map</h4>
-        <p>Journey maps, information architecture, competitive teardowns. Find the gap, frame the opportunity.</p>
+        <p>Journey maps, IA, competitive teardowns. Find the gap, frame the opportunity. This is where bad ideas die cheaply.</p>
       </div>
 
       <div class="process-step">
         <div class="step-num">03</div>
         <h4>Design</h4>
-        <p>Sketches, wireframes, high-fidelity prototypes with motion. Every screen has a reason to exist.</p>
+        <p>Sketches → wireframes → high-fidelity prototypes with motion. Every screen earns its place.</p>
       </div>
 
       <div class="process-step">
@@ -588,7 +826,7 @@
       <div class="process-step">
         <div class="step-num">05</div>
         <h4>Iterate</h4>
-        <p>Post-launch retrospectives. The day a product ships is the day the real design starts.</p>
+        <p>Post-launch retros, follow-up tweaks, weekly metrics review. The day a product ships is the day the real design starts.</p>
       </div>
 
     </div>
@@ -612,15 +850,25 @@
     <p class="contact-sub">
       Have a product in mind? An interface that needs rethinking? A team that needs a design partner who understands both pixels and production code? Drop us a line — every email is read.
     </p>
-    <a href="mailto:hello@xinxinmingde.com?subject=Project%20Inquiry&body=Hi%20xinxinmingde%2C%0A%0AI%27d%20like%20to%20talk%20about%20a%20design%20project.%0A%0A%E2%80%94%20About%20me%20%E2%80%94%0AName%3A%0ACompany%20%2F%20what%20you%20do%3A%0A%0A%E2%80%94%20The%20project%20%E2%80%94%0AType%20%280%E2%86%921%20app%20%C2%B7%20B2B%20console%20%C2%B7%20AI%20%C2%B7%20redesign%20%C2%B7%20research%20%C2%B7%20other%29%3A%0AWhat%20problem%20you%27re%20solving%3A%0A%0A%E2%80%94%20Scope%20%E2%80%94%0ABudget%20%28rough%20is%20fine%29%3A%0ATimeline%3A%0ADesign%20only%20or%20design%20%2B%20code%3A%0A%0A%E2%80%94%20Anything%20else%20%E2%80%94%0ALinks%20%2F%20references%3A%0A%0AThanks%21" class="cta-primary">
-      hello@xinxinmingde.com
-      <span class="arrow">→</span>
-    </a>
+    <div class="contact-cta-row">
+      <a href="mailto:hello@xinxinmingde.com?subject=Project%20Inquiry&body=Hi%20xinxinmingde%2C%0A%0AI%27d%20like%20to%20talk%20about%20a%20design%20project.%0A%0A%E2%80%94%20About%20me%20%E2%80%94%0AName%3A%0ACompany%20%2F%20what%20you%20do%3A%0ACompany%20website%20or%20LinkedIn%20%28helps%20us%20know%20who%20you%20are%29%3A%0ACountry%20%2F%20city%3A%0A%0A%E2%80%94%20The%20project%20%E2%80%94%0AType%20%280%E2%86%921%20app%20%C2%B7%20B2B%20console%20%C2%B7%20AI%20%C2%B7%20redesign%20%C2%B7%20research%20%C2%B7%20other%29%3A%0AWhat%20problem%20you%27re%20solving%3A%0A%0A%E2%80%94%20Scope%20%E2%80%94%0ABudget%20%28rough%20is%20fine%29%3A%0ATimeline%3A%0ADesign%20only%20or%20design%20%2B%20code%3A%0A%0A%E2%80%94%20Anything%20else%20%E2%80%94%0ALinks%20%2F%20references%3A%0AHow%20you%20found%20xinxinmingde%3A%0A%0AThanks%21" class="cta-primary">
+        Send a Brief
+        <span class="arrow">→</span>
+      </a>
+      <a href="mailto:hello@xinxinmingde.com?subject=Just%20saying%20hi&body=Hi%20xinxinmingde%2C%0A%0A" class="cta-secondary">
+        Or just say hi
+        <span class="arrow">→</span>
+      </a>
+    </div>
+    <p class="scam-hint">
+      We work with serious teams. Briefs without basic context — who you are, what you're building, rough scope — generally don't get a reply. Thanks for understanding.
+    </p>
   </section>
 
 </main>
 
 <footer class="studio-footer">
+  <span class="footer-scarcity">Selectively taking on 2 – 3 projects per quarter.</span>
   <span>&copy; 2025 xinxinmingde Studio &middot; <a href="index.html">UVPeek</a></span>
 </footer>
 
