@@ -28,7 +28,7 @@
     --glass-white: rgba(255, 255, 255, 0.08);
     --glass-white-border: rgba(255, 255, 255, 0.15);
     --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-secondary: rgba(255, 255, 255, 0.78);
     --text-muted: rgba(255, 255, 255, 0.45);
   }
 
@@ -134,6 +134,7 @@
   main {
     position: relative;
     z-index: 10;
+    overflow: visible;
   }
   section {
     padding: 8vh 5vw;
@@ -634,8 +635,8 @@
 
   /* HAT — Hero right side, beside the brand name (the studio "wears" the hat) */
   .illust-hat {
-    top: 80px;
-    right: -2%;
+    top: 160px;
+    right: 0;
     width: 336px;
     height: auto;
     transform-origin: 70% 80%;
@@ -707,7 +708,7 @@
     .why-item { padding: 20px 22px; }
     .quote-mark { font-size: 100px; }
     .section-title::before { width: 24px; }
-    .illust-hat      { width: 220px; top: 60px; right: -4%; }
+    .illust-hat      { width: 220px; top: 130px; right: 0; }
     .illust-flower   { width: 32px;  top: 12px; right: 12px; }
     .illust-umbrella { width: 200px; top: -76px; margin-left: -100px; }
     .illust-drink    { width: 220px; bottom: 8%; left: 0; }
@@ -717,7 +718,7 @@
     .orb-3 { display: none; }
     .grain { display: none; }
     .nav-links a:not(.active):nth-child(3) { display: none; }
-    .illust-hat      { width: 160px; top: 50px; right: -8%; }
+    .illust-hat      { width: 160px; top: 100px; right: -2%; }
     .illust-flower   { width: 26px;  top: 10px; right: 10px; }
     .illust-umbrella { width: 152px; top: -54px; margin-left: -76px; }
     .illust-drink    { width: 160px; bottom: 4%; left: -2%; }
@@ -797,7 +798,7 @@
     <div class="capability-grid">
 
       <div class="cap-card">
-        <img class="studio-illust illust-flower" src="illust-flower.png" alt="" aria-hidden="true">
+        <img class="studio-illust illust-flower" src="illust-flower.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
         <div class="cap-num">01</div>
         <h3>Build new products</h3>
         <p>0→1 apps, AI features, products that haven't earned their first user yet. From research and product definition through to a shipping interface and post-launch iteration. We design every layer — flow, screen, micro-interaction, the data model underneath, and the trust layer for AI features (how models meet users, what to surface, what to hide).</p>
@@ -846,7 +847,7 @@
 
   <!-- ENGAGEMENT MODELS -->
   <section class="reveal">
-    <img class="studio-illust illust-umbrella" src="illust-umbrella.png" alt="" aria-hidden="true">
+    <img class="studio-illust illust-umbrella" src="illust-umbrella.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
     <h2 class="section-title">
       How we work together
       <span class="zh">合作</span>
@@ -929,7 +930,7 @@
 
   <!-- CONTACT -->
   <section class="section-contact reveal">
-    <img class="studio-illust illust-drink" src="illust-drink.png" alt="" aria-hidden="true">
+    <img class="studio-illust illust-drink" src="illust-drink.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
     <h2 class="section-title">Let's build something</h2>
     <p class="contact-sub">
       Have a product in mind? An interface that needs rethinking? A team that needs a design partner who understands both pixels and production code? Drop us a line — every email is read.
