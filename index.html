@@ -213,15 +213,6 @@
     background-clip: text;
   }
 
-  .h1-sub {
-    font-family: 'Playfair Display', serif;
-    font-size: 13px;
-    color: var(--text-muted);
-    letter-spacing: 0.01em;
-    margin: 4px 0 18px;
-    animation: fadeInUp 1s 0.48s both;
-  }
-
   .tagline {
     font-family: 'Playfair Display', serif;
     font-style: italic;
@@ -232,20 +223,37 @@
     animation: fadeInUp 1s 0.55s both;
   }
 
-  /* Inline stats — single line replacing feature tags + bottom bar */
+  /* Inline stats — three numeric pillars with strong hierarchy */
   .inline-stats {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 22px;
     margin-bottom: 36px;
     animation: fadeInUp 1s 0.65s both;
-    font-size: 13px;
-    color: var(--text-muted);
-    letter-spacing: 0.02em;
   }
-  .inline-stats span {
-    font-weight: 700;
-    color: var(--text-secondary);
+  .inline-stats .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .inline-stats .stat-num {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .inline-stats .stat-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .inline-stats .stat-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255,255,255,0.15);
   }
 
   .cta-row {
@@ -553,7 +561,7 @@
 
   /* Card 2: $0 Charged — right, mid-upper, BEHIND phone */
   .glass-card-2 {
-    top: 80px; right: -90px;
+    top: 80px; right: -10px;
     z-index: 2;
     animation: float2 11s ease-in-out infinite;
     background: linear-gradient(140deg, rgba(96,165,250,0.08) 0%, rgba(15,15,26,0.95) 50%);
@@ -826,11 +834,11 @@
 
   /* Sun — top-right hero area */
   .illust-sun {
-    top: 8%;
-    right: 7%;
-    width: 80px;
-    height: 80px;
-    opacity: 0.35;
+    top: 12%;
+    right: 4%;
+    width: 60px;
+    height: 60px;
+    opacity: 0.38;
     animation: fadeInUp 1.5s 1.5s both, illustFloat1 9s ease-in-out 1.5s infinite;
   }
 
@@ -922,7 +930,7 @@
     .glass-card-label { font-size: 8px; }
     .glass-card-value { font-size: 11px; }
     .glass-card-1 { top: -14px; left: -55px; }
-    .glass-card-2 { top: 60px; right: -65px; }
+    .glass-card-2 { top: 60px; right: -8px; }
     .glass-card-3 { bottom: 130px; left: -55px; }
     .glass-card-4 { bottom: 35px; right: -60px; }
     .green-pulse { width: 5px; height: 5px; }
@@ -989,7 +997,6 @@
       </div>
 
       <h1>Know Your<br><span class="highlight">UV in 3 Meters</span></h1>
-      <p class="h1-sub"><em>Real readings where you actually stand — not city averages.</em></p>
 
       <p class="tagline">
         Precision UV detection powered by on-device AI.<br>
@@ -997,11 +1004,20 @@
       </p>
 
       <div class="inline-stats">
-        <span>3-10m</span> Precision
-        &middot;
-        <span>15+</span> Environments
-        &middot;
-        <span>100%</span> On-Device
+        <div class="stat">
+          <span class="stat-num">3–10m</span>
+          <span class="stat-label">Precision</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">15+</span>
+          <span class="stat-label">Environments</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">100%</span>
+          <span class="stat-label">On-Device</span>
+        </div>
       </div>
 
       <div class="cta-row">
@@ -1065,8 +1081,8 @@
             </svg>
           </div>
           <div class="glass-card-text">
-            <span class="glass-card-label">On-Device</span>
-            <span class="glass-card-value">AI Skin Analysis</span>
+            <span class="glass-card-label">On-Device AI</span>
+            <span class="glass-card-value">Skin Analysis</span>
           </div>
         </div>
 
