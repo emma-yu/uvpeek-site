@@ -293,16 +293,37 @@
   .based-on {
     display: flex;
     align-items: center;
-    gap: 6px;
-    color: var(--text-muted);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.04em;
+    flex-wrap: wrap;
+    gap: 10px;
   }
-  .based-on .org-names {
-    color: var(--text-secondary);
+  .based-on-label {
+    font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .org-chips {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .org-chip {
+    padding: 4px 9px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(251,191,36,0.28);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--sun-gold);
+    transition: all 0.3s ease;
+    cursor: default;
+  }
+  .org-chip:hover {
+    background: rgba(251,191,36,0.12);
+    border-color: rgba(251,191,36,0.55);
+    transform: translateY(-1px);
   }
 
   /* ── RIGHT SIDE: PHONE ── */
@@ -659,6 +680,18 @@
     transition: color 0.3s;
   }
   .footer-links a:hover { color: var(--text-secondary); }
+  .footer-links .studio-credit {
+    margin-top: -10px;
+    font-size: 10px;
+    font-style: italic;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+  .footer-links .studio-credit a {
+    color: var(--text-secondary);
+    transition: color 0.3s;
+  }
+  .footer-links .studio-credit a:hover { color: var(--sun-gold); }
 
   /* ── BOTTOM-LEFT ICON GROUP (audio + social) ── */
   .bottom-left-icons {
@@ -934,7 +967,13 @@
           </span>
         </a>
         <div class="based-on">
-          Based on <span class="org-names">WHO &middot; AAD &middot; CDC &middot; NHS</span>
+          <span class="based-on-label">Based on</span>
+          <span class="org-chips">
+            <span class="org-chip" title="World Health Organization">WHO</span>
+            <span class="org-chip" title="American Academy of Dermatology">AAD</span>
+            <span class="org-chip" title="Centers for Disease Control and Prevention (US)">CDC</span>
+            <span class="org-chip" title="UK National Health Service">NHS</span>
+          </span>
         </div>
       </div>
     </div>
@@ -1029,6 +1068,7 @@
   <div class="footer-links">
     <img class="cta-sunflower" src="illust-sunflower.png" alt="" aria-hidden="true">
     <span>&copy; 2025 UVPeek</span>
+    <span class="studio-credit">Hand-crafted by <a href="studio.html">xinxinmingde Studio →</a></span>
   </div>
 </div>
 
