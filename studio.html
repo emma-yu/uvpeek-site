@@ -634,11 +634,11 @@
 
   /* HAT — hero top-right · wind catching the brim */
   .illust-hat {
-    top: 60px;
-    right: 3%;
-    width: 168px;   /* hat occupies ~30% of canvas → larger display compensates */
+    top: 40px;
+    right: 2%;
+    width: 336px;
     height: auto;
-    transform-origin: 70% 80%;  /* rotate around hat's stem-side */
+    transform-origin: 70% 80%;
     animation: illustHatSway 6.5s ease-in-out infinite;
   }
   @keyframes illustHatSway {
@@ -648,9 +648,9 @@
 
   /* FLOWER — Why us section, top-left · gentle bloom + breath */
   .illust-flower {
-    top: 8px;
-    left: -22px;
-    width: 88px;    /* flower fills ~40% of canvas → modest display */
+    top: 14px;
+    left: -8px;
+    width: 44px;
     height: auto;
     transform-origin: 50% 50%;
     animation: illustFlowerBreathe 4.5s ease-in-out infinite;
@@ -662,11 +662,11 @@
 
   /* UMBRELLA — Engagement models, top-right · slow parasol twirl */
   .illust-umbrella {
-    top: -8px;
-    right: 1%;
-    width: 152px;   /* umbrella ~30% of canvas */
+    top: -32px;
+    right: 0;
+    width: 304px;
     height: auto;
-    transform-origin: 50% 75%;  /* twirl around stem */
+    transform-origin: 50% 75%;
     animation: illustUmbrellaTwirl 9s ease-in-out infinite;
   }
   @keyframes illustUmbrellaTwirl {
@@ -676,9 +676,9 @@
 
   /* DRINK — Contact section, bottom-left · liquid bobble */
   .illust-drink {
-    bottom: -32px;
-    left: 6%;
-    width: 168px;   /* drink ~25% of canvas → display larger to compensate */
+    bottom: -64px;
+    left: 4%;
+    width: 336px;
     height: auto;
     transform-origin: 50% 90%;
     animation: illustDrinkBobble 3.8s ease-in-out infinite;
@@ -705,20 +705,20 @@
     .why-item { padding: 20px 22px; }
     .quote-mark { font-size: 100px; }
     .section-title::before { width: 24px; }
-    .illust-hat      { width: 110px; top: 50px; right: 2%; }
-    .illust-flower   { width: 60px;  top: 4px; left: -10px; }
-    .illust-umbrella { width: 100px; top: -6px; right: 2%; }
-    .illust-drink    { width: 110px; bottom: -22px; left: 4%; }
+    .illust-hat      { width: 220px; top: 40px; right: 0; }
+    .illust-flower   { width: 30px;  top: 8px; left: -4px; }
+    .illust-umbrella { width: 200px; top: -22px; right: 0; }
+    .illust-drink    { width: 220px; bottom: -42px; left: 2%; }
   }
   @media (max-width: 480px) {
     .orb { filter: blur(50px); }
     .orb-3 { display: none; }
     .grain { display: none; }
     .nav-links a:not(.active):nth-child(3) { display: none; }
-    .illust-hat      { width: 80px; top: 36px; right: 0; }
-    .illust-flower   { width: 48px; }
-    .illust-umbrella { width: 76px; }
-    .illust-drink    { width: 80px; bottom: -16px; }
+    .illust-hat      { width: 160px; top: 36px; right: -10px; }
+    .illust-flower   { width: 24px; }
+    .illust-umbrella { width: 152px; top: -16px; }
+    .illust-drink    { width: 160px; bottom: -32px; }
   }
 </style>
 </head>
