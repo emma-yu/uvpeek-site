@@ -130,6 +130,42 @@
     color: var(--sun-gold);
   }
 
+  /* Hamburger toggle (mobile only) */
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 0;
+    gap: 4px;
+    transition: all 0.3s;
+  }
+  .nav-toggle:hover {
+    border-color: var(--sun-gold);
+    background: rgba(251,191,36,0.06);
+  }
+  .nav-toggle .bar {
+    display: block;
+    width: 18px;
+    height: 1.5px;
+    background: var(--text-secondary);
+    transition: all 0.3s ease;
+    transform-origin: center;
+  }
+  .nav-toggle.open .bar:nth-child(1) {
+    transform: translateY(5.5px) rotate(45deg);
+  }
+  .nav-toggle.open .bar:nth-child(2) { opacity: 0; }
+  .nav-toggle.open .bar:nth-child(3) {
+    transform: translateY(-5.5px) rotate(-45deg);
+  }
+
   /* ── SHARED LAYOUT ── */
   main {
     position: relative;
@@ -141,6 +177,8 @@
     max-width: 1280px;
     margin: 0 auto;
   }
+  /* anchored sections scroll past the fixed nav */
+  section[id] { scroll-margin-top: 80px; }
 
   /* ── HERO ── */
   .studio-hero {
@@ -695,8 +733,6 @@
   /* ── RESPONSIVE ── */
   @media (max-width: 768px) {
     .top-nav { padding: 16px 5vw; }
-    .nav-links { gap: 18px; }
-    .nav-links a { font-size: 13px; }
     .studio-hero { padding-top: 100px; min-height: 80vh; }
     section { padding: 6vh 5vw; }
     .capability-grid { grid-template-columns: 1fr; }
@@ -712,16 +748,57 @@
     .illust-flower   { width: 32px;  top: 12px; right: 12px; }
     .illust-umbrella { width: 200px; top: -76px; margin-left: -100px; }
     .illust-drink    { width: 220px; bottom: 8%; left: 0; }
+
+    /* Hamburger menu kicks in below 768 */
+    .nav-toggle { display: inline-flex; }
+    .nav-links {
+      position: fixed;
+      top: 70px;
+      right: 16px;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+      padding: 22px 26px;
+      background: rgba(12,10,29,0.94);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 14px;
+      backdrop-filter: blur(24px);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+      transform: scale(0.92);
+      transform-origin: top right;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .nav-links.open {
+      transform: scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-links a { font-size: 15px; }
   }
   @media (max-width: 480px) {
     .orb { filter: blur(50px); }
     .orb-3 { display: none; }
     .grain { display: none; }
-    .nav-links a:not(.active):nth-child(3) { display: none; }
     .illust-hat      { width: 160px; top: 100px; right: -2%; }
     .illust-flower   { width: 26px;  top: 10px; right: 10px; }
     .illust-umbrella { width: 152px; top: -54px; margin-left: -76px; }
     .illust-drink    { width: 160px; bottom: 4%; left: -2%; }
+  }
+
+  /* ── REDUCED MOTION (accessibility) ── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001s !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001s !important;
+      scroll-behavior: auto !important;
+    }
+    .ambient { animation: none !important; }
+    .orb { animation: none !important; }
+    .studio-illust { animation: none !important; }
+    .reveal { opacity: 1 !important; transform: none !important; }
   }
 </style>
 </head>
@@ -738,7 +815,12 @@
     <div class="logo-icon"><img src="logo.png" alt=""></div>
     UVPeek
   </a>
-  <div class="nav-links">
+  <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+    <span class="bar"></span>
+    <span class="bar"></span>
+    <span class="bar"></span>
+  </button>
+  <div class="nav-links" id="nav-links">
     <a href="studio.html" class="active">Studio</a>
     <a href="mailto:hello@xinxinmingde.com">Contact</a>
     <a href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect.overseas">Download</a>
@@ -748,7 +830,7 @@
 <main>
 
   <!-- HERO -->
-  <section class="studio-hero">
+  <section id="top" class="studio-hero">
     <img class="studio-illust illust-hat" src="illust-hat.png" alt="" aria-hidden="true">
     <div class="badge">
       <span class="dot"></span>
@@ -776,7 +858,7 @@
   </section>
 
   <!-- TRUST -->
-  <section class="section-trust reveal">
+  <section id="trust" class="section-trust reveal">
     <div class="trust-block">
       <h3>We don't list clients here.</h3>
       <p class="trust-sub">By choice, not by lack.</p>
@@ -790,7 +872,7 @@
   </section>
 
   <!-- CAPABILITIES -->
-  <section class="reveal">
+  <section id="capabilities" class="reveal">
     <h2 class="section-title">
       What we make
       <span class="zh">能力</span>
@@ -820,7 +902,7 @@
   </section>
 
   <!-- WHY US -->
-  <section class="reveal">
+  <section id="why" class="reveal">
     <h2 class="section-title">
       Why xinxinmingde
       <span class="zh">差异</span>
@@ -846,8 +928,7 @@
   </section>
 
   <!-- ENGAGEMENT MODELS -->
-  <section class="reveal">
-    <img class="studio-illust illust-umbrella" src="illust-umbrella.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
+  <section id="engagement" class="reveal">
     <h2 class="section-title">
       How we work together
       <span class="zh">合作</span>
@@ -876,7 +957,7 @@
   </section>
 
   <!-- PROCESS -->
-  <section class="reveal">
+  <section id="process" class="reveal">
     <h2 class="section-title">
       How we work
       <span class="zh">方法</span>
@@ -917,7 +998,8 @@
   </section>
 
   <!-- PHILOSOPHY -->
-  <section class="section-philosophy reveal">
+  <section id="philosophy" class="section-philosophy reveal">
+    <img class="studio-illust illust-umbrella" src="illust-umbrella.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
     <div class="quote-block">
       <span class="quote-mark">&ldquo;</span>
       <p class="quote-text">
@@ -929,7 +1011,7 @@
   </section>
 
   <!-- CONTACT -->
-  <section class="section-contact reveal">
+  <section id="contact" class="section-contact reveal">
     <img class="studio-illust illust-drink" src="illust-drink.png" alt="" aria-hidden="true" loading="lazy" decoding="async">
     <h2 class="section-title">Let's build something</h2>
     <p class="contact-sub">
@@ -972,6 +1054,34 @@
     revealEls.forEach(function(el) { io.observe(el); });
   } else {
     revealEls.forEach(function(el) { el.classList.add('in-view'); });
+  }
+
+  // Hamburger menu (mobile)
+  var navToggle = document.querySelector('.nav-toggle');
+  var navLinks  = document.getElementById('nav-links');
+  if (navToggle && navLinks) {
+    navToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = navToggle.classList.toggle('open');
+      navLinks.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    // Tap any nav link → close menu
+    navLinks.querySelectorAll('a').forEach(function(a) {
+      a.addEventListener('click', function() {
+        navToggle.classList.remove('open');
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+    // Tap outside → close menu
+    document.addEventListener('click', function(e) {
+      if (!navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+        navToggle.classList.remove('open');
+        navLinks.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
   }
 </script>
 
