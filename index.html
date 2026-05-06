@@ -6,6 +6,16 @@
 <title>UVPeek — Your Skin's Best Friend</title>
 <meta name="description" content="Precision UV detection powered by on-device AI. Know your UV in 3 meters. Your skin deserves more than a weather forecast.">
 <link rel="canonical" href="https://xinxinmingde.com">
+<link rel="icon" type="image/png" href="logo.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="UVPeek — Your Skin's Best Friend">
+<meta property="og:description" content="Precision UV detection powered by on-device AI. Know your UV in 3 meters.">
+<meta property="og:image" content="https://xinxinmingde.com/logo.png">
+<meta property="og:url" content="https://xinxinmingde.com/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="UVPeek — Your Skin's Best Friend">
+<meta name="twitter:description" content="Precision UV detection powered by on-device AI.">
+<meta name="twitter:image" content="https://xinxinmingde.com/logo.png">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -203,6 +213,15 @@
     background-clip: text;
   }
 
+  .h1-sub {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.01em;
+    margin: 4px 0 18px;
+    animation: fadeInUp 1s 0.48s both;
+  }
+
   .tagline {
     font-family: 'Playfair Display', serif;
     font-style: italic;
@@ -263,12 +282,20 @@
     border-radius: inherit;
   }
   .google-play-btn:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.2);
+    transform: translateY(-4px) scale(1.04);
+    box-shadow:
+      0 14px 44px rgba(251,191,36,0.45),
+      0 0 0 1px rgba(255,255,255,0.25),
+      0 0 28px rgba(249,115,22,0.35);
+    animation: ctaGlowPulse 1.6s ease-in-out infinite;
   }
   .google-play-btn:hover::before { opacity: 1; }
   .google-play-btn:hover .gp-text { color: #111; }
   .google-play-btn:hover .gp-icon svg path { fill: #111; }
+  @keyframes ctaGlowPulse {
+    0%, 100% { box-shadow: 0 14px 44px rgba(251,191,36,0.40), 0 0 0 1px rgba(255,255,255,0.25), 0 0 24px rgba(249,115,22,0.30); }
+    50%      { box-shadow: 0 14px 50px rgba(251,191,36,0.55), 0 0 0 1px rgba(255,255,255,0.30), 0 0 36px rgba(249,115,22,0.50); }
+  }
 
   .gp-icon {
     position: relative; z-index: 1;
@@ -693,6 +720,27 @@
   }
   .footer-links .studio-credit a:hover { color: var(--sun-gold); }
 
+  /* Mobile-only trust strip — replaces hidden floating glass cards on small screens */
+  .mobile-trust-strip {
+    display: none;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    animation: fadeInUp 1s 0.9s both;
+    justify-content: center;
+  }
+  .mobile-trust-strip span {
+    padding: 5px 11px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
   /* ── BOTTOM-LEFT ICON GROUP (audio + social) ── */
   .bottom-left-icons {
     position: fixed;
@@ -888,8 +936,9 @@
     .icon-btn { width: 34px; height: 34px; }
     .icon-btn svg { width: 16px; height: 16px; }
     .x-link svg { width: 14px; height: 14px; }
-    /* Floating cards: mobile — hide for clean look */
+    /* Floating cards hidden on small mobile, replaced by trust strip below */
     .glass-card { display: none; }
+    .mobile-trust-strip { display: flex; }
     /* Illustrations: hide on mobile */
     .illust { display: none; }
   }
@@ -940,6 +989,7 @@
       </div>
 
       <h1>Know Your<br><span class="highlight">UV in 3 Meters</span></h1>
+      <p class="h1-sub"><em>Real readings where you actually stand — not city averages.</em></p>
 
       <p class="tagline">
         Precision UV detection powered by on-device AI.<br>
@@ -976,6 +1026,14 @@
           </span>
         </div>
       </div>
+
+      <!-- Mobile-only trust strip — visible only when floating glass cards are hidden -->
+      <div class="mobile-trust-strip" aria-hidden="true">
+        <span>✓ Free Trial</span>
+        <span>✓ AI Skin Analysis</span>
+        <span>✓ No Sign-Up</span>
+        <span>✓ Cancel Anytime</span>
+      </div>
     </div>
 
     <!-- Right: Phone + Floating Cards -->
@@ -997,16 +1055,18 @@
           <div class="green-pulse"></div>
         </div>
 
-        <!-- Glass Card 2: First 24 Hours (blue, top-right) -->
+        <!-- Glass Card 2: AI Skin Analysis (blue, top-right) — product value, not pricing -->
         <div class="glass-card glass-card-2">
           <div class="glass-card-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M12 2l1.6 4.6L18 8l-4.6 1.6L12 14l-1.6-4.4L6 8l4.4-1.4z"/>
+              <circle cx="18" cy="16" r="1.5"/>
+              <circle cx="6" cy="18" r="1"/>
             </svg>
           </div>
           <div class="glass-card-text">
-            <span class="glass-card-label">First 24 Hours</span>
-            <span class="glass-card-value">$0 Charged</span>
+            <span class="glass-card-label">On-Device</span>
+            <span class="glass-card-value">AI Skin Analysis</span>
           </div>
         </div>
 
@@ -1051,7 +1111,7 @@
   <!-- Bottom-left icon group -->
   <div class="bottom-left-icons">
     <!-- Audio toggle -->
-    <button class="icon-btn audio-toggle" id="audioToggle" title="Toggle audio">
+    <button class="icon-btn audio-toggle" id="audioToggle" title="Click to toggle background sound" aria-label="Toggle background sound">
       <svg viewBox="0 0 24 24">
         <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
         <path d="M15.54 8.46a5 5 0 010 7.07"/>
@@ -1106,8 +1166,19 @@
   var video = document.getElementById('bgVideo');
   var audioBtn = document.getElementById('audioToggle');
   var audioOn = false;
+  var isSmallMobile = window.innerWidth <= 600;
+
+  // Skip bg video on small mobile (saves ~2MB bandwidth + battery)
+  if (isSmallMobile && video) {
+    video.removeAttribute('autoplay');
+    video.removeAttribute('preload');
+    video.pause();
+    video.style.display = 'none';
+    if (audioBtn) audioBtn.style.display = 'none';
+  }
 
   function enableAudio() {
+    if (isSmallMobile) return;
     video.muted = false;
     video.play().catch(function(){});
     audioOn = true;
@@ -1115,14 +1186,20 @@
   }
 
   function disableAudio() {
+    if (isSmallMobile) return;
     video.muted = true;
     audioOn = false;
     audioBtn.classList.add('muted');
   }
 
-  // Step 1: Try playing with sound immediately
-  video.muted = false;
-  var playAttempt = video.play();
+  // Step 1: Try playing with sound immediately (desktop + tablet only)
+  if (isSmallMobile) {
+    // Don't even try on small mobile
+    var playAttempt = undefined;
+  } else {
+    video.muted = false;
+    var playAttempt = video.play();
+  }
   if (playAttempt !== undefined) {
     playAttempt.then(function() {
       // Autoplay with sound succeeded
