@@ -620,45 +620,73 @@
     transform: translateY(0);
   }
 
-  /* ── SECTION ORNAMENTS — visual punctuation between text-heavy sections ── */
-  .section-ornament {
-    display: block;
+  /* ── STUDIO ILLUSTRATIONS — irregular scatter, full opacity, motion matched to icon nature ── */
+  main > section { position: relative; }
+
+  .studio-illust {
+    position: absolute;
     pointer-events: none;
     user-select: none;
-    filter: drop-shadow(0 6px 18px rgba(0,0,0,0.35));
-  }
-  .ornament-row {
-    display: flex;
-    justify-content: center;
-    margin: -16px 0 24px;
-    position: relative;
     z-index: 5;
+    opacity: 1;
+    filter: drop-shadow(0 10px 24px rgba(0,0,0,0.45));
   }
-  .ornament-row .section-ornament {
-    width: 46px;
+
+  /* HAT — hero top-right · wind catching the brim */
+  .illust-hat {
+    top: 60px;
+    right: 3%;
+    width: 168px;   /* hat occupies ~30% of canvas → larger display compensates */
     height: auto;
-    opacity: 0.55;
-    animation: ornamentFloat 8s ease-in-out infinite;
+    transform-origin: 70% 80%;  /* rotate around hat's stem-side */
+    animation: illustHatSway 6.5s ease-in-out infinite;
   }
-  .ornament-row.gap-row { margin: 4vh 0; }
-  .ornament-flower { animation-delay: -2s; }
-  .ornament-umbrella { animation-delay: -4s; }
-  .ornament-drink { animation-delay: -6s; }
-  .ornament-hero-hat {
-    position: absolute;
-    top: 96px;
-    right: 6%;
-    width: 68px;
+  @keyframes illustHatSway {
+    0%, 100% { transform: rotate(-6deg) translateY(0); }
+    50%      { transform: rotate(6deg) translateY(-5px); }
+  }
+
+  /* FLOWER — Why us section, top-left · gentle bloom + breath */
+  .illust-flower {
+    top: 8px;
+    left: -22px;
+    width: 88px;    /* flower fills ~40% of canvas → modest display */
     height: auto;
-    opacity: 0.5;
-    z-index: 5;
-    pointer-events: none;
-    animation: ornamentFloat 9s ease-in-out infinite;
-    filter: drop-shadow(0 8px 22px rgba(0,0,0,0.4));
+    transform-origin: 50% 50%;
+    animation: illustFlowerBreathe 4.5s ease-in-out infinite;
   }
-  @keyframes ornamentFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50%      { transform: translateY(-8px) rotate(-3deg); }
+  @keyframes illustFlowerBreathe {
+    0%, 100% { transform: rotate(-4deg) scale(1); }
+    50%      { transform: rotate(4deg) scale(1.08); }
+  }
+
+  /* UMBRELLA — Engagement models, top-right · slow parasol twirl */
+  .illust-umbrella {
+    top: -8px;
+    right: 1%;
+    width: 152px;   /* umbrella ~30% of canvas */
+    height: auto;
+    transform-origin: 50% 75%;  /* twirl around stem */
+    animation: illustUmbrellaTwirl 9s ease-in-out infinite;
+  }
+  @keyframes illustUmbrellaTwirl {
+    0%, 100% { transform: rotate(-12deg) translateY(0); }
+    50%      { transform: rotate(12deg) translateY(-3px); }
+  }
+
+  /* DRINK — Contact section, bottom-left · liquid bobble */
+  .illust-drink {
+    bottom: -32px;
+    left: 6%;
+    width: 168px;   /* drink ~25% of canvas → display larger to compensate */
+    height: auto;
+    transform-origin: 50% 90%;
+    animation: illustDrinkBobble 3.8s ease-in-out infinite;
+  }
+  @keyframes illustDrinkBobble {
+    0%, 100% { transform: rotate(-4deg) translateY(0); }
+    30%      { transform: rotate(3deg) translateY(-4px); }
+    60%      { transform: rotate(-2deg) translateY(-2px); }
   }
 
   /* ── RESPONSIVE ── */
@@ -677,16 +705,20 @@
     .why-item { padding: 20px 22px; }
     .quote-mark { font-size: 100px; }
     .section-title::before { width: 24px; }
-    .ornament-hero-hat { width: 50px; top: 80px; right: 5%; opacity: 0.4; }
-    .ornament-row .section-ornament { width: 36px; opacity: 0.45; }
+    .illust-hat      { width: 110px; top: 50px; right: 2%; }
+    .illust-flower   { width: 60px;  top: 4px; left: -10px; }
+    .illust-umbrella { width: 100px; top: -6px; right: 2%; }
+    .illust-drink    { width: 110px; bottom: -22px; left: 4%; }
   }
   @media (max-width: 480px) {
     .orb { filter: blur(50px); }
     .orb-3 { display: none; }
     .grain { display: none; }
     .nav-links a:not(.active):nth-child(3) { display: none; }
-    .ornament-hero-hat { display: none; }
-    .ornament-row .section-ornament { width: 32px; }
+    .illust-hat      { width: 80px; top: 36px; right: 0; }
+    .illust-flower   { width: 48px; }
+    .illust-umbrella { width: 76px; }
+    .illust-drink    { width: 80px; bottom: -16px; }
   }
 </style>
 </head>
@@ -714,7 +746,7 @@
 
   <!-- HERO -->
   <section class="studio-hero">
-    <img class="ornament-hero-hat" src="illust-hat.png" alt="" aria-hidden="true">
+    <img class="studio-illust illust-hat" src="illust-hat.png" alt="" aria-hidden="true">
     <div class="badge">
       <span class="dot"></span>
       Product Design Practice
@@ -754,11 +786,6 @@
     </div>
   </section>
 
-  <!-- ornament: umbrella -->
-  <div class="ornament-row gap-row" aria-hidden="true">
-    <img class="section-ornament ornament-umbrella" src="illust-umbrella.png" alt="">
-  </div>
-
   <!-- CAPABILITIES -->
   <section class="reveal">
     <h2 class="section-title">
@@ -790,6 +817,7 @@
 
   <!-- WHY US -->
   <section class="reveal">
+    <img class="studio-illust illust-flower" src="illust-flower.png" alt="" aria-hidden="true">
     <h2 class="section-title">
       Why xinxinmingde
       <span class="zh">差异</span>
@@ -814,13 +842,9 @@
     </div>
   </section>
 
-  <!-- ornament: flower -->
-  <div class="ornament-row gap-row" aria-hidden="true">
-    <img class="section-ornament ornament-flower" src="illust-flower.png" alt="">
-  </div>
-
   <!-- ENGAGEMENT MODELS -->
   <section class="reveal">
+    <img class="studio-illust illust-umbrella" src="illust-umbrella.png" alt="" aria-hidden="true">
     <h2 class="section-title">
       How we work together
       <span class="zh">合作</span>
@@ -889,11 +913,6 @@
     </div>
   </section>
 
-  <!-- ornament: drink -->
-  <div class="ornament-row gap-row" aria-hidden="true">
-    <img class="section-ornament ornament-drink" src="illust-drink.png" alt="">
-  </div>
-
   <!-- PHILOSOPHY -->
   <section class="section-philosophy reveal">
     <div class="quote-block">
@@ -908,6 +927,7 @@
 
   <!-- CONTACT -->
   <section class="section-contact reveal">
+    <img class="studio-illust illust-drink" src="illust-drink.png" alt="" aria-hidden="true">
     <h2 class="section-title">Let's build something</h2>
     <p class="contact-sub">
       Have a product in mind? An interface that needs rethinking? A team that needs a design partner who understands both pixels and production code? Drop us a line — every email is read.
