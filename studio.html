@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>xinxinmingde Studio — Product Design Practice</title>
+<meta name="description" content="A small product design practice. We help builders ship products users actually use — on apps, consoles, AI tools, and everything in between.">
+<link rel="canonical" href="https://xinxinmingde.com/studio.html">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --warm-500: #F97316;
+    --sun-gold: #FBBF24;
+    --sky-400: #38BDF8;
+    --sky-500: #0EA5E9;
+    --sky-600: #0284C7;
+    --night: #0C0A1D;
+    --glass-white: rgba(255, 255, 255, 0.08);
+    --glass-white-border: rgba(255, 255, 255, 0.15);
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.45);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%;
+    font-family: 'Sora', sans-serif;
+    background: var(--night);
+    color: var(--text-primary);
+    scroll-behavior: smooth;
+  }
+  body { overflow-x: hidden; }
+
+  /* ── AMBIENT BACKGROUND (fixed behind content) ── */
+  .ambient {
+    position: fixed; inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(251,191,36,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 20%, rgba(249,115,22,0.14) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 50% 50%, rgba(14,165,233,0.10) 0%, transparent 60%),
+      linear-gradient(135deg, #0C0A1D 0%, #1a1535 30%, #1E1B3A 60%, #0C0A1D 100%);
+    animation: bgShift 14s ease-in-out infinite alternate;
+  }
+  @keyframes bgShift {
+    0% { background-position: 0% 0%, 100% 100%, 50% 50%, 0% 0%; }
+    100% { background-position: 60% 40%, 40% 60%, 60% 40%, 0% 0%; }
+  }
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 1;
+    pointer-events: none;
+    animation: orbFloat 10s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(251,191,36,0.15), transparent 70%);
+    top: -10%; left: -8%; }
+  .orb-2 { width: 420px; height: 420px;
+    background: radial-gradient(circle, rgba(249,115,22,0.1), transparent 70%);
+    bottom: -15%; right: -10%; animation-delay: -3s; }
+  .orb-3 { width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(56,189,248,0.08), transparent 70%);
+    top: 40%; right: 20%; animation-delay: -6s; }
+  @keyframes orbFloat {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, -25px) scale(1.1); }
+  }
+  .grain {
+    position: fixed; inset: 0;
+    z-index: 2;
+    opacity: 0.03;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* ── NAV ── */
+  .top-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 5vw;
+    backdrop-filter: blur(12px);
+    background: linear-gradient(180deg, rgba(12,10,29,0.6) 0%, rgba(12,10,29,0) 100%);
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(251,191,36,0.3);
+  }
+  .logo-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .nav-links { display: flex; align-items: center; gap: 28px; }
+  .nav-links a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s;
+  }
+  .nav-links a:hover { color: var(--text-primary); }
+  .nav-links a.active {
+    color: var(--sun-gold);
+  }
+
+  /* ── SHARED LAYOUT ── */
+  main {
+    position: relative;
+    z-index: 10;
+  }
+  section {
+    padding: 8vh 5vw;
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ── HERO ── */
+  .studio-hero {
+    min-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 110px;
+    padding-bottom: 8vh;
+    max-width: 1080px;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    background: var(--glass-white);
+    border: 1px solid var(--glass-white-border);
+    backdrop-filter: blur(20px);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sun-gold);
+    margin-bottom: 32px;
+    align-self: flex-start;
+    animation: fadeInUp 1s 0.2s both;
+  }
+  .badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--sun-gold);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+  .studio-hero h1 {
+    font-size: clamp(2.6rem, 6vw, 5.2rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin-bottom: 18px;
+    animation: fadeInUp 1s 0.35s both;
+  }
+  .studio-hero h1 .zh {
+    display: block;
+    font-family: 'Playfair Display', 'Songti SC', serif;
+    font-weight: 400;
+    font-size: 0.45em;
+    letter-spacing: 0.4em;
+    color: var(--sun-gold);
+    margin-top: 12px;
+    text-indent: 0.4em;
+  }
+  .hero-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.2rem, 2.4vw, 1.8rem);
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 28px;
+    animation: fadeInUp 1s 0.5s both;
+    max-width: 680px;
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 1.4vw, 1.1rem);
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 620px;
+    margin-bottom: 40px;
+    animation: fadeInUp 1s 0.65s both;
+  }
+  .cta-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 32px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--sun-gold), var(--warm-500));
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 24px rgba(251,191,36,0.25);
+    animation: fadeInUp 1s 0.8s both;
+  }
+  .cta-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(251,191,36,0.4);
+  }
+  .cta-primary .arrow { transition: transform 0.3s; }
+  .cta-primary:hover .arrow { transform: translateX(4px); }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 56px;
+    flex-wrap: wrap;
+  }
+  .section-title .zh {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-size: 0.55em;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+  }
+  .section-title::before {
+    content: '';
+    display: inline-block;
+    width: 36px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--sun-gold), transparent);
+    margin-right: 8px;
+    transform: translateY(-6px);
+  }
+
+  /* ── CAPABILITY GRID ── */
+  .capability-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 20px;
+  }
+  .cap-card {
+    position: relative;
+    padding: 28px 26px;
+    border-radius: 18px;
+    background: linear-gradient(140deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
+    border: 1px solid var(--glass-white-border);
+    backdrop-filter: blur(20px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+  }
+  .cap-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(251,191,36,0.5), transparent);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .cap-card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(251,191,36,0.3);
+    background: linear-gradient(140deg, rgba(251,191,36,0.06) 0%, rgba(255,255,255,0.02) 100%);
+  }
+  .cap-card:hover::before { opacity: 1; }
+  .cap-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--sun-gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+  .cap-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    letter-spacing: -0.01em;
+  }
+  .cap-card p {
+    font-size: 0.94rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+
+  /* ── PROCESS FLOW ── */
+  .process-flow {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    position: relative;
+  }
+  .process-step {
+    position: relative;
+    padding: 24px 22px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: all 0.4s ease;
+  }
+  .process-step:hover {
+    border-color: rgba(56,189,248,0.4);
+    background: rgba(56,189,248,0.04);
+  }
+  .step-num {
+    display: inline-block;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 1;
+    color: var(--sky-400);
+    margin-bottom: 12px;
+    opacity: 0.85;
+  }
+  .process-step h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .process-step p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  /* ── TOOLS ── */
+  .tools-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .tool-chip {
+    padding: 10px 22px;
+    border-radius: 100px;
+    background: var(--glass-white);
+    border: 1px solid var(--glass-white-border);
+    backdrop-filter: blur(20px);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    letter-spacing: 0.02em;
+    transition: all 0.3s ease;
+  }
+  .tool-chip:hover {
+    background: rgba(251,191,36,0.08);
+    border-color: rgba(251,191,36,0.3);
+    color: var(--sun-gold);
+    transform: translateY(-2px);
+  }
+
+  /* ── PHILOSOPHY QUOTE ── */
+  .section-philosophy { padding-top: 12vh; padding-bottom: 12vh; }
+  .quote-block {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 56px 32px;
+  }
+  .quote-mark {
+    position: absolute;
+    top: -10px; left: 50%;
+    transform: translateX(-50%);
+    font-family: 'Playfair Display', serif;
+    font-size: 140px;
+    line-height: 1;
+    color: var(--sun-gold);
+    opacity: 0.25;
+    pointer-events: none;
+  }
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.4rem, 2.6vw, 2rem);
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+    margin-bottom: 18px;
+    position: relative;
+    z-index: 1;
+  }
+  .quote-zh {
+    font-family: 'Playfair Display', 'Songti SC', serif;
+    font-size: 1rem;
+    color: var(--sun-gold);
+    letter-spacing: 0.3em;
+    text-indent: 0.3em;
+    opacity: 0.85;
+  }
+
+  /* ── CONTACT ── */
+  .section-contact {
+    text-align: center;
+    padding-top: 6vh;
+    padding-bottom: 14vh;
+  }
+  .section-contact .section-title {
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  .section-contact .section-title::before { display: none; }
+  .contact-sub {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    max-width: 600px;
+    margin: 0 auto 36px;
+  }
+
+  /* ── FOOTER ── */
+  .studio-footer {
+    position: relative;
+    z-index: 10;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 28px 5vw;
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+  .studio-footer a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.3s;
+  }
+  .studio-footer a:hover { color: var(--sun-gold); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .top-nav { padding: 16px 5vw; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 13px; }
+    .studio-hero { padding-top: 100px; min-height: 80vh; }
+    section { padding: 6vh 5vw; }
+    .capability-grid { grid-template-columns: 1fr; }
+    .process-flow { grid-template-columns: 1fr; }
+    .quote-mark { font-size: 100px; }
+    .section-title::before { width: 24px; }
+  }
+  @media (max-width: 480px) {
+    .orb { filter: blur(50px); }
+    .orb-3 { display: none; }
+    .grain { display: none; }
+    .nav-links a:not(.active):nth-child(3) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="grain"></div>
+
+<nav class="top-nav">
+  <a href="index.html" class="logo">
+    <div class="logo-icon"><img src="logo.png" alt=""></div>
+    UVPeek
+  </a>
+  <div class="nav-links">
+    <a href="studio.html" class="active">Studio</a>
+    <a href="mailto:aiapis.info@gmail.com">Contact</a>
+    <a href="https://play.google.com/store/apps/details?id=com.ziwaixian.uvprotect.overseas">Download</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HERO -->
+  <section class="studio-hero">
+    <div class="badge">
+      <span class="dot"></span>
+      Product Design Practice
+    </div>
+    <h1>
+      xinxinmingde<span class="zh">心 心 明 德</span>
+    </h1>
+    <p class="hero-tagline">
+      Designs that get used — not just designs that get awards.
+    </p>
+    <p class="hero-sub">
+      A small product design practice. We work with founders and product teams to take real products from spark to ship — across consumer apps, B2B consoles, AI tools, and the long tail of unsexy interfaces in between.
+    </p>
+    <a href="mailto:aiapis.info@gmail.com" class="cta-primary">
+      Start a Project
+      <span class="arrow">→</span>
+    </a>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section class="reveal">
+    <h2 class="section-title">
+      What we make
+      <span class="zh">能力</span>
+    </h2>
+    <div class="capability-grid">
+
+      <div class="cap-card">
+        <div class="cap-num">01</div>
+        <h3>0 → 1 Products</h3>
+        <p>From research and product definition through to a shipping interface and post-launch iteration. We design every layer of a product — flow, screen, micro-interaction, and the data model behind them.</p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-num">02</div>
+        <h3>B2B &amp; Console UX</h3>
+        <p>Complex internal systems, dashboards, and SaaS consoles. Onboarding, upgrade paths, empty states, error states, expiry, billing — the parts of a product where most teams give up. We don't.</p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-num">03</div>
+        <h3>AI Product UX</h3>
+        <p>Designing the trust layer for AI features. How models meet users, what to surface, what to hide, how to set expectation honestly, and how to translate raw capability into something simple, fast, and confident.</p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-num">04</div>
+        <h3>International Design</h3>
+        <p>Beyond translation. Adapting flow, density, and information architecture to local user habits, cultural expectations, and regional regulation. Multi-region products that feel native, not imported.</p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-num">05</div>
+        <h3>Research &amp; Strategy</h3>
+        <p>Interviews, surveys, focus groups, heatmap testing, A/B experiments, journey mapping, competitive teardowns. Evidence to back design decisions — not opinion, not vibes, not the loudest stakeholder.</p>
+      </div>
+
+      <div class="cap-card">
+        <div class="cap-num">06</div>
+        <h3>Design × Code</h3>
+        <p>Where it makes sense, we ship code too. Native Android (Kotlin / Jetpack Compose), front-end, AI-assisted development. Designs that arrive in production unchanged — because the same person built both.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PROCESS -->
+  <section class="reveal">
+    <h2 class="section-title">
+      How we work
+      <span class="zh">方法</span>
+    </h2>
+    <div class="process-flow">
+
+      <div class="process-step">
+        <div class="step-num">01</div>
+        <h4>Listen</h4>
+        <p>Interviews, focus groups, surveys, support tickets. Understand the user before drawing a pixel.</p>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">02</div>
+        <h4>Map</h4>
+        <p>Journey maps, information architecture, competitive teardowns. Find the gap, frame the opportunity.</p>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">03</div>
+        <h4>Design</h4>
+        <p>Sketches, wireframes, high-fidelity prototypes with motion. Every screen has a reason to exist.</p>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">04</div>
+        <h4>Validate</h4>
+        <p>Heatmap testing, A/B experiments, behavioral analytics. Decisions held to the data, not the demo.</p>
+      </div>
+
+      <div class="process-step">
+        <div class="step-num">05</div>
+        <h4>Iterate</h4>
+        <p>Post-launch retrospectives. The day a product ships is the day the real design starts.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section class="reveal">
+    <h2 class="section-title">
+      Tools we trust
+      <span class="zh">工具</span>
+    </h2>
+    <div class="tools-list">
+      <span class="tool-chip">Figma</span>
+      <span class="tool-chip">Framer</span>
+      <span class="tool-chip">Sketch</span>
+      <span class="tool-chip">Adobe XD</span>
+      <span class="tool-chip">After Effects</span>
+      <span class="tool-chip">Hotjar</span>
+      <span class="tool-chip">Kotlin / Jetpack Compose</span>
+      <span class="tool-chip">AI-assisted Coding</span>
+    </div>
+  </section>
+
+  <!-- PHILOSOPHY -->
+  <section class="section-philosophy reveal">
+    <div class="quote-block">
+      <span class="quote-mark">&ldquo;</span>
+      <p class="quote-text">
+        As a craftsman — keep learning, stay grounded.<br>
+        Build slowly. Build the right thing.
+      </p>
+      <p class="quote-zh">以 工 匠 精 神 持 续 学 习 ， 保 持 正 念</p>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="section-contact reveal">
+    <h2 class="section-title">Let's build something</h2>
+    <p class="contact-sub">
+      Have a product in mind? An interface that needs rethinking? A team that needs a design partner who understands both pixels and production code? Drop us a line — every email is read.
+    </p>
+    <a href="mailto:aiapis.info@gmail.com" class="cta-primary">
+      aiapis.info@gmail.com
+      <span class="arrow">→</span>
+    </a>
+  </section>
+
+</main>
+
+<footer class="studio-footer">
+  <span>&copy; 2025 xinxinmingde Studio &middot; <a href="index.html">UVPeek</a></span>
+</footer>
+
+<script>
+  // Reveal-on-scroll
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach(function(el) { io.observe(el); });
+  } else {
+    revealEls.forEach(function(el) { el.classList.add('in-view'); });
+  }
+</script>
+
+</body>
+</html>
