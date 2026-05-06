@@ -632,10 +632,10 @@
     filter: drop-shadow(0 10px 24px rgba(0,0,0,0.45));
   }
 
-  /* HAT — hero top-right · wind catching the brim */
+  /* HAT — Hero right side, beside the brand name (the studio "wears" the hat) */
   .illust-hat {
-    top: 40px;
-    right: 2%;
+    top: 80px;
+    right: -2%;
     width: 336px;
     height: auto;
     transform-origin: 70% 80%;
@@ -646,10 +646,11 @@
     50%      { transform: rotate(6deg) translateY(-5px); }
   }
 
-  /* FLOWER — Why us section, top-left · gentle bloom + breath */
+  /* FLOWER — on "Build new products" capability card 01 (0→1 = blooming) */
+  .cap-card { overflow: visible; }
   .illust-flower {
-    top: 14px;
-    left: -8px;
+    top: 16px;
+    right: 14px;
     width: 44px;
     height: auto;
     transform-origin: 50% 50%;
@@ -657,13 +658,14 @@
   }
   @keyframes illustFlowerBreathe {
     0%, 100% { transform: rotate(-4deg) scale(1); }
-    50%      { transform: rotate(4deg) scale(1.08); }
+    50%      { transform: rotate(4deg) scale(1.1); }
   }
 
-  /* UMBRELLA — Engagement models, top-right · slow parasol twirl */
+  /* UMBRELLA — Engagement section, hanging above the middle "Embedded Design" card (long-term shelter) */
   .illust-umbrella {
-    top: -32px;
-    right: 0;
+    top: -120px;
+    left: 50%;
+    margin-left: -152px;   /* center the 304px wide umbrella */
     width: 304px;
     height: auto;
     transform-origin: 50% 75%;
@@ -674,10 +676,10 @@
     50%      { transform: rotate(12deg) translateY(-3px); }
   }
 
-  /* DRINK — Contact section, bottom-left · liquid bobble */
+  /* DRINK — Contact section, near "Or just say hi" CTA (casual chat over a drink) */
   .illust-drink {
-    bottom: -64px;
-    left: 4%;
+    bottom: 12%;
+    left: 2%;
     width: 336px;
     height: auto;
     transform-origin: 50% 90%;
@@ -705,20 +707,20 @@
     .why-item { padding: 20px 22px; }
     .quote-mark { font-size: 100px; }
     .section-title::before { width: 24px; }
-    .illust-hat      { width: 220px; top: 40px; right: 0; }
-    .illust-flower   { width: 30px;  top: 8px; left: -4px; }
-    .illust-umbrella { width: 200px; top: -22px; right: 0; }
-    .illust-drink    { width: 220px; bottom: -42px; left: 2%; }
+    .illust-hat      { width: 220px; top: 60px; right: -4%; }
+    .illust-flower   { width: 32px;  top: 12px; right: 12px; }
+    .illust-umbrella { width: 200px; top: -76px; margin-left: -100px; }
+    .illust-drink    { width: 220px; bottom: 8%; left: 0; }
   }
   @media (max-width: 480px) {
     .orb { filter: blur(50px); }
     .orb-3 { display: none; }
     .grain { display: none; }
     .nav-links a:not(.active):nth-child(3) { display: none; }
-    .illust-hat      { width: 160px; top: 36px; right: -10px; }
-    .illust-flower   { width: 24px; }
-    .illust-umbrella { width: 152px; top: -16px; }
-    .illust-drink    { width: 160px; bottom: -32px; }
+    .illust-hat      { width: 160px; top: 50px; right: -8%; }
+    .illust-flower   { width: 26px;  top: 10px; right: 10px; }
+    .illust-umbrella { width: 152px; top: -54px; margin-left: -76px; }
+    .illust-drink    { width: 160px; bottom: 4%; left: -2%; }
   }
 </style>
 </head>
@@ -795,6 +797,7 @@
     <div class="capability-grid">
 
       <div class="cap-card">
+        <img class="studio-illust illust-flower" src="illust-flower.png" alt="" aria-hidden="true">
         <div class="cap-num">01</div>
         <h3>Build new products</h3>
         <p>0→1 apps, AI features, products that haven't earned their first user yet. From research and product definition through to a shipping interface and post-launch iteration. We design every layer — flow, screen, micro-interaction, the data model underneath, and the trust layer for AI features (how models meet users, what to surface, what to hide).</p>
@@ -817,7 +820,6 @@
 
   <!-- WHY US -->
   <section class="reveal">
-    <img class="studio-illust illust-flower" src="illust-flower.png" alt="" aria-hidden="true">
     <h2 class="section-title">
       Why xinxinmingde
       <span class="zh">差异</span>
