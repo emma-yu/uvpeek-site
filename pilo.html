@@ -853,20 +853,18 @@
     <symbol id="i-arrow-ne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <path d="M7 17L17 7M9 7h8v8"/>
     </symbol>
-    <symbol id="i-envelope" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="4" y="8" width="24" height="16" rx="2"/>
-      <path d="M4 10l12 8 12-8"/>
-      <circle cx="22" cy="14.5" r="1.1" fill="currentColor" stroke="none"/>
+    <symbol id="i-folders" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 11h6.5l2 2.5H26a2 2 0 0 1 2 2V25a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V11z"/>
+      <path d="M8 7h5l2 2.5h10v3"/>
     </symbol>
-    <symbol id="i-key" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="11" cy="21" r="5"/>
-      <path d="M14.5 17.5L26 6"/>
-      <path d="M22 10l3 3M25 7l2 2"/>
+    <symbol id="i-bookmark" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 4h14v24l-7-5.5L9 28V4z"/>
+      <path d="M13 11h6M13 15h4"/>
     </symbol>
-    <symbol id="i-cube" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M16 4L4 10v12l12 6 12-6V10z"/>
-      <path d="M4 10l12 6 12-6"/>
-      <path d="M16 16v12"/>
+    <symbol id="i-moon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22.5 19a8.5 8.5 0 0 1-9.5-12.5 10.5 10.5 0 1 0 9.5 12.5z"/>
+      <circle cx="9" cy="9" r="0.8" fill="currentColor" stroke="none"/>
+      <circle cx="24" cy="6" r="0.7" fill="currentColor" stroke="none"/>
     </symbol>
     <symbol id="i-cloud-off" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <path d="M9 21h13a4.5 4.5 0 0 0 .6-8.97A6 6 0 0 0 12 11"/>
@@ -887,16 +885,6 @@
     <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
       <line x1="12" y1="6" x2="12" y2="18"/>
       <line x1="6" y1="12" x2="18" y2="12"/>
-    </symbol>
-    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12z"/>
-      <circle cx="12" cy="12" r="2.5"/>
-    </symbol>
-    <symbol id="i-postbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-      <rect x="3" y="7" width="18" height="13" rx="2"/>
-      <path d="M3 11h18"/>
-      <path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/>
-      <line x1="9" y1="15" x2="15" y2="15"/>
     </symbol>
     <symbol id="i-copy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <rect x="8" y="8" width="12" height="12" rx="2"/>
@@ -936,18 +924,18 @@
 <section class="hero">
   <div class="hero-left">
     <div class="kicker">
-      <span class="zh">献给 AI 时代的独立开发者</span>
-      <span class="en">For indie devs in the AI era</span>
+      <span class="zh">AI 时代独立开发者的菜单栏伴侣</span>
+      <span class="en">Menu-bar companion for indie devs in the AI era</span>
     </div>
 
     <h1>
-      <span class="zh">push 之前，<br>让小信鸽 <u>替你看一眼</u>。</span>
-      <span class="en">Before you push,<br>let the pigeon <u>take a look</u>.</span>
+      <span class="zh">你的菜单栏里，<br>多一只 <u>看着仓库</u> 的小信鸽。</span>
+      <span class="en">In your menu bar,<br>a pigeon <u>quietly watching</u> your repos.</span>
     </h1>
 
     <p class="lede">
-      <span class="zh">Cursor、Claude Code、Copilot —— AI 一晚生几十个 commit，你不可能逐个看。<br>Pilo 在那一刻替你过一遍 —— 三秒拦下 <b>泄漏的 key</b> 和 <b>不该 push 的大文件</b>。</span>
-      <span class="en">Cursor, Claude Code, Copilot — AI ships dozens of commits a night, more than you can read.<br>Pilo takes the careful look at that moment — three seconds to catch <b>leaked keys</b> and <b>files that shouldn't go up</b>.</span>
+      <span class="zh">AI 让一个人同时写 10 个项目 —— Pilo 替你看着全部：<br>哪个还在 draft、哪个 30 天没动、<b>常用 prompt 一键召唤</b>，傍晚 18:00 一封信回顾今天。<br>顺便，push 之前替你过一眼。</span>
+      <span class="en">AI lets one person juggle ten projects — Pilo watches them all:<br>what's drafting, what's gone quiet, <b>your prompts one tap away</b>, and at 18:00 a letter to close the day.<br>And one careful look before you push.</span>
     </p>
 
     <p class="tagline">
@@ -962,15 +950,15 @@
         <span class="en">Star on GitHub</span>
       </a>
       <a class="btn btn-secondary" href="#features">
-        <span class="zh">它怎么工作</span>
-        <span class="en">See how it works</span>
+        <span class="zh">看看它能做什么</span>
+        <span class="en">See what it does</span>
       </a>
     </div>
 
     <div class="hero-pills">
       <span class="pill"><span class="dot"></span><span class="zh">macOS 14+</span><span class="en">macOS 14+</span></span>
       <span class="pill"><span class="dot gold"></span><span class="zh">MIT 开源</span><span class="en">MIT licensed</span></span>
-      <span class="pill"><span class="dot red"></span><span class="zh">25 条规则 · 254 个测试</span><span class="en">25 rules · 254 tests</span></span>
+      <span class="pill"><span class="dot red"></span><span class="zh">全本地 · 永不上传</span><span class="en">Fully local · never uploads</span></span>
     </div>
   </div>
 
@@ -988,60 +976,60 @@
 <section id="problem" class="reveal">
   <div class="section-head">
     <div class="eyebrow">
-      <span class="zh">为什么需要它</span><span class="en">The why</span>
+      <span class="zh">为什么需要伴侣</span><span class="en">Why a companion</span>
     </div>
     <h2>
-      <span class="zh">AI 写得越快，<br>没人替你检查的就越多。</span>
-      <span class="en">The faster AI writes,<br>the less anyone checks.</span>
+      <span class="zh">和 AI 一起编程，<br>难的不是写代码 —— 是 <u>记住</u>。</span>
+      <span class="en">Coding with AI —<br>the hard part isn't writing.<br>It's <u>remembering</u>.</span>
     </h2>
   </div>
 
   <div class="problem-grid stagger">
     <div class="problem-card" style="--i:0">
-      <div class="icon-wrap"><svg><use href="#i-envelope"/></svg></div>
+      <div class="icon-wrap"><svg><use href="#i-folders"/></svg></div>
       <h3>
-        <span class="zh">.env 被悄悄推上去</span>
-        <span class="en">.env quietly committed</span>
+        <span class="zh">仓库一堆，散在各处</span>
+        <span class="en">Repos scattered everywhere</span>
       </h3>
       <p>
-        <span class="zh">一次手抖的 <code>git add .</code> — 一周后 GitGuardian 邮件到：key 已泄漏。</span>
-        <span class="en">One careless <code>git add .</code> — a week later GitGuardian emails you: the key is out.</span>
+        <span class="zh">你 Mac 上到底有多少 Git 仓库？昨晚的 wip 在哪？哪个还没 push？哪个 30 天没动过？</span>
+        <span class="en">How many Git repos on your Mac, exactly? Where's last night's wip? What hasn't been pushed yet? What's been untouched for 30 days?</span>
       </p>
       <p class="outcome">
-        <span class="zh">你的周末用来 rotate key。</span>
-        <span class="en">Your weekend, gone to rotating keys.</span>
+        <span class="zh">脑子里那张地图，越用 AI 越糊。</span>
+        <span class="en">That mental map gets blurrier the more AI you use.</span>
       </p>
     </div>
 
     <div class="problem-card" style="--i:1">
-      <div class="icon-wrap"><svg><use href="#i-key"/></svg></div>
+      <div class="icon-wrap"><svg><use href="#i-bookmark"/></svg></div>
       <h3>
-        <span class="zh">API key 进了 git history</span>
-        <span class="en">API keys in git history</span>
+        <span class="zh">常用 prompt，每次找一通</span>
+        <span class="en">Your prompts, lost in folders</span>
       </h3>
       <p>
-        <span class="zh">"反正之后会改" —— history 比记忆长。</span>
-        <span class="en">"I'll fix it later." History outlives memory.</span>
+        <span class="zh">Cursor 那个用了 50 次的 system prompt 存哪了？Notion？Apple Notes？commit-message 模板旁边？</span>
+        <span class="en">That Cursor system prompt you've used 50 times — where did you save it? Notion? Apple Notes? Next to a commit-message template?</span>
       </p>
       <p class="outcome">
-        <span class="zh">force-push 改 history，整队的 clone 都要重置。</span>
-        <span class="en">Rewrite history with force-push — everyone's clone breaks.</span>
+        <span class="zh">每次找一遍，等于多写一遍。</span>
+        <span class="en">Every search wastes another minute of writing.</span>
       </p>
     </div>
 
     <div class="problem-card" style="--i:2">
-      <div class="icon-wrap"><svg><use href="#i-cube"/></svg></div>
+      <div class="icon-wrap"><svg><use href="#i-moon"/></svg></div>
       <h3>
-        <span class="zh">200 MB 模型混进 commit</span>
-        <span class="en">200 MB blob in a commit</span>
+        <span class="zh">一天结束，糊一片</span>
+        <span class="en">End of day, blurred</span>
       </h3>
       <p>
-        <span class="zh"><code>.DS_Store</code>、<code>build/</code>、<code>id_rsa</code>、200 MB <code>.safetensors</code>。</span>
-        <span class="en"><code>.DS_Store</code>, <code>build/</code>, <code>id_rsa</code>, a 200 MB <code>.safetensors</code>.</span>
+        <span class="zh">今天到底动了哪些项目？跑了哪些 AI？最后一个 commit 是几点？写了多少行？</span>
+        <span class="en">Which projects moved today? Which AIs did you run? When was the last commit? How many lines?</span>
       </p>
       <p class="outcome">
-        <span class="zh">两年后 clone 一次 1.2 GB。</span>
-        <span class="en">Two years later a fresh clone is 1.2 GB.</span>
+        <span class="zh">GitHub 的小绿格回答不了这些。</span>
+        <span class="en">Those little green squares on GitHub won't tell you.</span>
       </p>
     </div>
   </div>
@@ -1065,19 +1053,19 @@
 
   <div class="features stagger">
     <div class="feat" style="--i:0">
-      <img class="feat-stamp" src="assets/pilo/postalsatchel.png" alt="" aria-hidden="true" />
+      <img class="feat-stamp" src="assets/pilo/postmancap.png" alt="" aria-hidden="true" />
       <div class="feat-num">01</div>
       <h3>
-        <span class="zh">Push 前安全检查</span>
-        <span class="en">Push-time safety</span>
+        <span class="zh">仓库陪伴</span>
+        <span class="en">Repo companion</span>
       </h3>
       <p>
-        <span class="zh">25 条 secret 规则 · 6 类误提交守护 · 全本地。误报两档持久标记，二次 push 不再骚扰。</span>
-        <span class="en">25 secret rules · 6 commit-guard categories · all local. False-positives persist at two scopes — second push, quiet.</span>
+        <span class="zh">Pilo 自动发现你 Mac 上所有 Git 仓库，分活跃 / 静默 / 沉寂三段。走进任一个，小信鸽按情境跟你打招呼：「桌上 N 件待寄」「昨天来过」「已 30 天没见」。</span>
+        <span class="en">Pilo discovers every Git repo on your Mac and sorts them — active, idle, dormant. Step into any one, the pigeon greets you in context — "N drafts on the desk", "saw you yesterday", "30 days, welcome back".</span>
       </p>
       <div class="footnote">
-        <span class="zh">— 一键 kill switch · 24h 自动恢复</span>
-        <span class="en">— Kill switch · auto-restores after 24h</span>
+        <span class="zh">— Readme / AI-instructions / CHANGELOG 自动索引 · 检测 Cursor / Claude Code 一键打开</span>
+        <span class="en">— Readme / AI-instructions / CHANGELOG indexed · detects & opens Cursor / Claude Code</span>
       </div>
     </div>
 
@@ -1116,19 +1104,19 @@
     </div>
 
     <div class="feat" style="--i:3">
-      <img class="feat-stamp" src="assets/pilo/postmancap.png" alt="" aria-hidden="true" />
+      <img class="feat-stamp" src="assets/pilo/postalsatchel.png" alt="" aria-hidden="true" />
       <div class="feat-num">04</div>
       <h3>
-        <span class="zh">仓库陪伴</span>
-        <span class="en">Repo companion</span>
+        <span class="zh">Push 前安全检查</span>
+        <span class="en">Push-time safety</span>
       </h3>
       <p>
-        <span class="zh">走进任一仓库，小信鸽按情境跟你打招呼：「桌上 N 件待寄」「昨天来过」「已 30 天没见」。同时索引 Readme / AI-instructions / CHANGELOG。</span>
-        <span class="en">Step into any repo and the pigeon greets you in context — "N drafts on the desk", "saw you yesterday", "30 days, welcome back". Readme / AI-instructions / CHANGELOG indexed for you.</span>
+        <span class="zh">25 条 secret 规则 · 6 类误提交守护 · 全本地。<code>.env</code>、<code>id_rsa</code>、超大 blob 都在清单上。误报两档持久标记，二次 push 不再骚扰。</span>
+        <span class="en">25 secret rules · 6 commit-guard categories · all local. <code>.env</code>, <code>id_rsa</code>, oversized blobs — all on the checklist. False-positives persist at two scopes; second push, quiet.</span>
       </p>
       <div class="footnote">
-        <span class="zh">— 类别邮戳：工 / 私 / 试</span>
-        <span class="en">— Category stamps: Work / Personal / Experiment</span>
+        <span class="zh">— 一键 kill switch · 24h 自动恢复 · 工 / 私 / 试 三档邮箱分拣</span>
+        <span class="en">— Kill switch · auto-restores in 24h · per-repo email guard</span>
       </div>
     </div>
   </div>
@@ -1243,18 +1231,18 @@
   <div class="faq-list stagger">
     <details class="faq-item" style="--i:0">
       <summary>
-        <span class="zh">我已经有 pre-commit hook / husky，还需要 Pilo？</span>
-        <span class="en">I already have pre-commit hooks / husky — do I need Pilo?</span>
+        <span class="zh">Pilo 和 GitHub Desktop / Fork 这种客户端有什么区别？</span>
+        <span class="en">How is Pilo different from GitHub Desktop / Fork?</span>
         <span class="plus" aria-hidden="true"><svg><use href="#i-plus"/></svg></span>
       </summary>
       <div class="faq-body">
         <p>
-          <span class="zh"><strong>不冲突，是层叠。</strong>Pre-commit 在 commit 时介入 —— 但和 Cursor / Claude Code 配合时，几分钟一个 wip commit 是常态。<strong>push 才是和外界的真正交接</strong> —— Pilo 在那一刻最后看一眼。</span>
-          <span class="en"><strong>Not competing — they layer.</strong> Hooks fire at commit. But with AI shipping wip commits every few minutes, the real moment of contact with the outside world is <strong>push</strong> — that's when Pilo looks.</span>
+          <span class="zh"><strong>GUI 客户端管的是一个仓库 —— Pilo 管的是你所有仓库。</strong>GitHub Desktop / Fork / Sourcetree 帮你看一个项目的 commit / branch / push 流程。Pilo 站在更高的视角 —— 自动发现你 Mac 上每一个 Git 仓库，把活跃 / 静默 / 沉寂状态摊开给你看。</span>
+          <span class="en"><strong>GUI clients manage one repo. Pilo manages all of them.</strong> GitHub Desktop, Fork, Sourcetree help you with the commit / branch / push flow inside a single project. Pilo zooms out — discovers every Git repo on your Mac, lays out their active / idle / dormant moods at a glance.</span>
         </p>
         <p>
-          <span class="zh">而且 hook 只看当前仓库，Pilo 看 Mac 上<strong>所有 Git 仓库</strong>。</span>
-          <span class="en">Hooks only see one repo. Pilo watches <strong>every Git repo on your Mac</strong>.</span>
+          <span class="zh">每天傍晚 18:00 把今天动过的项目用一封信汇总，常用 prompt 在屏幕边缘一键召唤。<strong>它们在不同的图层 —— 同时用，不冲突。</strong></span>
+          <span class="en">At 18:00 it mails a letter summing up what moved, and your favourite prompts fan out from a stamp at the screen edge. <strong>They live on different layers — use both.</strong></span>
         </p>
       </div>
     </details>
