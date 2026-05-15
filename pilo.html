@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pilo · 一只常驻菜单栏的小信鸽</title>
-<meta name="description" content="Pilo 是一只常驻 macOS 菜单栏的小信鸽，在 push 前替你看一眼。纯本地、不调 LLM、不传代码。开源，MIT。">
+<meta name="description" content="给 AI 时代独立开发者的一道人类把关。Pilo 在你 push 之前替你看一眼 — 25 条规则三秒拦下 .env、泄漏的 API key、50MB 模型。纯本地、不调 LLM、不传代码。macOS 菜单栏，MIT 开源。">
 <link rel="canonical" href="https://xinxinmingde.com/pilo.html">
 <link rel="icon" type="image/png" href="assets/pilo/postalstamp.png">
 <meta property="og:type" content="website">
@@ -739,6 +739,317 @@
     font-size: 13px;
   }
 
+  /* ─── Scroll progress bar (top, gold→red gradient) ─── */
+  .scroll-progress {
+    position: fixed; top: 0; left: 0; height: 2px;
+    background: linear-gradient(to right, var(--pilo-gold) 0%, var(--stamp-red) 100%);
+    width: 0;
+    z-index: 200;
+    transition: width 0.12s ease-out;
+    box-shadow: 0 0 8px rgba(184,85,63,0.35);
+  }
+
+  /* ─── Kicker (above hero h1) ─── */
+  .kicker {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--stamp-red);
+    background: rgba(184,85,63,0.08);
+    padding: 6px 14px;
+    border-radius: var(--r-chip);
+    border: 1px solid rgba(184,85,63,0.22);
+    letter-spacing: 0.02em;
+  }
+  .kicker::before {
+    content: '✦'; color: var(--pilo-gold); font-size: 11px;
+  }
+
+  /* underline accent in h1 — hand-drawn feel */
+  .hero h1 u {
+    text-decoration: none;
+    background-image: linear-gradient(to right,
+      transparent 0%, transparent 5%,
+      var(--pilo-gold) 5%, var(--pilo-gold) 95%,
+      transparent 95%, transparent 100%);
+    background-size: 100% 6px;
+    background-position: 0 92%;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+    color: inherit;
+  }
+
+  /* ─── Resonance section — "如果你曾经……" ─── */
+  .resonance {
+    background: var(--paper-card);
+    border-radius: var(--r-sheet);
+    border: 1px solid var(--paper-border);
+    padding: 56px 48px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    overflow: hidden;
+  }
+  .resonance::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: url('assets/pilo/postbox.png') no-repeat center / contain;
+    opacity: 0.07;
+    transform: rotate(8deg);
+    pointer-events: none;
+  }
+  .resonance h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.3;
+    margin-bottom: 28px;
+    color: var(--ink-primary);
+  }
+  .resonance ul {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+    max-width: 720px;
+  }
+  .resonance li {
+    padding: 14px 18px 14px 44px;
+    background: var(--pilo-paper);
+    border-radius: 12px;
+    border: 1px solid var(--paper-border);
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--ink-primary);
+    position: relative;
+    transition: all 0.3s var(--ease-warm);
+  }
+  .resonance li::before {
+    content: '✓';
+    position: absolute;
+    left: 16px; top: 14px;
+    width: 20px; height: 20px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--stamp-red);
+    color: white;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    transition: transform 0.4s var(--ease-warm);
+  }
+  .resonance li:hover {
+    transform: translateX(4px);
+    border-color: var(--pilo-gold);
+    background: var(--pilo-paper);
+  }
+  .resonance li:hover::before {
+    transform: scale(1.15) rotate(-10deg);
+  }
+  .resonance .punchline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--pilo-gold-dark);
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--cloud-divider);
+    max-width: 720px;
+  }
+
+  /* ─── Stats hero (counter animation) ─── */
+  .stats {
+    text-align: center;
+    padding-top: 6vh;
+    padding-bottom: 6vh;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+  .stat-item {
+    padding: 24px 16px;
+    position: relative;
+  }
+  .stat-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -12px; top: 30%;
+    width: 1px; height: 40%;
+    background: var(--paper-border);
+  }
+  .stat-num {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(40px, 5.5vw, 64px);
+    line-height: 1;
+    color: var(--pilo-gold-dark);
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+  .stat-num .prefix,
+  .stat-num .suffix {
+    font-size: 0.45em;
+    color: var(--pilo-gold);
+    font-weight: 500;
+    font-style: italic;
+  }
+  .stat-num .prefix { margin-right: 2px; }
+  .stat-num .suffix { margin-left: 4px; }
+  .stat-label {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--ink-secondary);
+    line-height: 1.5;
+  }
+  .stat-item .stat-bullet {
+    display: block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--stamp-red);
+    margin: 0 auto 14px;
+    opacity: 0.7;
+  }
+
+  /* problem card: now with an outcome line */
+  .problem-card .outcome {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--cloud-divider);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--stamp-red);
+    line-height: 1.55;
+    opacity: 0.9;
+  }
+  .problem-card .outcome::before {
+    content: '↳ ';
+    color: var(--pilo-gold-dark);
+    margin-right: 4px;
+    font-style: normal;
+  }
+
+  /* ─── FAQ (details/summary) ─── */
+  .faq-list {
+    max-width: 800px;
+    margin: 0 auto;
+    display: grid;
+    gap: 14px;
+  }
+  details.faq-item {
+    background: var(--paper-card);
+    border: 1px solid var(--paper-border);
+    border-radius: var(--r-card);
+    padding: 0;
+    transition: all 0.35s var(--ease-warm);
+    overflow: hidden;
+  }
+  details.faq-item[open] {
+    border-color: var(--pilo-gold);
+    box-shadow: var(--shadow-soft);
+    background: var(--pilo-paper);
+  }
+  details.faq-item summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 20px 24px;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink-primary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    line-height: 1.4;
+    transition: color 0.3s var(--ease-warm);
+  }
+  details.faq-item summary::-webkit-details-marker { display: none; }
+  details.faq-item summary::after {
+    content: '';
+    flex: 0 0 24px;
+    width: 24px; height: 24px;
+    background: var(--pilo-paper);
+    border: 1px solid var(--paper-border);
+    border-radius: 50%;
+    background-image: linear-gradient(45deg, transparent 46%, var(--pilo-gold-dark) 46%, var(--pilo-gold-dark) 54%, transparent 54%),
+                      linear-gradient(-45deg, transparent 46%, var(--pilo-gold-dark) 46%, var(--pilo-gold-dark) 54%, transparent 54%);
+    background-size: 12px 12px, 12px 12px;
+    background-repeat: no-repeat, no-repeat;
+    background-position: center, center;
+    transition: transform 0.35s var(--ease-warm), background 0.3s;
+  }
+  details.faq-item[open] summary::after {
+    transform: rotate(180deg);
+    background-color: var(--pilo-gold);
+  }
+  details.faq-item summary:hover {
+    color: var(--pilo-blue);
+  }
+  details.faq-item .faq-body {
+    padding: 0 24px 22px 24px;
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--ink-secondary);
+  }
+  details.faq-item .faq-body code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    background: var(--paper-card);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--paper-border);
+    color: var(--ink-primary);
+  }
+  details.faq-item .faq-body strong { color: var(--ink-primary); font-weight: 600; }
+
+  /* ─── Notify-me row in footer ─── */
+  .notify-row {
+    margin: 0 auto 28px;
+    max-width: 540px;
+    padding: 18px 22px;
+    background: var(--pilo-paper);
+    border: 1px dashed var(--paper-border);
+    border-radius: var(--r-card);
+    font-family: var(--serif);
+    font-size: 14px;
+    text-align: center;
+    color: var(--ink-primary);
+    line-height: 1.6;
+  }
+  .notify-row a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--stamp-red);
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 1px solid var(--stamp-red);
+    padding-bottom: 1px;
+    transition: all 0.25s var(--ease-warm);
+  }
+  .notify-row a:hover {
+    color: var(--pilo-blue);
+    border-bottom-color: var(--pilo-blue);
+  }
+
+  /* mascot cursor follow — layered on top of breathing */
+  .mascot-wrap {
+    --mx: 0px; --my: 0px;
+    transition: transform 0.7s var(--ease-warm);
+    transform: translate(var(--mx), var(--my));
+  }
+
   /* ─── Reveal animation ─── */
   .reveal {
     opacity: 0;
@@ -795,6 +1106,14 @@
     .local-grid { grid-template-columns: 1fr; gap: 16px; }
     .install-body { font-size: 12.5px; padding: 20px; }
     section { padding: 8vh 5vw; }
+    .resonance { padding: 36px 24px; }
+    .resonance::before { width: 130px; height: 130px; top: -30px; right: -40px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-item:nth-child(2)::after { display: none; }
+    .stat-item::after { display: none; }
+    details.faq-item summary { font-size: 15.5px; padding: 16px 20px; }
+    details.faq-item .faq-body { padding: 0 20px 18px 20px; font-size: 14px; }
+    .kicker { font-size: 12.5px; padding: 5px 12px; }
   }
 
   @media (max-width: 480px) {
@@ -803,6 +1122,9 @@
 </style>
 </head>
 <body>
+
+<!-- Scroll progress -->
+<div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
 
 <!-- ─── NAV ─── -->
 <nav class="nav">
@@ -829,35 +1151,37 @@
 <!-- ─── HERO ─── -->
 <section class="hero">
   <div class="hero-left">
-    <div class="postal-label">
-      <span class="zh">开源 · MIT · macOS 菜单栏</span>
-      <span class="en">Open Source · MIT · macOS Menu Bar</span>
+    <div class="kicker">
+      <span class="zh">给 AI 时代独立开发者的安静工具</span>
+      <span class="en">A quiet tool for indie devs in the AI era</span>
     </div>
+
     <h1>
-      <span class="zh">一只常驻菜单栏的<br>小信鸽。</span>
-      <span class="en">A serif menu bar pigeon<br>for your Git repos.</span>
+      <span class="zh">在你 push 之前 ——<br>让小信鸽 <u>替你看一眼</u>。</span>
+      <span class="en">Before you push —<br>let the pigeon <u>take one careful look</u>.</span>
     </h1>
+
     <p class="lede">
-      <span class="zh">在你 push 之前 — 替你看一眼。</span>
-      <span class="en">Takes one careful look — before you push.</span>
+      <span class="zh">Cursor、Claude Code 一晚生 50 个 commit，你来不及逐个看。<br>Pilo 是最后一道人类把关 —— 三秒拦下 <b>.env</b>、泄漏的 <b>API key</b>、<b>50&nbsp;MB</b> 的模型文件。</span>
+      <span class="en">Cursor and Claude Code ship 50 commits a night — too many to read.<br>Pilo is the last human checkpoint — three seconds to catch <b>.env</b>, leaked <b>API keys</b>, <b>50&nbsp;MB</b> blobs.</span>
     </p>
 
     <div class="ornament"><span>✦</span></div>
 
     <p class="tagline">
-      <span class="zh">纯本地 · 不调 LLM · 不传代码 · 不收 telemetry</span>
-      <span class="en">Local by principle · No LLM · No data leaves your Mac</span>
+      <span class="zh">纯本地 · 不调 LLM · 你的代码从不离开 Mac</span>
+      <span class="en">Local by principle · No LLM · Your code never leaves your Mac</span>
     </p>
 
     <div class="hero-ctas">
       <a class="btn btn-primary" href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">
         <span>⭐</span>
-        <span class="zh">在 GitHub 上 Star（DMG 准备好之前）</span>
-        <span class="en">Star on GitHub — until DMG ships</span>
+        <span class="zh">在 GitHub Star（让 DMG 早点到）</span>
+        <span class="en">Star on GitHub (bring the DMG closer)</span>
       </a>
-      <a class="btn btn-secondary" href="#how-it-works">
-        <span class="zh">看看它怎么工作</span>
-        <span class="en">See how it works</span>
+      <a class="btn btn-secondary" href="#resonance">
+        <span class="zh">这是不是说我？</span>
+        <span class="en">Is this me?</span>
       </a>
     </div>
 
@@ -866,10 +1190,10 @@
         <span class="zh">macOS 14.0+</span><span class="en">macOS 14.0+</span>
       </span>
       <span class="pill"><span class="dot gold"></span>
-        <span class="zh">Swift 6.0 严格并发</span><span class="en">Swift 6.0 strict concurrency</span>
+        <span class="zh">MIT · 完全开源</span><span class="en">MIT · fully open source</span>
       </span>
       <span class="pill"><span class="dot red"></span>
-        <span class="zh">254 个测试 · 14.3k 行</span><span class="en">254 tests · 14.3k LoC</span>
+        <span class="zh">v2.1 · 254 个测试</span><span class="en">v2.1 · 254 tests</span>
       </span>
     </div>
   </div>
@@ -881,6 +1205,85 @@
       <img class="float-stamp s1" style="--rot: -12deg" src="assets/pilo/postalstamp.png" alt="" aria-hidden="true" />
       <img class="float-stamp s2" style="--rot: 8deg" src="assets/pilo/waxsealpilo.png" alt="" aria-hidden="true" />
       <img class="float-stamp s3" style="--rot: -6deg" src="assets/pilo/letterstack.png" alt="" aria-hidden="true" />
+    </div>
+  </div>
+</section>
+
+<!-- ─── RESONANCE — "如果你曾经…" ─── -->
+<section id="resonance" class="reveal">
+  <div class="resonance">
+    <h2>
+      <span class="zh">如果你曾经 ——</span>
+      <span class="en">If any of these has been you —</span>
+    </h2>
+    <ul>
+      <li>
+        <span class="zh">凌晨 push 完去睡，第二天醒来收到 GitGuardian 邮件 —— OpenAI key 已经被人扫到了。</span>
+        <span class="en">Pushed at 3 AM, woke up to a GitGuardian email — your OpenAI key has already been crawled.</span>
+      </li>
+      <li>
+        <span class="zh">commit message 全是 <code>fix</code> / <code>wip</code> / <code>update</code> —— 三个月后自己都说不出改了啥。</span>
+        <span class="en">Your commits are all <code>fix</code> / <code>wip</code> / <code>update</code> — three months later, you can't tell what changed.</span>
+      </li>
+      <li>
+        <span class="zh">用工作邮箱的 git config 误推到 personal 开源仓库，author email 改不掉 history。</span>
+        <span class="en">Pushed personal code with your work email — the author field is in history, and history doesn't apologise.</span>
+      </li>
+      <li>
+        <span class="zh">.DS_Store / build/ / 200 MB 的 .safetensors 模型悄悄混进 commit —— <code>git filter-repo</code> 救了你一下午。</span>
+        <span class="en">Smuggled <code>.DS_Store</code> / <code>build/</code> / a 200 MB <code>.safetensors</code> into git — <code>filter-repo</code> ate your afternoon.</span>
+      </li>
+      <li>
+        <span class="zh">Cursor 一夜生 30 个 commit，懒得逐个 review —— 第二天才发现 prompt 注释还留在代码里。</span>
+        <span class="en">Cursor wrote 30 commits overnight, you skimmed — next day you find prompt-injection comments still in the source.</span>
+      </li>
+    </ul>
+    <p class="punchline">
+      <span class="zh">—— 这只小信鸽，是写给你的。</span>
+      <span class="en">— this pigeon was written for you.</span>
+    </p>
+  </div>
+</section>
+
+<!-- ─── STATS (counter-animated) ─── -->
+<section id="stats" class="stats reveal">
+  <div class="section-head" style="margin-bottom: 32px;">
+    <span class="postal-label">
+      <span class="zh">用数字说话</span><span class="en">In numbers</span>
+    </span>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-item">
+      <span class="stat-bullet"></span>
+      <div class="stat-num"><span class="num" data-target="25">0</span></div>
+      <div class="stat-label">
+        <span class="zh">条 secret 检测规则</span>
+        <span class="en">secret detection rules</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-bullet"></span>
+      <div class="stat-num"><span class="num" data-target="0">0</span><span class="suffix">B</span></div>
+      <div class="stat-label">
+        <span class="zh">字节代码上传到云端</span>
+        <span class="en">bytes of your code uploaded</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-bullet"></span>
+      <div class="stat-num"><span class="prefix">~</span><span class="num" data-target="3">0</span><span class="suffix">s</span></div>
+      <div class="stat-label">
+        <span class="zh">push 前完成扫描的耗时</span>
+        <span class="en">to scan before you push</span>
+      </div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-bullet"></span>
+      <div class="stat-num"><span class="num" data-target="254">0</span></div>
+      <div class="stat-label">
+        <span class="zh">单元测试守门</span>
+        <span class="en">unit tests guarding it</span>
+      </div>
     </div>
   </div>
 </section>
@@ -909,20 +1312,28 @@
         <span class="en">.env quietly committed</span>
       </h3>
       <p>
-        <span class="zh">一次手抖的 git add . —— 一周后从 GitGuardian 邮件里发现 OpenAI key 被人扫到了。</span>
+        <span class="zh">一次手抖的 <code>git add .</code> —— 一周后从 GitGuardian 邮件里发现 OpenAI key 被人扫到了。</span>
         <span class="en">One careless <code>git add .</code> — a week later GitGuardian emails you about the leaked OpenAI key.</span>
+      </p>
+      <p class="outcome">
+        <span class="zh">rotate key、撤 token、检查账单 —— 你的周末就这样过去了。</span>
+        <span class="en">Rotate the key, revoke tokens, check the invoice. There goes your weekend.</span>
       </p>
     </div>
 
     <div class="problem-card">
       <div class="icon">📜</div>
       <h3>
-        <span class="zh">LLM API key 进了 git history</span>
+        <span class="zh">API key 进了 git history</span>
         <span class="en">API keys in git history</span>
       </h3>
       <p>
-        <span class="zh">"反正之后会改" —— history 比记忆长。一旦 push，rotate key 是唯一的退路。</span>
+        <span class="zh">"反正之后会改" —— history 比记忆长。一旦 push，rotate 是唯一的退路。</span>
         <span class="en">"I'll fix it later." History outlives memory. Once pushed, rotating the key is the only way back.</span>
+      </p>
+      <p class="outcome">
+        <span class="zh">force-push 改 history？整个团队的 clone 都要重置 —— 没人会感谢你。</span>
+        <span class="en">Force-push to rewrite history? Everyone's clone breaks — and no one will thank you.</span>
       </p>
     </div>
 
@@ -935,6 +1346,10 @@
       <p>
         <span class="zh">.DS_Store、build/、id_rsa、200MB 的 .safetensors —— 仓库膨胀的故事，永远从一个 commit 开始。</span>
         <span class="en">.DS_Store, build/, id_rsa, a 200 MB .safetensors — every bloated repo started with one commit.</span>
+      </p>
+      <p class="outcome">
+        <span class="zh">两年后 clone 一次要 1.2 GB —— 你已经忘了那个 commit 长什么样。</span>
+        <span class="en">Two years later a fresh clone takes 1.2 GB. You've long forgotten what that commit even was.</span>
       </p>
     </div>
   </div>
@@ -1149,6 +1564,114 @@
   </p>
 </section>
 
+<!-- ─── FAQ — objections handled honestly ─── -->
+<section id="faq" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">你心里可能在想</span><span class="en">You're probably thinking</span>
+    </span>
+    <h2>
+      <span class="zh">老实回答几个问题。</span>
+      <span class="en">Honest answers to honest doubts.</span>
+    </h2>
+  </div>
+
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>
+        <span class="zh">我已经有 pre-commit hook / husky 了，还需要 Pilo？</span>
+        <span class="en">I already have pre-commit hooks / husky — do I need Pilo?</span>
+      </summary>
+      <div class="faq-body">
+        <p>
+          <span class="zh"><strong>它们不冲突，是层叠。</strong> Pre-commit hook 在 commit 时阻断 —— 但你 commit 频繁，尤其和 Cursor / Claude Code 配合时，每几分钟一个 wip commit 是常态。<strong>push 才是和外界的真正交接</strong> —— Pilo 在那一刻最后看一眼。</span>
+          <span class="en"><strong>Not competing — they layer.</strong> Pre-commit hooks fire at commit time. But with Cursor / Claude Code shipping wip commits every few minutes, the real moment of contact with the outside world is <strong>push</strong> — that's when Pilo takes its careful look.</span>
+        </p>
+        <p style="margin-top: 10px;">
+          <span class="zh">而且 hook 只看当前仓库 —— Pilo 看你 Mac 上<strong>所有 Git 仓库</strong>，跨 repo 一起感知状态。</span>
+          <span class="en">Also: hooks only see one repo. Pilo watches <strong>every Git repo on your Mac</strong>, all at once.</span>
+        </p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        <span class="zh">macOS only？我是 Linux / Windows 用户。</span>
+        <span class="en">macOS only? I'm on Linux / Windows.</span>
+      </summary>
+      <div class="faq-body">
+        <p>
+          <span class="zh">老实说：是的。Pilo 用了 <code>NSPanel</code>、<code>FSEventStream</code>、<code>UNUserNotificationCenter</code> 这些 macOS 原生 API，才换来菜单栏常驻 + 邮票本浮动 dock + 系统级通知的体验。<strong>设计取舍是显式的</strong> —— 我们要写一个像 Mac 软件的 Mac 软件，不是一个跑在 Electron 里的网页。</span>
+          <span class="en">Honestly — yes. Pilo leans on <code>NSPanel</code>, <code>FSEventStream</code>, <code>UNUserNotificationCenter</code> — the native APIs that make the menu-bar presence, floating stamp dock, and system notifications possible. The design choice is explicit: <strong>a Mac app that feels like a Mac app</strong>, not a website wrapped in Electron.</span>
+        </p>
+        <p style="margin-top: 10px;">
+          <span class="zh">代码是 MIT —— 欢迎 fork 一个 cross-platform sibling。</span>
+          <span class="en">The code is MIT — a cross-platform sibling fork is welcome.</span>
+        </p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        <span class="zh">我已经在用 GitGuardian / Gitleaks 了，重复了吗？</span>
+        <span class="en">I'm already using GitGuardian / Gitleaks — is this redundant?</span>
+      </summary>
+      <div class="faq-body">
+        <p>
+          <span class="zh">GitGuardian 是<strong>事后通知</strong>：你的 key 已经在 GitHub 上、爬虫已经扫到了，邮件才到你手里。Pilo 是<strong>事前拦截</strong>：还没 push 出去就停下。</span>
+          <span class="en">GitGuardian is <strong>after-the-fact notification</strong>: by the time you get the email, the key is already on GitHub and crawlers have it. Pilo is <strong>before-the-fact interception</strong> — it stops at the push moment, before the key leaves your Mac.</span>
+        </p>
+        <p style="margin-top: 10px;">
+          <span class="zh">两个工具是层叠互补：Pilo 是第一道，GitGuardian 是兜底。如果 Pilo 漏了什么，GG 还会接住。</span>
+          <span class="en">They layer: Pilo is the first line, GG is the safety net. If Pilo misses something, GG still catches it.</span>
+        </p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        <span class="zh">false positive 误报怎么办？我可不想每次 push 都被打断。</span>
+        <span class="en">What about false positives? I don't want every push interrupted.</span>
+      </summary>
+      <div class="faq-body">
+        <p>
+          <span class="zh">Pilo 有<strong>两档误报标记</strong>，持久化到本地：</span>
+          <span class="en">Pilo gives you <strong>two scopes for false-positive marks</strong>, persisted locally:</span>
+        </p>
+        <ul style="margin: 10px 0 10px 20px; line-height: 1.85;">
+          <li><span class="zh"><strong>"仅此文件"</strong> —— 这个文件这种命中以后都跳过</span><span class="en"><strong>"This file only"</strong> — skip this match in this file from now on</span></li>
+          <li><span class="zh"><strong>"仅此规则"</strong> —— 这条规则我用不到，全局禁用</span><span class="en"><strong>"This rule"</strong> — globally disable a rule you'll never need</span></li>
+        </ul>
+        <p>
+          <span class="zh">另外还有 <strong>kill switch</strong>：实在烦了一键关闭，24 小时后自动恢复。</span>
+          <span class="en">There's also a <strong>kill switch</strong>: one click silences everything, auto-restores after 24 hours.</span>
+        </p>
+      </div>
+    </details>
+
+    <details class="faq-item">
+      <summary>
+        <span class="zh">怎么相信你说的"本地"？凭什么不传我的代码？</span>
+        <span class="en">How do I trust the "local-only" claim?</span>
+      </summary>
+      <div class="faq-body">
+        <p>
+          <span class="zh">最直接的方式 —— <strong>读源码</strong>。Pilo 在 <a href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">github.com/emma-yu/Pilo</a> 完全 MIT 开源。</span>
+          <span class="en">The directest way — <strong>read the source</strong>. Pilo is fully MIT-open at <a href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">github.com/emma-yu/Pilo</a>.</span>
+        </p>
+        <p style="margin-top: 10px;">
+          <span class="zh"><strong>唯一的网络请求</strong>写在 <code>GitHubVisibility.swift</code> 一个文件里：调一次 GitHub 公开 API 判断仓库公开/私有（无需 token、24 小时缓存）。grep <code>URLSession</code> 整个仓库，只有这一处。</span>
+          <span class="en">The <strong>only network call</strong> lives in <code>GitHubVisibility.swift</code>: an unauthenticated GitHub public API call to check whether a repo is public or private (no token, 24h cache). Grep <code>URLSession</code> across the repo — exactly one hit.</span>
+        </p>
+        <p style="margin-top: 10px;">
+          <span class="zh">如果你不想要这一次：在设置里关掉，整个 app 零网络请求。</span>
+          <span class="en">Don't want that one call either? Disable it in Settings — the entire app becomes zero-network.</span>
+        </p>
+      </div>
+    </details>
+  </div>
+</section>
+
 <!-- ─── INSTALL ─── -->
 <section id="install" class="reveal">
   <div class="section-head">
@@ -1194,6 +1717,17 @@
 
 <!-- ─── FOOTER ─── -->
 <footer>
+  <div class="notify-row">
+    <span class="zh">📬 DMG 准备好就告诉你 —— </span>
+    <span class="en">📬 Know the moment the DMG ships — </span>
+    <a href="https://github.com/emma-yu/Pilo/subscription" target="_blank" rel="noopener">
+      <span>👁</span>
+      <span class="zh">在 GitHub 上 Watch</span>
+      <span class="en">Watch on GitHub</span>
+    </a>
+    <span class="zh"> · 不发 newsletter，不收邮箱</span>
+    <span class="en"> · no newsletter, no email collection</span>
+  </div>
   <img class="wax-seal" src="assets/pilo/waxsealpilo.png" alt="" aria-hidden="true" />
   <div class="lines">
     <div>
@@ -1250,6 +1784,10 @@
     btn.addEventListener('click', () => setLang(btn.dataset.lang));
   });
 
+  // Pilo §3.4.8 — honour reduce-motion as a hard constraint
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasHover = window.matchMedia('(hover: hover)').matches;
+
   // ─── Scroll reveal ───
   if ('IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
@@ -1263,6 +1801,88 @@
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
   } else {
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  // ─── Scroll progress (gold→stamp-red gradient bar) ───
+  const progressEl = document.getElementById('scrollProgress');
+  if (progressEl) {
+    let ticking = false;
+    const updateProgress = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? Math.min(100, Math.max(0, (window.scrollY / max) * 100)) : 0;
+      progressEl.style.width = pct + '%';
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateProgress);
+        ticking = true;
+      }
+    }, { passive: true });
+    updateProgress();
+  }
+
+  // ─── Mascot subtle cursor follow (desktop, no-RM only) ───
+  // The pigeon's posture leans toward your cursor — like she's watching.
+  if (!reduceMotion && hasHover) {
+    const wrap = document.querySelector('.mascot-wrap');
+    if (wrap) {
+      let raf = null;
+      let targetX = 0, targetY = 0, curX = 0, curY = 0;
+      const MAX_OFFSET = 5; // px — Pilo stays mostly still, just hints
+      const tick = () => {
+        curX += (targetX - curX) * 0.08;
+        curY += (targetY - curY) * 0.08;
+        wrap.style.setProperty('--mx', curX.toFixed(2) + 'px');
+        wrap.style.setProperty('--my', curY.toFixed(2) + 'px');
+        if (Math.abs(targetX - curX) > 0.1 || Math.abs(targetY - curY) > 0.1) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          raf = null;
+        }
+      };
+      window.addEventListener('mousemove', (e) => {
+        const rect = wrap.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = (e.clientX - cx) / window.innerWidth;
+        const dy = (e.clientY - cy) / window.innerHeight;
+        targetX = Math.max(-1, Math.min(1, dx * 2)) * MAX_OFFSET;
+        targetY = Math.max(-1, Math.min(1, dy * 2)) * MAX_OFFSET;
+        if (raf === null) raf = requestAnimationFrame(tick);
+      }, { passive: true });
+    }
+  }
+
+  // ─── Stat counter animation (once, when visible) ───
+  if ('IntersectionObserver' in window) {
+    const counterIO = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        const target = parseInt(el.dataset.target, 10) || 0;
+        counterIO.unobserve(el);
+        if (reduceMotion || target === 0) {
+          el.textContent = String(target);
+          return;
+        }
+        const duration = 1400;
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = String(Math.floor(target * eased));
+          if (t < 1) requestAnimationFrame(tick);
+          else el.textContent = String(target);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.stat-num .num').forEach(el => counterIO.observe(el));
+  } else {
+    document.querySelectorAll('.stat-num .num').forEach(el => {
+      el.textContent = el.dataset.target;
+    });
   }
 
   // ─── Copy install command ───
