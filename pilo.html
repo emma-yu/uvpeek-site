@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pilo · 一只常驻菜单栏的小信鸽</title>
-<meta name="description" content="献给 AI 时代的独立开发者。Pilo 是一只常驻 macOS 菜单栏的小信鸽，在你 push 之前替你看一眼 —— 三秒拦下泄漏的 key 和不该 push 的大文件。纯本地、不调 LLM、MIT 开源。">
+<meta name="description" content="AI 时代独立开发者的菜单栏伴侣。Pilo 是一只常驻 macOS 菜单栏的小信鸽，替你看着所有 Git 仓库 —— 草稿、静默仓库、常用 prompt 一键召唤，每天傍晚一封回顾信。v0.5.0 已发布，macOS 14+，纯本地，MIT 开源。">
 <link rel="canonical" href="https://xinxinmingde.com/pilo.html">
 <link rel="icon" type="image/png" href="assets/pilo/postalstamp.png">
 <meta property="og:type" content="website">
@@ -599,6 +599,167 @@
     position: relative;
   }
 
+  /* ───── Hero CTA meta caption ───── */
+  .hero-ctas-meta {
+    margin-top: 12px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--ink-tertiary);
+    letter-spacing: 0.02em;
+  }
+  .hero-ctas-meta b {
+    color: var(--pilo-gold-dark);
+    font-weight: 500;
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    padding: 1px 8px;
+    background: var(--pilo-paper);
+    border: 1px solid var(--paper-border);
+    border-radius: 4px;
+    margin-right: 4px;
+  }
+
+  /* ───── Download card (Install primary block) ───── */
+  .download-card {
+    background: var(--pilo-paper);
+    border: 1px solid var(--pilo-gold);
+    border-radius: var(--r-sheet);
+    padding: 36px 40px 30px;
+    max-width: 720px;
+    margin: 0 auto 36px;
+    text-align: center;
+    box-shadow: var(--shadow-med);
+    position: relative;
+    overflow: hidden;
+  }
+  .download-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(to right,
+      transparent 0%, var(--pilo-gold) 18%,
+      var(--stamp-red) 50%, var(--pilo-gold) 82%, transparent 100%);
+  }
+  .dc-version {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--pilo-gold-dark);
+    background: var(--paper-card);
+    padding: 4px 12px;
+    border-radius: var(--r-chip);
+    border: 1px solid var(--paper-border);
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+  }
+  .dc-version::before {
+    content: ''; width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--stamp-mint);
+    box-shadow: 0 0 0 3px rgba(45,139,90,0.15);
+  }
+  .download-card h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(22px, 2.6vw, 26px);
+    color: var(--ink-primary);
+    margin-bottom: 6px;
+    line-height: 1.35;
+  }
+  .dc-meta {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13.5px;
+    color: var(--ink-secondary);
+    margin-bottom: 24px;
+  }
+  .dc-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px;
+    background: var(--pilo-blue);
+    color: white;
+    border-radius: var(--r-btn);
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    box-shadow: var(--shadow-med);
+    transition: all 0.3s var(--ease-warm);
+    will-change: transform;
+  }
+  .dc-btn:hover {
+    background: var(--pilo-blue-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+  }
+  .dc-btn svg { width: 17px; height: 17px; stroke-width: 1.7; }
+  .dc-note {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--paper-border);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--ink-secondary);
+    line-height: 1.7;
+    max-width: 460px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .dc-note code {
+    font-family: var(--mono);
+    font-size: 0.9em;
+    color: var(--ink-primary);
+    background: var(--paper-card);
+    padding: 1px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--paper-border);
+    font-style: normal;
+  }
+
+  /* "或者" divider */
+  .install-or {
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 12.5px;
+    color: var(--pilo-gold);
+    margin: 0 auto 22px;
+    max-width: 720px;
+    letter-spacing: 0.08em;
+  }
+  .install-or::before, .install-or::after {
+    content: '';
+    display: inline-block;
+    width: 56px; height: 1px;
+    background: var(--pilo-gold);
+    opacity: 0.45;
+    vertical-align: middle;
+    margin: 0 14px;
+  }
+
+  .source-label {
+    text-align: center;
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--ink-secondary);
+    margin: 0 auto 16px;
+    max-width: 720px;
+  }
+  .source-label .badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-tertiary);
+    background: var(--paper-card);
+    padding: 2px 8px;
+    border-radius: var(--r-chip);
+    border: 1px solid var(--paper-border);
+    margin-left: 6px;
+    letter-spacing: 0.04em;
+  }
+
   /* ───── Install ───── */
   .install-wrap {
     background: var(--paper-card);
@@ -853,6 +1014,11 @@
     <symbol id="i-arrow-ne" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <path d="M7 17L17 7M9 7h8v8"/>
     </symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4v12"/>
+      <path d="M7 11l5 5 5-5"/>
+      <path d="M5 20h14"/>
+    </symbol>
     <symbol id="i-folders" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
       <path d="M4 11h6.5l2 2.5H26a2 2 0 0 1 2 2V25a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V11z"/>
       <path d="M8 7h5l2 2.5h10v3"/>
@@ -929,13 +1095,13 @@
     </div>
 
     <h1>
-      <span class="zh">你的菜单栏里，<br>多一只 <u>看着仓库</u> 的小信鸽。</span>
-      <span class="en">In your menu bar,<br>a pigeon <u>quietly watching</u> your repos.</span>
+      <span class="zh">你的菜单栏，多一只<br><u>看着仓库</u>的小信鸽。</span>
+      <span class="en">A menu-bar pigeon,<br><u>watching</u> all your repos.</span>
     </h1>
 
     <p class="lede">
-      <span class="zh">AI 让一个人同时写 10 个项目 —— Pilo 替你看着全部：<br>哪个还在 draft、哪个 30 天没动、<b>常用 prompt 一键召唤</b>，傍晚 18:00 一封信回顾今天。<br>顺便，push 之前替你过一眼。</span>
-      <span class="en">AI lets one person juggle ten projects — Pilo watches them all:<br>what's drafting, what's gone quiet, <b>your prompts one tap away</b>, and at 18:00 a letter to close the day.<br>And one careful look before you push.</span>
+      <span class="zh">AI 让一个人写 10 个项目 —— Pilo 替你 <b>看着全部</b>。<br>草稿、静默仓库、常用 prompt，每天傍晚一封回顾信。</span>
+      <span class="en">AI lets one person ship 10 projects — Pilo <b>watches them all</b>.<br>Drafts, quiet repos, prompts at a tap, and a letter every evening.</span>
     </p>
 
     <p class="tagline">
@@ -944,15 +1110,21 @@
     </p>
 
     <div class="hero-ctas">
-      <a class="btn btn-primary" id="cta-magnetic" href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">
+      <a class="btn btn-primary" id="cta-magnetic" href="https://github.com/emma-yu/Pilo/releases/latest" target="_blank" rel="noopener">
+        <svg class="icon-16"><use href="#i-download"/></svg>
+        <span class="zh">下载 macOS 版</span>
+        <span class="en">Download for macOS</span>
+      </a>
+      <a class="btn btn-secondary" href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">
         <svg class="icon-16"><use href="#i-star"/></svg>
-        <span class="zh">Star on GitHub</span>
-        <span class="en">Star on GitHub</span>
+        <span class="zh">在 GitHub 看看</span>
+        <span class="en">View on GitHub</span>
       </a>
-      <a class="btn btn-secondary" href="#features">
-        <span class="zh">看看它能做什么</span>
-        <span class="en">See what it does</span>
-      </a>
+    </div>
+    <div class="hero-ctas-meta">
+      <b>v0.5.0</b>
+      <span class="zh">macOS 14+ · 免费 · MIT</span>
+      <span class="en">macOS 14+ · free · MIT</span>
     </div>
 
     <div class="hero-pills">
@@ -1181,14 +1353,46 @@
       <span class="zh">安装</span><span class="en">Install</span>
     </div>
     <h2>
-      <span class="zh">今天 —— 从源码编译。</span>
-      <span class="en">Today — build from source.</span>
+      <span class="zh">拿到 Pilo，两种方式。</span>
+      <span class="en">Two ways to get Pilo.</span>
     </h2>
     <p>
-      <span class="zh">签名 DMG 还在路上。想让它早点到？给仓库一颗 star。</span>
-      <span class="en">A signed DMG is still on the way. Star the repo if you'd like it sooner.</span>
+      <span class="zh">v0.5.0 刚发布。直接下载装好就用，或者从源码自己编译一份。</span>
+      <span class="en">v0.5.0 just shipped. Grab the .zip and you're running, or build from source yourself.</span>
     </p>
   </div>
+
+  <!-- Primary: download card -->
+  <div class="download-card">
+    <span class="dc-version">v0.5.0 · <span class="zh">最新</span><span class="en">latest</span></span>
+    <h3>
+      <span class="zh">Pilo · macOS 版</span>
+      <span class="en">Pilo for macOS</span>
+    </h3>
+    <p class="dc-meta">
+      <span class="zh">universal 二进制 · macOS 14.0+ · 几 MB 的小信鸽</span>
+      <span class="en">universal binary · macOS 14.0+ · a few MB of pigeon</span>
+    </p>
+    <a class="dc-btn" href="https://github.com/emma-yu/Pilo/releases/latest" target="_blank" rel="noopener">
+      <svg><use href="#i-download"/></svg>
+      <span class="zh">下载 Pilo v0.5.0</span>
+      <span class="en">Download Pilo v0.5.0</span>
+    </a>
+    <p class="dc-note">
+      <span class="zh">解压后把 <code>Pilo.app</code> 拖进 Applications。<br>第一次打开请<strong>右键 → 打开</strong>（暂未签名，绕过 Gatekeeper）。</span>
+      <span class="en">Unzip, drag <code>Pilo.app</code> into Applications.<br>First launch: <strong>right-click → Open</strong> (unsigned, Gatekeeper bypass).</span>
+    </p>
+  </div>
+
+  <div class="install-or">
+    <span class="zh">或者</span><span class="en">or</span>
+  </div>
+
+  <p class="source-label">
+    <span class="zh">从源码编译</span>
+    <span class="en">build from source</span>
+    <span class="badge">macOS 14+ · Xcode 16+ · Swift 6.0+</span>
+  </p>
 
   <div class="install-wrap">
     <div class="install-header">
@@ -1210,10 +1414,6 @@
 <span class="prompt">$</span> open Pilo.xcodeproj</pre>
     </div>
   </div>
-  <p class="install-footer">
-    <span class="zh">macOS 14.0+ · Xcode 16+ · Swift 6.0+</span>
-    <span class="en">macOS 14.0+ · Xcode 16+ · Swift 6.0+</span>
-  </p>
 </section>
 
 <!-- ─── FAQ ─── -->
