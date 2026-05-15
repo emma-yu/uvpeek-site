@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pilo · 一只常驻菜单栏的小信鸽</title>
+<meta name="description" content="Pilo 是一只常驻 macOS 菜单栏的小信鸽，在 push 前替你看一眼。纯本地、不调 LLM、不传代码。开源，MIT。">
+<link rel="canonical" href="https://xinxinmingde.com/pilo.html">
+<link rel="icon" type="image/png" href="assets/pilo/postalstamp.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pilo · A serif menu bar pigeon for your Git repos">
+<meta property="og:description" content="In your menu bar. Takes one careful look before you push. Local by principle, no LLM, no data leaves your Mac.">
+<meta property="og:image" content="https://xinxinmingde.com/assets/pilo/waxsealpilo.png">
+<meta property="og:url" content="https://xinxinmingde.com/pilo.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pilo · A serif menu bar pigeon for your Git repos">
+<meta name="twitter:description" content="In your menu bar. Takes one careful look before you push.">
+<meta name="twitter:image" content="https://xinxinmingde.com/assets/pilo/waxsealpilo.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+  /* ─── Design tokens (lifted from Pilo IMPLEMENTATION.md §7.1) ─── */
+  :root {
+    /* surfaces */
+    --cream-bg:        #F5F2EC;
+    --paper-card:      #FAF8F5;
+    --pilo-paper:      #FFF8EB;
+    --pilo-cream:      #F5E6D3;
+    --paper-border:    #E5D9C4;
+    --cloud-divider:   #E8E2D6;
+    /* brand */
+    --pilo-blue:       #5079D0;
+    --pilo-blue-dark:  #3859A8;
+    --pilo-blue-light: #9CB5E5;
+    --pilo-gold:       #D4A574;
+    --pilo-gold-dark:  #B8895A;
+    --stamp-red:       #B8553F;
+    --stamp-mint:      #2D8B5A;
+    /* state */
+    --mint-safe:       #88C9A1;
+    --amber-warn:      #E8B568;
+    --rose-danger:     #D87B7B;
+    --lavender-info:   #B5A8CF;
+    --pilo-accent:     #F4B5B0;
+    /* ink */
+    --ink-primary:     #2D2A26;
+    --ink-secondary:   #7A7A7A;
+    --ink-tertiary:    #B5B5B5;
+    /* shadows — PiloBlue tinted, never flat black */
+    --shadow-soft:   0 2px 8px rgba(80,121,208,0.08), 0 1px 2px rgba(80,121,208,0.04);
+    --shadow-med:    0 6px 18px rgba(80,121,208,0.10), 0 2px 6px rgba(80,121,208,0.06);
+    --shadow-lift:   0 16px 36px rgba(80,121,208,0.14), 0 4px 10px rgba(80,121,208,0.08);
+    /* typography */
+    --serif: "Noto Serif SC", "Songti SC", "STSong", "Source Han Serif SC", "SimSun", Georgia, serif;
+    --sans:  "Inter", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --mono:  "JetBrains Mono", "SF Mono", Menlo, monospace;
+    /* radii (8pt grid) */
+    --r-chip:   999px;
+    --r-btn:    10px;
+    --r-card:   16px;
+    --r-sheet:  18px;
+    /* motion */
+    --ease-warm: cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    color: var(--ink-primary);
+    background: var(--cream-bg);
+    line-height: 1.6;
+    overflow-x: hidden;
+    /* subtle paper grain */
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(212,165,116,0.05) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(212,165,116,0.04) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.4 0 0 0 0 0.3 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    background-attachment: fixed;
+  }
+
+  /* zh / en visibility — JS toggles [data-lang] on <html> */
+  html[data-lang="zh"] .en, html[data-lang="en"] .zh { display: none; }
+
+  /* ─── Top nav ─── */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 6vw;
+    background: rgba(245,242,236,0.82);
+    backdrop-filter: blur(14px) saturate(1.1);
+    -webkit-backdrop-filter: blur(14px) saturate(1.1);
+    border-bottom: 1px solid var(--cloud-divider);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none; color: var(--ink-primary);
+    font-family: var(--serif); font-weight: 600; font-size: 18px;
+  }
+  .nav-logo img { width: 28px; height: 28px; object-fit: contain; }
+  .nav-logo .star { color: var(--pilo-gold); font-size: 14px; }
+
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .lang-toggle {
+    display: inline-flex; align-items: center;
+    border: 1px solid var(--paper-border);
+    border-radius: var(--r-chip);
+    background: var(--paper-card);
+    padding: 2px; gap: 2px;
+    font-family: var(--serif); font-size: 12px;
+  }
+  .lang-toggle button {
+    border: none; background: transparent; cursor: pointer;
+    padding: 5px 12px; border-radius: var(--r-chip);
+    color: var(--ink-secondary); font-family: inherit; font-size: inherit;
+    transition: all 0.25s var(--ease-warm);
+  }
+  .lang-toggle button.active {
+    background: var(--pilo-gold);
+    color: var(--paper-card);
+  }
+  .nav-link {
+    color: var(--ink-secondary);
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: color 0.25s var(--ease-warm);
+  }
+  .nav-link:hover { color: var(--pilo-blue); }
+  .nav-link.gh {
+    color: var(--ink-primary);
+    padding: 6px 12px;
+    border: 1px solid var(--paper-border);
+    border-radius: var(--r-chip);
+    background: var(--paper-card);
+  }
+  .nav-link.gh:hover { border-color: var(--pilo-gold); }
+
+  /* ─── Layout ─── */
+  main { position: relative; z-index: 1; }
+  section {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 10vh 6vw;
+  }
+  section[id] { scroll-margin-top: 80px; }
+
+  /* ─── Ornament divider (gold hairline + ✦) ─── */
+  .ornament {
+    display: flex; align-items: center; justify-content: center;
+    gap: 18px;
+    color: var(--pilo-gold);
+    margin: 24px 0;
+  }
+  .ornament::before, .ornament::after {
+    content: '';
+    flex: 0 0 auto;
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--pilo-gold), transparent);
+  }
+  .ornament span {
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  /* ─── Postal label (uppercase tracked) ─── */
+  .postal-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--pilo-gold-dark);
+    letter-spacing: 0.04em;
+  }
+  .postal-label::before, .postal-label::after {
+    content: ''; display: inline-block;
+    width: 24px; height: 1px;
+    background: var(--pilo-gold);
+    opacity: 0.5;
+  }
+
+  /* ─── Hero ─── */
+  .hero {
+    min-height: 86vh;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+  .hero-left { position: relative; }
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.15;
+    color: var(--ink-primary);
+    margin: 22px 0 18px;
+    letter-spacing: -0.01em;
+  }
+  html[data-lang="en"] .hero h1 { font-size: clamp(36px, 5.4vw, 60px); }
+
+  .hero .lede {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--ink-secondary);
+    margin-bottom: 28px;
+    line-height: 1.55;
+  }
+  .hero .tagline {
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--pilo-gold-dark);
+    margin: 28px 0;
+    letter-spacing: 0.02em;
+  }
+  .hero-ctas {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  /* buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 22px;
+    border-radius: var(--r-btn);
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.25s var(--ease-warm);
+    line-height: 1;
+  }
+  .btn-primary {
+    background: var(--pilo-blue);
+    color: white;
+    box-shadow: var(--shadow-soft);
+  }
+  .btn-primary:hover {
+    background: var(--pilo-blue-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-med);
+  }
+  .btn-secondary {
+    background: var(--paper-card);
+    color: var(--ink-primary);
+    border-color: var(--paper-border);
+  }
+  .btn-secondary:hover {
+    border-color: var(--pilo-gold);
+    background: var(--pilo-paper);
+  }
+
+  /* mascot column */
+  .hero-right {
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .mascot-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    aspect-ratio: 1;
+  }
+  .mascot {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    animation: breathe 2.5s ease-in-out infinite alternate;
+    filter: drop-shadow(0 18px 28px rgba(80,121,208,0.18));
+  }
+  @keyframes breathe {
+    from { transform: scale(1) rotate(-0.5deg); }
+    to   { transform: scale(1.035) rotate(0.5deg); }
+  }
+  .mascot-halo {
+    position: absolute; inset: -10%;
+    background: radial-gradient(circle, rgba(212,165,116,0.18) 0%, transparent 60%);
+    border-radius: 50%;
+    z-index: -1;
+    animation: haloPulse 4s ease-in-out infinite alternate;
+  }
+  @keyframes haloPulse {
+    from { transform: scale(0.95); opacity: 0.6; }
+    to   { transform: scale(1.05); opacity: 1; }
+  }
+  /* floating little postal stamps */
+  .float-stamp {
+    position: absolute;
+    width: 64px; height: 64px;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 12px rgba(0,0,0,0.08));
+    animation: floaty 5s ease-in-out infinite alternate;
+  }
+  .float-stamp.s1 { top: -8%; left: -2%; transform: rotate(-12deg); animation-delay: -1s; }
+  .float-stamp.s2 { bottom: 4%; right: -4%; transform: rotate(8deg); width: 80px; height: 80px; animation-delay: -2.5s; }
+  .float-stamp.s3 { top: 30%; right: -8%; transform: rotate(-6deg); width: 56px; height: 56px; animation-delay: -3.5s; }
+  @keyframes floaty {
+    from { transform: translateY(0) rotate(var(--rot, 0deg)); }
+    to   { transform: translateY(-10px) rotate(calc(var(--rot, 0deg) + 2deg)); }
+  }
+
+  /* ─── Trust pills under hero ─── */
+  .hero-pills {
+    display: flex; gap: 10px; flex-wrap: wrap;
+    margin-top: 36px;
+  }
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 14px;
+    background: var(--paper-card);
+    border: 1px solid var(--paper-border);
+    border-radius: var(--r-chip);
+    font-size: 12px;
+    color: var(--ink-secondary);
+  }
+  .pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--mint-safe); }
+  .pill .dot.gold { background: var(--pilo-gold); }
+  .pill .dot.red { background: var(--stamp-red); }
+
+  /* ─── Section title ─── */
+  .section-head {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+  .section-head h2 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(28px, 3.6vw, 42px);
+    line-height: 1.25;
+    color: var(--ink-primary);
+    margin: 14px 0 12px;
+    letter-spacing: -0.005em;
+  }
+  .section-head p {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    color: var(--ink-secondary);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.65;
+  }
+
+  /* ─── Problem cards (rotated postage stamps) ─── */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    margin-top: 12px;
+  }
+  .problem-card {
+    background: var(--paper-card);
+    border: 1px dashed var(--paper-border);
+    border-radius: var(--r-card);
+    padding: 32px 26px 28px;
+    position: relative;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.35s var(--ease-warm);
+  }
+  .problem-card:nth-child(1) { transform: rotate(-1.2deg); }
+  .problem-card:nth-child(2) { transform: rotate(0.6deg); }
+  .problem-card:nth-child(3) { transform: rotate(-0.5deg); }
+  .problem-card:hover {
+    transform: rotate(0) translateY(-3px);
+    box-shadow: var(--shadow-lift);
+    border-style: solid;
+    border-color: var(--pilo-gold);
+  }
+  .problem-card .icon {
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px;
+    background: var(--pilo-paper);
+    border-radius: 14px;
+    margin-bottom: 18px;
+    border: 1px solid var(--paper-border);
+  }
+  .problem-card h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--ink-primary);
+    margin-bottom: 10px;
+    line-height: 1.35;
+  }
+  .problem-card p {
+    font-size: 14px;
+    color: var(--ink-secondary);
+    line-height: 1.65;
+  }
+  /* tiny stamp corner */
+  .problem-card::before {
+    content: ''; position: absolute;
+    top: 12px; right: 12px;
+    width: 28px; height: 28px;
+    background: var(--stamp-red);
+    opacity: 0.08;
+    border-radius: 4px;
+    transform: rotate(-8deg);
+  }
+
+  /* ─── Solution (parcel + bullet list) ─── */
+  .solution {
+    background: var(--paper-card);
+    border-radius: var(--r-sheet);
+    border: 1px solid var(--paper-border);
+    padding: 56px 48px;
+    box-shadow: var(--shadow-med);
+    display: grid;
+    grid-template-columns: 0.7fr 1fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .solution::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(to right,
+      transparent 0%, var(--pilo-gold) 20%, var(--pilo-gold) 80%, transparent 100%);
+  }
+  .solution-illust {
+    width: 100%; max-width: 240px;
+    margin: 0 auto;
+    filter: drop-shadow(0 10px 22px rgba(80,121,208,0.12));
+  }
+  .solution-illust img { width: 100%; height: auto; object-fit: contain; }
+  .solution h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 24px;
+    line-height: 1.3;
+  }
+  .solution ul {
+    list-style: none;
+    padding: 0;
+  }
+  .solution li {
+    padding: 10px 0;
+    padding-left: 28px;
+    position: relative;
+    font-size: 15px;
+    color: var(--ink-primary);
+    line-height: 1.55;
+    border-bottom: 1px dashed var(--cloud-divider);
+  }
+  .solution li:last-child { border-bottom: none; }
+  .solution li::before {
+    content: '✦';
+    position: absolute;
+    left: 4px; top: 12px;
+    color: var(--pilo-gold);
+    font-size: 12px;
+  }
+  .solution li b {
+    font-weight: 600;
+    color: var(--ink-primary);
+  }
+  .solution li .meta {
+    display: block;
+    font-size: 13px;
+    color: var(--ink-secondary);
+    margin-top: 2px;
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  /* ─── Feature pillars (2x2 stamp grid) ─── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .feat {
+    background: var(--pilo-paper);
+    border-radius: var(--r-card);
+    border: 1px solid var(--paper-border);
+    padding: 32px 28px;
+    box-shadow: var(--shadow-soft);
+    position: relative;
+    transition: all 0.3s var(--ease-warm);
+    overflow: hidden;
+  }
+  .feat:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--pilo-gold);
+  }
+  .feat-stamp {
+    position: absolute;
+    top: 18px; right: 18px;
+    width: 56px; height: 56px;
+    object-fit: contain;
+    opacity: 0.85;
+    transition: transform 0.4s var(--ease-warm);
+  }
+  .feat:hover .feat-stamp { transform: rotate(-6deg) scale(1.05); }
+  .feat-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--pilo-gold-dark);
+    letter-spacing: 0.05em;
+  }
+  .feat h3 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 22px;
+    margin: 8px 0 12px;
+    padding-right: 72px;
+    color: var(--ink-primary);
+    line-height: 1.35;
+  }
+  .feat p {
+    font-size: 14.5px;
+    color: var(--ink-secondary);
+    line-height: 1.7;
+  }
+  .feat .feat-detail {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--cloud-divider);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--pilo-gold-dark);
+  }
+
+  /* ─── Why-it-looks (philosophy) ─── */
+  .philosophy {
+    background: var(--pilo-cream);
+    border-radius: var(--r-sheet);
+    padding: 64px 56px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    border: 1px solid rgba(184,137,90,0.2);
+  }
+  .philosophy::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    background: url('assets/pilo/postaldial.png') no-repeat center / contain;
+    opacity: 0.08;
+    transform: rotate(-8deg);
+    pointer-events: none;
+  }
+  .philosophy blockquote {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(26px, 3.4vw, 38px);
+    line-height: 1.45;
+    color: var(--ink-primary);
+    margin: 20px auto 24px;
+    max-width: 680px;
+    position: relative;
+  }
+  .philosophy cite {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 14px;
+    color: var(--pilo-gold-dark);
+    display: block;
+    margin-top: 32px;
+  }
+  .philosophy .body {
+    font-size: 15.5px;
+    color: var(--ink-primary);
+    line-height: 1.85;
+    max-width: 620px;
+    margin: 0 auto;
+    position: relative;
+    opacity: 0.85;
+  }
+
+  /* ─── Local-first (3 col) ─── */
+  .local-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+  .local-item {
+    text-align: center;
+    padding: 24px;
+  }
+  .local-icon {
+    width: 56px; height: 56px;
+    margin: 0 auto 16px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--paper-card);
+    border-radius: 16px;
+    border: 1px solid var(--paper-border);
+    font-size: 26px;
+  }
+  .local-item h4 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+  .local-item p {
+    font-size: 14px;
+    color: var(--ink-secondary);
+    line-height: 1.6;
+  }
+  .local-footnote {
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--ink-tertiary);
+    max-width: 580px;
+    margin: 0 auto;
+    line-height: 1.7;
+    padding-top: 24px;
+    border-top: 1px dashed var(--cloud-divider);
+  }
+
+  /* ─── Install (terminal block) ─── */
+  .install-wrap {
+    background: var(--paper-card);
+    border-radius: var(--r-sheet);
+    border: 1px solid var(--paper-border);
+    overflow: hidden;
+    box-shadow: var(--shadow-med);
+    max-width: 760px;
+    margin: 0 auto;
+  }
+  .install-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 22px;
+    background: var(--pilo-paper);
+    border-bottom: 1px solid var(--paper-border);
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 13px;
+    color: var(--pilo-gold-dark);
+  }
+  .install-dots { display: flex; gap: 6px; }
+  .install-dots span {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--paper-border);
+  }
+  .install-dots span:nth-child(1) { background: var(--rose-danger); opacity: 0.6; }
+  .install-dots span:nth-child(2) { background: var(--amber-warn); opacity: 0.6; }
+  .install-dots span:nth-child(3) { background: var(--mint-safe); opacity: 0.6; }
+  .install-body {
+    padding: 24px 26px;
+    font-family: var(--mono);
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--ink-primary);
+    position: relative;
+  }
+  .install-body .comment {
+    color: var(--ink-tertiary);
+    font-style: italic;
+  }
+  .install-body .prompt {
+    color: var(--pilo-gold-dark);
+    user-select: none;
+  }
+  .copy-btn {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: var(--paper-card);
+    border: 1px solid var(--paper-border);
+    border-radius: var(--r-btn);
+    padding: 6px 12px;
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--ink-secondary);
+    cursor: pointer;
+    transition: all 0.25s var(--ease-warm);
+  }
+  .copy-btn:hover {
+    border-color: var(--pilo-gold);
+    color: var(--pilo-gold-dark);
+  }
+  .copy-btn.copied { color: var(--stamp-mint); border-color: var(--stamp-mint); }
+  .install-footer {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--ink-tertiary);
+    font-family: var(--serif);
+    font-style: italic;
+  }
+
+  /* ─── Footer ─── */
+  footer {
+    padding: 80px 6vw 60px;
+    text-align: center;
+    border-top: 1px solid var(--cloud-divider);
+    margin-top: 60px;
+    background: var(--paper-card);
+    position: relative;
+  }
+  .wax-seal {
+    width: 92px; height: 92px;
+    margin: 0 auto 24px;
+    display: block;
+    filter: drop-shadow(0 4px 10px rgba(184,85,63,0.18));
+    transition: transform 0.5s var(--ease-warm);
+  }
+  .wax-seal:hover { transform: rotate(-8deg) scale(1.05); }
+  footer .lines {
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--ink-secondary);
+    line-height: 1.9;
+  }
+  footer .lines a {
+    color: var(--pilo-blue);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--pilo-blue-light);
+  }
+  footer .lines a:hover { color: var(--pilo-blue-dark); }
+  footer .signature {
+    font-family: var(--serif);
+    font-style: italic;
+    color: var(--pilo-gold-dark);
+    margin-top: 16px;
+    font-size: 13px;
+  }
+
+  /* ─── Reveal animation ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s var(--ease-warm), transform 0.7s var(--ease-warm);
+  }
+  .reveal.in {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── Reduced motion (Pilo §3.4.8 promise) ─── */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.15s !important;
+      transition-property: opacity !important;
+    }
+    .mascot, .float-stamp { animation: none !important; }
+    .reveal { transform: none !important; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ─── Mobile ─── */
+  @media (max-width: 880px) {
+    .nav { padding: 12px 5vw; }
+    .nav-link.gh { padding: 5px 10px; font-size: 12px; }
+    .hero {
+      grid-template-columns: 1fr;
+      text-align: center;
+      padding-top: 110px;
+      gap: 20px;
+      min-height: auto;
+    }
+    .hero-pills { justify-content: center; }
+    .hero-ctas { justify-content: center; }
+    .hero-right { order: -1; }
+    .mascot-wrap { max-width: 220px; }
+    .float-stamp.s1, .float-stamp.s3 { width: 44px; height: 44px; }
+    .float-stamp.s2 { width: 56px; height: 56px; }
+    .problem-grid { grid-template-columns: 1fr; gap: 18px; }
+    .problem-card:nth-child(n) { transform: none; }
+    .solution {
+      grid-template-columns: 1fr;
+      padding: 40px 28px;
+      gap: 28px;
+      text-align: center;
+    }
+    .solution ul { text-align: left; }
+    .features { grid-template-columns: 1fr; }
+    .feat h3 { padding-right: 64px; }
+    .philosophy { padding: 48px 28px; }
+    .local-grid { grid-template-columns: 1fr; gap: 16px; }
+    .install-body { font-size: 12.5px; padding: 20px; }
+    section { padding: 8vh 5vw; }
+  }
+
+  @media (max-width: 480px) {
+    .nav-right .nav-link:not(.gh) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav">
+  <a href="pilo.html" class="nav-logo">
+    <img src="assets/pilo/postalstamp.png" alt="Pilo" />
+    <span>Pilo <span class="star">✦</span></span>
+  </a>
+  <div class="nav-right">
+    <div class="lang-toggle" role="tablist" aria-label="Language">
+      <button id="lang-zh" type="button" class="active" data-lang="zh">中</button>
+      <button id="lang-en" type="button" data-lang="en">EN</button>
+    </div>
+    <a class="nav-link" href="studio.html">
+      <span class="zh">↗ Studio</span><span class="en">↗ Studio</span>
+    </a>
+    <a class="nav-link gh" href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">
+      <span>⭐</span><span class="zh">GitHub</span><span class="en">GitHub</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="postal-label">
+      <span class="zh">开源 · MIT · macOS 菜单栏</span>
+      <span class="en">Open Source · MIT · macOS Menu Bar</span>
+    </div>
+    <h1>
+      <span class="zh">一只常驻菜单栏的<br>小信鸽。</span>
+      <span class="en">A serif menu bar pigeon<br>for your Git repos.</span>
+    </h1>
+    <p class="lede">
+      <span class="zh">在你 push 之前 — 替你看一眼。</span>
+      <span class="en">Takes one careful look — before you push.</span>
+    </p>
+
+    <div class="ornament"><span>✦</span></div>
+
+    <p class="tagline">
+      <span class="zh">纯本地 · 不调 LLM · 不传代码 · 不收 telemetry</span>
+      <span class="en">Local by principle · No LLM · No data leaves your Mac</span>
+    </p>
+
+    <div class="hero-ctas">
+      <a class="btn btn-primary" href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">
+        <span>⭐</span>
+        <span class="zh">在 GitHub 上 Star（DMG 准备好之前）</span>
+        <span class="en">Star on GitHub — until DMG ships</span>
+      </a>
+      <a class="btn btn-secondary" href="#how-it-works">
+        <span class="zh">看看它怎么工作</span>
+        <span class="en">See how it works</span>
+      </a>
+    </div>
+
+    <div class="hero-pills">
+      <span class="pill"><span class="dot"></span>
+        <span class="zh">macOS 14.0+</span><span class="en">macOS 14.0+</span>
+      </span>
+      <span class="pill"><span class="dot gold"></span>
+        <span class="zh">Swift 6.0 严格并发</span><span class="en">Swift 6.0 strict concurrency</span>
+      </span>
+      <span class="pill"><span class="dot red"></span>
+        <span class="zh">254 个测试 · 14.3k 行</span><span class="en">254 tests · 14.3k LoC</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="mascot-wrap">
+      <div class="mascot-halo" aria-hidden="true"></div>
+      <img class="mascot" src="assets/pilo/pilo-mascot.png" alt="Pilo the pigeon mascot" />
+      <img class="float-stamp s1" style="--rot: -12deg" src="assets/pilo/postalstamp.png" alt="" aria-hidden="true" />
+      <img class="float-stamp s2" style="--rot: 8deg" src="assets/pilo/waxsealpilo.png" alt="" aria-hidden="true" />
+      <img class="float-stamp s3" style="--rot: -6deg" src="assets/pilo/letterstack.png" alt="" aria-hidden="true" />
+    </div>
+  </div>
+</section>
+
+<!-- ─── PROBLEM ─── -->
+<section id="problem" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">为什么需要它</span><span class="en">Why this exists</span>
+    </span>
+    <h2>
+      <span class="zh">AI 写得越快，<br>没人替你检查的就越多。</span>
+      <span class="en">The faster AI writes,<br>the less anyone checks.</span>
+    </h2>
+    <p>
+      <span class="zh">Cursor、Claude Code、Copilot 一晚上能生成几十个 commit。你早已看不过来了 —— 而这些是直接被推到公网的代码。</span>
+      <span class="en">Cursor, Claude Code, Copilot — they ship commits faster than you can read. And every one of them lands on the public internet.</span>
+    </p>
+  </div>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">📨</div>
+      <h3>
+        <span class="zh">.env 被悄悄推上去</span>
+        <span class="en">.env quietly committed</span>
+      </h3>
+      <p>
+        <span class="zh">一次手抖的 git add . —— 一周后从 GitGuardian 邮件里发现 OpenAI key 被人扫到了。</span>
+        <span class="en">One careless <code>git add .</code> — a week later GitGuardian emails you about the leaked OpenAI key.</span>
+      </p>
+    </div>
+
+    <div class="problem-card">
+      <div class="icon">📜</div>
+      <h3>
+        <span class="zh">LLM API key 进了 git history</span>
+        <span class="en">API keys in git history</span>
+      </h3>
+      <p>
+        <span class="zh">"反正之后会改" —— history 比记忆长。一旦 push，rotate key 是唯一的退路。</span>
+        <span class="en">"I'll fix it later." History outlives memory. Once pushed, rotating the key is the only way back.</span>
+      </p>
+    </div>
+
+    <div class="problem-card">
+      <div class="icon">🪨</div>
+      <h3>
+        <span class="zh">50 MB 模型混进 commit</span>
+        <span class="en">50 MB blob in a commit</span>
+      </h3>
+      <p>
+        <span class="zh">.DS_Store、build/、id_rsa、200MB 的 .safetensors —— 仓库膨胀的故事，永远从一个 commit 开始。</span>
+        <span class="en">.DS_Store, build/, id_rsa, a 200 MB .safetensors — every bloated repo started with one commit.</span>
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SOLUTION ─── -->
+<section id="how-it-works" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">它做什么</span><span class="en">What it does</span>
+    </span>
+    <h2>
+      <span class="zh">像一封信寄出前，<br>过一遍邮戳。</span>
+      <span class="en">Like a letter passing<br>through the post office.</span>
+    </h2>
+  </div>
+
+  <div class="solution">
+    <div class="solution-illust">
+      <img src="assets/pilo/postalparcel.png" alt="" aria-hidden="true" />
+    </div>
+    <div>
+      <h3>
+        <span class="zh">在你点"推送"的瞬间，Pilo 做四件事</span>
+        <span class="en">The moment you hit push, Pilo does four things</span>
+      </h3>
+      <ul>
+        <li>
+          <b><span class="zh">扫敏感信息</span><span class="en">Scan for secrets</span></b>
+          <span class="meta zh">25 条精挑规则：OpenAI / Anthropic / AWS / Stripe / Slack / 数据库连接串 / GitHub PAT — 配合 Shannon 熵阈值识别高熵字符串</span>
+          <span class="meta en">25 hand-picked rules covering OpenAI / Anthropic / AWS / Stripe / Slack / DB strings / PATs — Shannon entropy gates included</span>
+        </li>
+        <li>
+          <b><span class="zh">守误提交</span><span class="en">Guard against accidents</span></b>
+          <span class="meta zh">.env / .pem / id_rsa / 构建产物 / .DS_Store / 大文件（用 git cat-file -s 真实测量 blob size）</span>
+          <span class="meta en">.env / .pem / id_rsa / build artifacts / .DS_Store / oversized blobs (measured via <code>git cat-file -s</code>)</span>
+        </li>
+        <li>
+          <b><span class="zh">辨身份</span><span class="en">Sentinel for identity</span></b>
+          <span class="meta zh">work / personal / experiment 三档邮箱池——别再把工作邮箱推到开源仓库</span>
+          <span class="meta en">Three email pools — work / personal / experiment — so the work email never lands on your open source repo</span>
+        </li>
+        <li>
+          <b><span class="zh">分类 push 错误</span><span class="en">Classify push errors</span></b>
+          <span class="meta zh">8 种 stderr 分类：auth / non-FF / 历史分叉 / hook / network / upstream — filter-repo 后的强推也能稳定走 force-with-lease</span>
+          <span class="meta en">8 stderr categories: auth / non-FF / history-diverged / hook / network / upstream — even post-filter-repo pushes route cleanly via force-with-lease</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FEATURE PILLARS ─── -->
+<section id="features" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">四张邮票</span><span class="en">Four stamps</span>
+    </span>
+    <h2>
+      <span class="zh">不只是安全检查 —<br>它陪你走完每一个仓库。</span>
+      <span class="en">More than a scanner —<br>a companion for every repo.</span>
+    </h2>
+    <p>
+      <span class="zh">Pilo 把 git 这件冷冰冰的事重新写成了一段日常仪式。</span>
+      <span class="en">Pilo turns the cold ritual of git into something almost warm.</span>
+    </p>
+  </div>
+
+  <div class="features">
+    <div class="feat">
+      <img class="feat-stamp" src="assets/pilo/postalsatchel.png" alt="" aria-hidden="true" />
+      <div class="feat-num">01</div>
+      <h3>
+        <span class="zh">Push 前安全检查</span>
+        <span class="en">Push-time safety check</span>
+      </h3>
+      <p>
+        <span class="zh">25 条 secret 规则 + 6 类误提交守护，全部跑在本地。误报标记可"仅此文件"或"仅此规则"两档持久化 —— 第二次 push 不再骚扰。</span>
+        <span class="en">25 secret rules + 6 commit-guard categories, all running locally. False-positive marks persist at two scopes ("this file only" or "this rule") — second push, quiet.</span>
+      </p>
+      <div class="feat-detail">
+        <span class="zh">— Kill switch 24 小时自动恢复</span>
+        <span class="en">— Kill switch auto-restores after 24h</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <img class="feat-stamp" src="assets/pilo/postaldial.png" alt="" aria-hidden="true" />
+      <div class="feat-num">02</div>
+      <h3>
+        <span class="zh">每日邮局信件</span>
+        <span class="en">Daily Letter</span>
+      </h3>
+      <p>
+        <span class="zh">每天 18:00 一封信。今日寄出 / 草稿中 / 各仓库的进度 —— 用宋体写在 cream 信纸上，配旋转邮戳水印。</span>
+        <span class="en">Every day at 18:00, a letter arrives. What you shipped, what's still drafting, every repo's mood — written in serif on cream paper with a rotated postal-dial watermark.</span>
+      </p>
+      <div class="feat-detail">
+        <span class="zh">— 启动补发 · 信箱归档 · 收信人姓名跟系统</span>
+        <span class="en">— Auto-replay on launch · archived inbox · personalised greeting</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <img class="feat-stamp" src="assets/pilo/postalstamp.png" alt="" aria-hidden="true" />
+      <div class="feat-num">03</div>
+      <h3>
+        <span class="zh">邮票本 · 桌面浮动 Dock</span>
+        <span class="en">Stamp Panel · floating dock</span>
+      </h3>
+      <p>
+        <span class="zh">屏幕边缘的浮动小邮票 — 点击展开扇形 prompt 库。AppKit 级别的拖拽，5pt 阈值区分点击/拖动。"钉到首位 ✦" 让常用 prompt 永远第一个。</span>
+        <span class="en">A floating stamp at your screen edge — tap to fan out your prompt collection. AppKit-level drag, 5pt threshold separates tap from drag. Pin ✦ keeps favourites first.</span>
+      </p>
+      <div class="feat-detail">
+        <span class="zh">— Reduce-Motion 已适配 · 半圆 / 全圆几何自适应</span>
+        <span class="en">— Reduce-Motion honoured · adaptive half/full circle geometry</span>
+      </div>
+    </div>
+
+    <div class="feat">
+      <img class="feat-stamp" src="assets/pilo/postmancap.png" alt="" aria-hidden="true" />
+      <div class="feat-num">04</div>
+      <h3>
+        <span class="zh">仓库陪伴 · 草稿 · 项目档案</span>
+        <span class="en">Companion · drafts · project docs</span>
+      </h3>
+      <p>
+        <span class="zh">智能 4 档 subtitle 跟你打招呼："桌上 N 件 / 昨天来过 / 已 30 天没见"。Readme / AI-instructions / CHANGELOG 自动索引 + cream paper sheet 预览。</span>
+        <span class="en">A 4-tier subtitle greets you — "N drafts on the desk" · "saw you yesterday" · "30 days, welcome back". Readme / AI-instructions / CHANGELOG indexed automatically, previewed on cream paper.</span>
+      </p>
+      <div class="feat-detail">
+        <span class="zh">— 类别邮戳：工 / 私 / 试 三档分拣</span>
+        <span class="en">— Category stamps: Work / Personal / Experiment</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PHILOSOPHY ─── -->
+<section id="why" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">为什么长这样</span><span class="en">Why it looks like this</span>
+    </span>
+  </div>
+
+  <div class="philosophy">
+    <blockquote>
+      <span class="zh">"美 = 留得下来。<br>大多数开发者工具像电子表格 —— 密集、方正、中性。<br>Pilo 像一封信。"</span>
+      <span class="en">"Beauty is what keeps a tool around.<br>Most developer tools are built like spreadsheets — dense, square, neutral.<br>Pilo is built like a letter."</span>
+    </blockquote>
+    <p class="body">
+      <span class="zh">宋体衬线 · 暖纸品色 · 金色装饰线 · 信纸 cream 卡 · 旋转邮戳 · 真鸽子。灵感来自中式邮局递信的那一点点小仪式 —— 在 AI 几秒就能写完一个 PR 的时代，慢一拍的设计反而能让人留下来。</span>
+      <span class="en">Songti SC serif, warm paper tones, gold ornament lines, cream letter cards, rotated postage stamps, a real pigeon. The small ceremony of posting a letter — translated into a developer tool. In an age where AI ships PRs in seconds, the design that slows you down by a half-beat is what makes you stay.</span>
+    </p>
+    <cite>
+      <span class="zh">—— 写在 README.md 第 33 行</span>
+      <span class="en">— from README.md, line 33</span>
+    </cite>
+  </div>
+</section>
+
+<!-- ─── LOCAL FIRST ─── -->
+<section id="privacy" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">隐私态度</span><span class="en">Privacy stance</span>
+    </span>
+    <h2>
+      <span class="zh">代码不会离开你的电脑。</span>
+      <span class="en">Your code never leaves your Mac.</span>
+    </h2>
+  </div>
+
+  <div class="local-grid">
+    <div class="local-item">
+      <div class="local-icon">🚫</div>
+      <h4>
+        <span class="zh">不调 LLM</span><span class="en">No LLM calls</span>
+      </h4>
+      <p>
+        <span class="zh">所有检测都是确定性规则 + 熵阈值。没有 prompt，没有云端模型。</span>
+        <span class="en">All detection is deterministic rules + entropy thresholds. No prompts, no cloud models.</span>
+      </p>
+    </div>
+    <div class="local-item">
+      <div class="local-icon">📭</div>
+      <h4>
+        <span class="zh">不传代码</span><span class="en">No code uploaded</span>
+      </h4>
+      <p>
+        <span class="zh">diff、commit、文件名 —— 都只在你本机被读。仓库元数据只写到 ~/Library/Application Support/Pilo/。</span>
+        <span class="en">Diffs, commits, filenames — read only on your machine. Repo metadata lives in <code>~/Library/Application Support/Pilo/</code>.</span>
+      </p>
+    </div>
+    <div class="local-item">
+      <div class="local-icon">🔒</div>
+      <h4>
+        <span class="zh">不收 telemetry</span><span class="en">No telemetry</span>
+      </h4>
+      <p>
+        <span class="zh">没有埋点。没有 analytics SDK。没有"匿名错误上报"。开源代码里你能搜得到证据。</span>
+        <span class="en">No tracking. No analytics SDK. No "anonymous error reports". The open source repo is your receipt.</span>
+      </p>
+    </div>
+  </div>
+
+  <p class="local-footnote">
+    <span class="zh">唯一的网络请求：调一次 GitHub 公开 API 判断仓库公开/私有（无需 token、24 小时缓存）。源代码可查 —— <code>GitHubVisibility.swift</code>。</span>
+    <span class="en">The only network call: GitHub's unauthenticated public API to check repo visibility (no token, 24h cache). All of it is in <code>GitHubVisibility.swift</code>.</span>
+  </p>
+</section>
+
+<!-- ─── INSTALL ─── -->
+<section id="install" class="reveal">
+  <div class="section-head">
+    <span class="postal-label">
+      <span class="zh">安装</span><span class="en">Install</span>
+    </span>
+    <h2>
+      <span class="zh">今天 —— 从源码编译。</span>
+      <span class="en">Today — build from source.</span>
+    </h2>
+    <p>
+      <span class="zh">签名 DMG 还在 wishlist 上。如果你想加速它的到来 —— ⭐ 一下仓库。</span>
+      <span class="en">A signed DMG is on the wishlist. ⭐ the repo if you'd like it sooner.</span>
+    </p>
+  </div>
+
+  <div class="install-wrap">
+    <div class="install-header">
+      <div class="install-dots"><span></span><span></span><span></span></div>
+      <span><span class="zh">~/Code · 拷贝即用</span><span class="en">~/Code · ready to paste</span></span>
+    </div>
+    <div class="install-body">
+      <button class="copy-btn" id="copy-install">
+        <span class="zh">复制</span><span class="en">Copy</span>
+      </button>
+<pre id="install-code"><span class="comment"># <span class="zh">第一次安装 xcodegen</span><span class="en">install xcodegen once</span></span>
+<span class="prompt">$</span> brew install xcodegen
+
+<span class="comment"># <span class="zh">拿代码 + 生成 Xcode 项目</span><span class="en">clone + generate Xcode project</span></span>
+<span class="prompt">$</span> git clone https://github.com/emma-yu/Pilo.git
+<span class="prompt">$</span> cd Pilo
+<span class="prompt">$</span> xcodegen generate
+<span class="prompt">$</span> open Pilo.xcodeproj</pre>
+    </div>
+  </div>
+  <p class="install-footer">
+    <span class="zh">需要 macOS 14.0+ · Xcode 16+ · Swift 6.0+</span>
+    <span class="en">Requires macOS 14.0+ · Xcode 16+ · Swift 6.0+</span>
+  </p>
+</section>
+
+</main>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <img class="wax-seal" src="assets/pilo/waxsealpilo.png" alt="" aria-hidden="true" />
+  <div class="lines">
+    <div>
+      <span class="zh">MIT 协议 · 开源 · </span>
+      <span class="en">MIT licensed · open source · </span>
+      <a href="https://github.com/emma-yu/Pilo" target="_blank" rel="noopener">github.com/emma-yu/Pilo</a>
+    </div>
+    <div style="margin-top: 6px">
+      <a href="studio.html">↗ <span class="zh">回到 Studio</span><span class="en">Back to Studio</span></a>
+      &nbsp;·&nbsp;
+      <a href="https://github.com/emma-yu/Pilo/blob/main/IMPLEMENTATION.md" target="_blank" rel="noopener">
+        <span class="zh">架构记录</span><span class="en">Architecture notes</span>
+      </a>
+    </div>
+    <p class="signature">
+      <span class="zh">用衬线字体和耐心制作 · @emma-yu</span>
+      <span class="en">Made with serif typography and patience · @emma-yu</span>
+    </p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  // ─── i18n: localStorage > navigator.language > 'zh' ───
+  const STORAGE_KEY = 'piloLang';
+  const supported = ['zh', 'en'];
+
+  function detectLang() {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored && supported.includes(stored)) return stored;
+    const nav = (navigator.language || navigator.userLanguage || 'zh').toLowerCase();
+    return nav.startsWith('zh') ? 'zh' : 'en';
+  }
+
+  function setLang(lang) {
+    if (!supported.includes(lang)) lang = 'zh';
+    document.documentElement.setAttribute('data-lang', lang);
+    document.documentElement.lang = (lang === 'zh' ? 'zh-Hans' : 'en');
+    localStorage.setItem(STORAGE_KEY, lang);
+    document.querySelectorAll('.lang-toggle button').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.lang === lang);
+      btn.setAttribute('aria-selected', btn.dataset.lang === lang ? 'true' : 'false');
+    });
+    document.title = lang === 'zh'
+      ? 'Pilo · 一只常驻菜单栏的小信鸽'
+      : 'Pilo · A serif menu bar pigeon for your Git repos';
+  }
+
+  setLang(detectLang());
+
+  document.querySelectorAll('.lang-toggle button').forEach(btn => {
+    btn.addEventListener('click', () => setLang(btn.dataset.lang));
+  });
+
+  // ─── Scroll reveal ───
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  // ─── Copy install command ───
+  const copyBtn = document.getElementById('copy-install');
+  const installCode = document.getElementById('install-code');
+  if (copyBtn && installCode) {
+    copyBtn.addEventListener('click', async () => {
+      const lang = document.documentElement.getAttribute('data-lang');
+      const text = [
+        'brew install xcodegen',
+        'git clone https://github.com/emma-yu/Pilo.git',
+        'cd Pilo',
+        'xcodegen generate',
+        'open Pilo.xcodeproj'
+      ].join('\n');
+      try {
+        await navigator.clipboard.writeText(text);
+        copyBtn.classList.add('copied');
+        const orig = copyBtn.innerHTML;
+        copyBtn.innerHTML = lang === 'zh' ? '✓ 已复制' : '✓ Copied';
+        setTimeout(() => {
+          copyBtn.classList.remove('copied');
+          copyBtn.innerHTML = orig;
+        }, 1800);
+      } catch (err) {
+        copyBtn.textContent = lang === 'zh' ? '复制失败' : 'Copy failed';
+      }
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
