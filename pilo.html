@@ -330,9 +330,23 @@
     animation: breathe 2.6s ease-in-out infinite alternate;
     filter: drop-shadow(0 18px 28px rgba(80,121,208,0.16));
   }
+  /* Video mascot — has its own motion, so we skip the scale-breathing.
+     macOS app-icon corner radius (squircle approximation via border-radius). */
+  .mascot-video {
+    object-fit: cover;
+    border-radius: 22.37%;
+    animation: idleNudge 6s ease-in-out infinite alternate;
+    background: #B8D6E8;  /* matches the video's sky-blue background while loading */
+  }
   @keyframes breathe {
     from { transform: scale(1) rotate(-0.4deg); }
     to   { transform: scale(1.03) rotate(0.4deg); }
+  }
+  /* The video already moves; we add only a whisper of float so it doesn't
+     sit dead-still during the loop seam. */
+  @keyframes idleNudge {
+    from { transform: translateY(0) rotate(-0.3deg); }
+    to   { transform: translateY(-4px) rotate(0.3deg); }
   }
   .mascot-halo {
     position: absolute; inset: -10%;
@@ -1137,7 +1151,15 @@
   <div class="hero-right">
     <div class="mascot-wrap">
       <div class="mascot-halo" aria-hidden="true"></div>
-      <img class="mascot" src="assets/pilo/pilo-mascot.png" alt="Pilo the pigeon mascot" />
+      <video
+        class="mascot mascot-video"
+        id="mascot-video"
+        src="assets/pilo/pilo-mascot.mp4"
+        poster="assets/pilo/pilo-mascot-poster.jpg"
+        autoplay muted loop playsinline preload="auto"
+        aria-label="Pilo the pigeon mascot — a gentle looping animation"
+        role="img">
+      </video>
       <img class="float-deco s1" src="assets/pilo/postalstamp.png" alt="" aria-hidden="true" />
       <img class="float-deco s2" src="assets/pilo/letterstack.png" alt="" aria-hidden="true" />
     </div>
@@ -1595,6 +1617,42 @@
       if (!ticking) { requestAnimationFrame(update); ticking = true; }
     }, { passive: true });
     update();
+  }
+
+  // ─── Mascot video lifecycle ───
+  // - Pause when scrolled out of view (save battery + decode work)
+  // - Reduce-motion: don't play, show poster frame only
+  // - Visibility change (tab background): pause
+  const mascotVideo = document.getElementById('mascot-video');
+  if (mascotVideo) {
+    const playIfAllowed = () => {
+      if (reduceMotion) return;
+      const playPromise = mascotVideo.play();
+      if (playPromise && typeof playPromise.catch === 'function') {
+        playPromise.catch(() => { /* autoplay blocked — poster stays */ });
+      }
+    };
+    if (reduceMotion) {
+      mascotVideo.removeAttribute('autoplay');
+      mascotVideo.pause();
+    }
+    if ('IntersectionObserver' in window) {
+      const vio = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) playIfAllowed();
+          else mascotVideo.pause();
+        });
+      }, { threshold: 0.15 });
+      vio.observe(mascotVideo);
+    }
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) mascotVideo.pause();
+      else playIfAllowed();
+    });
+    rmQuery.addEventListener && rmQuery.addEventListener('change', (e) => {
+      if (e.matches) mascotVideo.pause();
+      else playIfAllowed();
+    });
   }
 
   // ─── Mascot subtle cursor follow (desktop, non-RM) ───
