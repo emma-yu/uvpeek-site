@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /p/
+
+# Sitemap
+Sitemap: https://xinxinmingde.com/sitemap.xml
